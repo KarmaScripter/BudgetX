@@ -1,0 +1,5 @@
+SELECT Allocations.BudgetLevel AS [Budget Level], Allocations.PrcId, Allocations.RPIO, Allocations.BFY, Allocations.FundCode AS [Fund Code], Allocations.AhCode AS [AH Code], Allocations.OrgCode AS [ORG Code], Allocations.AccountCode AS [Account Code], Allocations.RcCode AS [RC Code], Allocations.BocCode AS [BOC Code], Allocations.Amount AS Authority, Allocations.FundName AS [Fund Name], Allocations.BocName AS [BOC Name], Allocations.BocName, Allocations.DivisionName AS [Division Name], Allocations.ActivityCode AS [Activity Code], Allocations.NpmName AS [NPM Name], Allocations.NpmCode AS [NPM Code], Allocations.ProgramProjectCode AS [Program Project Code], Allocations.ProgramProjectName AS [Program Project Name], Allocations.ProgramAreaCode AS [Program Area Code], Allocations.ProgramAreaName AS [Program Area Name], Allocations.GoalCode AS [Goal Code], Allocations.GoalName AS [Goal Name], Allocations.ObjectiveCode AS [Objective Code], Allocations.ObjectiveName AS [Objective Name] 
+INTO RegionalAuthority
+FROM Allocations
+WHERE (((Allocations.BudgetLevel)="8"))
+ORDER BY Allocations.BFY DESC;
