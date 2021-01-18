@@ -51,19 +51,19 @@ End Property
 '---------   Event Handlers for the Query Dialog ComboBoxes         
 '-------------------------------------------------------------------
 
-Private Sub OnCloseButtonClick()
+Private Sub OnCloseButtonClicked()
     Dim Action As FormAction
     Set Action = New FormAction
     Action.OnCloseButtonClick
 End Sub
 
 
-Private Sub OnExecuteButtonClick()
+Private Sub OnExecuteButtonClicked()
     '---- Private variable declaration    
 End Sub
 
 
-Private Sub OnFiscalYearComboBoxChange()
+Private Sub OnFiscalYearComboBoxChanged()
     Dim cbo As ComboBox
     Set cbo = New ComboBox
     cbo = BfyComboBox
@@ -74,7 +74,7 @@ Private Sub OnFiscalYearComboBoxChange()
 End Sub
 
 
-Private Sub OnBudgetLevelComboBoxChange()
+Private Sub OnBudgetLevelComboBoxChanged()
     Dim cbo As ComboBox
     Set cbo = New ComboBox
     cbo = BudgetLevelComboBox
@@ -86,7 +86,7 @@ End Sub
 
 
 
-Private Sub OnFundCodeComboBoxChange()
+Private Sub OnFundCodeComboBoxChanged()
     Dim cbo As ComboBox
     Set cbo = New ComboBox
     cbo = FundCodeComboBox
@@ -98,7 +98,7 @@ End Sub
 
 
 
-Private Sub OnAccountCodeComboBoxChange()
+Private Sub OnAccountCodeComboBoxChanged()
     Dim cbo As ComboBox
     Set cbo = New ComboBox
     cbo = AccountCodeComboBox
@@ -109,7 +109,7 @@ Private Sub OnAccountCodeComboBoxChange()
 End Sub
 
 
-Private Sub OnBocCodeComboBoxChange()
+Private Sub OnBocCodeComboBoxChanged()
     Dim cbo As ComboBox
     Set cbo = New ComboBox
     cbo = BocCodeComboBox
