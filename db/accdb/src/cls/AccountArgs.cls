@@ -59,6 +59,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      ID" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -83,6 +84,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      ID" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -106,6 +108,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      BFY" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -130,6 +133,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      BFY" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -153,6 +157,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      BudgetLevel" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -177,6 +182,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      BudgetLevel" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -200,6 +206,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      RpioCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -224,6 +231,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      RpioCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -247,6 +255,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      AhCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -271,6 +280,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      AhCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -294,6 +304,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      OrgCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -318,6 +329,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      OrgCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -342,6 +354,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      FundCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -366,6 +379,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      FundCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -389,6 +403,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      FundName" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -413,6 +428,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      FundName" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -436,6 +452,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      AccountCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -460,6 +477,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      AccountCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -483,6 +501,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      ActivityCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -507,6 +526,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      ActivityCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -531,6 +551,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      BocCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -555,6 +576,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      BocCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -578,6 +600,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      BocName" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -602,6 +625,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      BocName" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -625,6 +649,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      RcCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -649,6 +674,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      RcCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -672,6 +698,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      DivisionName" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -696,6 +723,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      DivisionName" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -720,6 +748,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      ProgramProjectName" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -743,6 +772,7 @@ ErrorHandler:
         m_Error = "Source:   AccountArgs" _
             & vbCrLf & "Member:      ProgramProjectName" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property

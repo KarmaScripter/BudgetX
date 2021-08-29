@@ -12,22 +12,26 @@ Option Explicit
 
 
 
-Private mBudgetPath As BudgetPath
+Private m_BudgetPath As BudgetPath
 Private m_Error As String
-Private mNotification As String
-Private mDataModels As Collection
-Private mConnection As ADODB.Connection
-Private mCommand As ADODB.Command
-Private mData As ADODB.Recordset
-Private mRecord As ADODB.Record
-
-
+Private m_Notification As String
+Private m_DataModels As Collection
+Private m_Connection As ADODB.Connection
+Private m_Command As ADODB.Command
+Private m_Data As ADODB.Recordset
+Private m_Record As ADODB.Record
 
 Private Sub Class_Initialize()
-    Set mBudgetPath = New BudgetPath
-    Set mData = New ADODB.Recordset
+    Set m_BudgetPath = New BudgetPath
+    Set m_Data = New ADODB.Recordset
+End Sub
+
+Private Sub Class_Terminate()
+    KillData
 End Sub
  
+
+
 
 '----------------------------------------------------------------------------------
 '   Type        Property Get
@@ -40,13 +44,14 @@ Public Property Get Data() As ADODB.Connection
     On Error GoTo ErrorHandler:
     Dim cnn As ADODB.Connection
     Set cnn = New ADODB.Connection
-    cnn.Open mBudgetPath.Data
+    cnn.Open m_BudgetPath.Data
     Set Data = cnn
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   AccessData" _
             & vbCrLf & "Member:     Data" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Set cnn = Nothing
@@ -66,13 +71,14 @@ Public Property Get References() As ADODB.Connection
     On Error GoTo ErrorHandler:
     Dim cnn As ADODB.Connection
     Set cnn = New ADODB.Connection
-    cnn.Open mBudgetPath.References
+    cnn.Open m_BudgetPath.References
     Set References = cnn
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   AccessData" _
             & vbCrLf & "Member:     References" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Set cnn = Nothing
@@ -92,13 +98,14 @@ Public Property Get Divisions() As ADODB.Connection
     On Error GoTo ErrorHandler:
     Dim cnn As ADODB.Connection
     Set cnn = New ADODB.Connection
-    cnn.Open mBudgetPath.Divisions
+    cnn.Open m_BudgetPath.Divisions
     Set Divisions = cnn
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   AccessData" _
             & vbCrLf & "Member:     Divisions" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Set cnn = Nothing
@@ -129,6 +136,7 @@ ErrorHandler:
         m_Error = "Source:   AccessData" _
             & vbCrLf & "Member:     GetReferenceModel(String)" _
             & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Function
@@ -163,6 +171,7 @@ ErrorHandler:
         m_Error = "Source:   AccessData" _
             & vbCrLf & "Member:     CreateCommand(String)" _
             & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Function
@@ -189,6 +198,7 @@ ErrorHandler:
         m_Error = "Source:       AccessData" _
             & vbCrLf & "Member:     ExcelExport(String)" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Function
@@ -237,6 +247,7 @@ ErrorHandler:
         m_Error = "Source:       AccessData" _
             & vbCrLf & "Member:     ImportExcelData(String)" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Sub
@@ -254,14 +265,15 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub KillData()
     On Error GoTo ErrorHandler:
-    If Not mData Is Nothing Then
-        Set mData = Nothing
+    If Not m_Data Is Nothing Then
+        Set m_Data = Nothing
     End If
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:       AccessData" _
             & vbCrLf & "Member:     KillData" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Sub
@@ -280,14 +292,15 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub KillFiles()
     On Error GoTo ErrorHandler:
-    If Not mBudgetPath Is Nothing Then
-        Set mBudgetPath = Nothing
+    If Not m_BudgetPath Is Nothing Then
+        Set m_BudgetPath = Nothing
     End If
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:       AccessData" _
             & vbCrLf & "Member:     KillFiles" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Sub

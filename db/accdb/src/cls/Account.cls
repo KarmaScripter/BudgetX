@@ -40,6 +40,7 @@ ErrorHandler:
          m_Error = "Source:       Account" _
             & vbCrLf & "Member:     ID" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -64,6 +65,7 @@ ErrorHandler:
          m_Error = "Source:       Account" _
             & vbCrLf & "Member:     ID" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -88,6 +90,7 @@ ErrorHandler:
          m_Error = "Source:       Account" _
             & vbCrLf & "Member:     Code" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -112,6 +115,7 @@ ErrorHandler:
          m_Error = "Source:       Account" _
             & vbCrLf & "Member:     Code" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -137,6 +141,7 @@ ErrorHandler:
          m_Error = "Source:       Account" _
             & vbCrLf & "Member:     Goal" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -162,6 +167,7 @@ ErrorHandler:
          m_Error = "Source:       Account" _
             & vbCrLf & "Member:     Goal" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -187,6 +193,7 @@ ErrorHandler:
          m_Error = "Source:       Account" _
             & vbCrLf & "Member:     Objective" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -212,6 +219,7 @@ ErrorHandler:
          m_Error = "Source:       Account" _
             & vbCrLf & "Member:     Objective" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -237,6 +245,7 @@ ErrorHandler:
          m_Error = "Source:       Account" _
             & vbCrLf & "Member:     ProgramProjectCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -262,6 +271,7 @@ ErrorHandler:
          m_Error = "Source:       Account" _
             & vbCrLf & "Member:     ProgramProjectCode" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property

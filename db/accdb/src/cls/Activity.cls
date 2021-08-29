@@ -37,6 +37,7 @@ ErrorHandler:
         m_Error = "Source:      Activity" _
             & vbCrLf & "Member:       ID" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -60,6 +61,7 @@ ErrorHandler:
         m_Error = "Source:      Activity" _
             & vbCrLf & "Member:       ID" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -83,6 +85,7 @@ ErrorHandler:
         m_Error = "Source:      Activity" _
             & vbCrLf & "Member:       Code" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -106,6 +109,7 @@ ErrorHandler:
         m_Error = "Source:      Activity" _
             & vbCrLf & "Member:       Code" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -129,6 +133,7 @@ ErrorHandler:
         m_Error = "Source:      Activity" _
             & vbCrLf & "Member:       Name" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
@@ -152,6 +157,7 @@ ErrorHandler:
         m_Error = "Source:      Activity" _
             & vbCrLf & "Member:       Name" _
             & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Property
