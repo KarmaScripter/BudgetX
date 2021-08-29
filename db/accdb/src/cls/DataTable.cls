@@ -14,9 +14,9 @@ Option Explicit
 Private m_DataAccess As DataAccess
 Private m_Base As DAO.Recordset
 Private m_Name As String
-Private m_Schema As DataSchema
-Private m_Columns()  As DataColumn
-Private m_Rows() As DataRow
+Private m_DataSchema As DataSchema
+Private m_DataColumns()  As DataColumn
+Private m_DataRows() As DataRow
 Private m_Error As String
 Private m_Notification As String
 
@@ -37,15 +37,7 @@ Private Sub Class_Initialize()
 End Sub
 
 Private Sub Class_Terminate()
-    If Not m_DataAccess Is Nothing Then
-        Set m_DataAccess = Nothing
-    End If
-    If Not m_Base Is Nothing Then
-        Set m_Base = Nothing
-    End If
-    If Not m_Schema Is Nothing Then
-        Set m_Schema = Nothing
-    End If
+    KillData
 End Sub
 
 
@@ -105,7 +97,7 @@ End Property
 
 '----------------------------------------------------------------------------------
 '   Type:        Property Let
-'   Name:
+'   Name:        Name
 '   Parameters:  Void
 '   RetVal:      Void
 '   Purpose:
@@ -127,7 +119,7 @@ End Property
 
 '----------------------------------------------------------------------------------
 '   Type:        Property Get
-'   Name:        DAO.Field
+'   Name:        Name
 '   Parameters:  Void
 '   RetVal:
 '   Purpose:
@@ -153,7 +145,7 @@ End Property
 
 '----------------------------------------------------------------------------------
 '   Type:        Property Get
-'   Name:        DAO.Field
+'   Name:        RowCount
 '   Parameters:  Void
 '   RetVal:
 '   Purpose:
@@ -179,7 +171,7 @@ End Property
 
 '----------------------------------------------------------------------------------
 '   Type:        Property Get
-'   Name:        DAO.Field
+'   Name:        ColumnCount
 '   Parameters:  Void
 '   RetVal:
 '   Purpose:
@@ -273,9 +265,9 @@ End Property
 Public Property Get Schema() As DataSchema
     On Error GoTo ErrorHandler:
     If Not m_Base Is Nothing Then
-        Set m_Schema = New DataSchema
-        m_Schema.Base = m_Base
-        Schema = m_Schema
+        Set m_DataSchema = New DataSchema
+        m_DataSchema.Base = m_Base
+        Schema = m_DataSchema
     End If
 ErrorHandler:
     If Err.Number > 0 Then
@@ -329,13 +321,13 @@ End Function
 
 
 
-'----------------------------------------------------------------------------------
+'--------------------------------------------------------------------------------
 '   Type:        Function
 '   Name:
 '   Parameters:  DAO.Fields
 '   RetVal:      Variant()
 '   Purpose:
-'---------------------------------------------------------------------------------
+'--------------------------------------------------------------------------------
 Private Function GetDataRows(pData As DAO.Recordset) As DataRow()
     On Error GoTo ErrorHandler:
     If Not pData Is Nothing Then
@@ -394,6 +386,32 @@ End Property
 
 
 
+
+'--------------------------------------------------------------------------------
+'   Type:        Function
+'   Name:        KillData()
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:     Releases resources used by the Database
+'--------------------------------------------------------------------------------
+Private Sub KillData()
+    On Error GoTo ErrorHandler:
+    If Not m_DataAccess Is Nothing Then
+        Set m_DataAccess = Nothing
+    End If
+    If Not m_Base Is Nothing Then
+        Set m_Base = Nothing
+    End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       DataTable" _
+            & vbCrLf & "Member:     KillData" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Sub
+End Sub
 
 
 

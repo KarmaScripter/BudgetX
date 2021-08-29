@@ -1,35 +1,25 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "Account"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
-Private mID As Integer
-Private mCode As String
-Private mGoalCode As String
-Private mObjectiveCode As String
-Private mProgramProjectCode As String
-Private mActivityCode As String
-
-
-'---------------------------------------------------------------------------------
-'   Type            Constructor
-'   Name            Class_Initialize
-'   Parameters      Void
-'   Return          Void
-'   Purpose
-'---------------------------------------------------------------------------------
-Private Sub Class_Initialize()
-End Sub
 
 
 
-'---------------------------------------------------------------------------------
-'   Type            Destructor
-'   Name            Class_Terminate
-'   Parameters      Void
-'   Return          Void
-'   Purpose
-'---------------------------------------------------------------------------------
-Private Sub Class_Terminate()
-End Sub
+Private m_ID As Integer
+Private m_Code As String
+Private m_GoalCode As String
+Private m_ObjectiveCode As String
+Private m_ProgramProjectCode As String
+Private m_ActivityCode As String
+Private m_Error As String
 
 
 
@@ -41,10 +31,20 @@ End Sub
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let ID(num As Integer)
+    On Error GoTo ErrorHandler:
     If Not num < 0 Then
-        mID = num
+        m_ID = num
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+         m_Error = "Source:       Account" _
+            & vbCrLf & "Member:     ID" _
+            & vbCrLf & "Descript:   " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '---------------------------------------------------------------------------------
@@ -55,10 +55,20 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get ID() As Integer
-    If Not mID < 0 Then
-        ID = mID
+    On Error GoTo ErrorHandler:
+    If Not m_ID < 0 Then
+        ID = m_ID
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+         m_Error = "Source:       Account" _
+            & vbCrLf & "Member:     ID" _
+            & vbCrLf & "Descript:   " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '---------------------------------------------------------------------------------
@@ -69,10 +79,20 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let Code(cd As String)
+    On Error GoTo ErrorHandler:
     If Not cd & "" = "" Then
-        mCode = cd
+        m_Code = cd
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+         m_Error = "Source:       Account" _
+            & vbCrLf & "Member:     Code" _
+            & vbCrLf & "Descript:   " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '---------------------------------------------------------------------------------
@@ -83,10 +103,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get Code() As String
-    If Not mCode & "" = "" Then
-        Code = mCode
+    On Error GoTo ErrorHandler:
+    If Not m_Code & "" = "" Then
+        Code = m_Code
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+         m_Error = "Source:       Account" _
+            & vbCrLf & "Member:     Code" _
+            & vbCrLf & "Descript:   " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
+
 
 
 '---------------------------------------------------------------------------------
@@ -97,10 +128,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let Goal(gc As String)
+    On Error GoTo ErrorHandler:
     If Not gc & "" = "" Then
-        mGoalCode = gc
+        m_GoalCode = gc
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+         m_Error = "Source:       Account" _
+            & vbCrLf & "Member:     Goal" _
+            & vbCrLf & "Descript:   " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
+
 
 
 '---------------------------------------------------------------------------------
@@ -111,10 +153,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get Goal() As String
-    If Not mGoalCode & "" = "" Then
-        Goal = mGoalCode
+    On Error GoTo ErrorHandler:
+    If Not m_GoalCode & "" = "" Then
+        Goal = m_GoalCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+         m_Error = "Source:       Account" _
+            & vbCrLf & "Member:     Goal" _
+            & vbCrLf & "Descript:   " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
+
 
 
 '---------------------------------------------------------------------------------
@@ -125,10 +178,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let Objective(oc As String)
+    On Error GoTo ErrorHandler:
     If Not oc & "" = "" Then
-        mObjectiveCode = oc
+        m_ObjectiveCode = oc
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+         m_Error = "Source:       Account" _
+            & vbCrLf & "Member:     Objective" _
+            & vbCrLf & "Descript:   " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
+
 
 
 '---------------------------------------------------------------------------------
@@ -139,10 +203,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get Objective() As String
-    If Not mObjectiveCode & "" = "" Then
-        Objective = mObjectiveCode
+    On Error GoTo ErrorHandler:
+    If Not m_ObjectiveCode & "" = "" Then
+        Objective = m_ObjectiveCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+         m_Error = "Source:       Account" _
+            & vbCrLf & "Member:     Objective" _
+            & vbCrLf & "Descript:   " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
+
 
 
 '---------------------------------------------------------------------------------
@@ -153,10 +228,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let ProgramProjectCode(ppc As String)
+    On Error GoTo ErrorHandler:
     If Not ppc & "" = "" Then
-        mProgramProjectCode = ppc
+        m_ProgramProjectCode = ppc
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+         m_Error = "Source:       Account" _
+            & vbCrLf & "Member:     ProgramProjectCode" _
+            & vbCrLf & "Descript:   " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
+
 
 
 '---------------------------------------------------------------------------------
@@ -167,8 +253,17 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get ProgramProjectCode() As String
-    If Not mProgramProjectCode & "" = "" Then
-        ProgramProjectCode = mProgramProjectCode
+    On Error GoTo ErrorHandler:
+    If Not m_ProgramProjectCode & "" = "" Then
+        ProgramProjectCode = m_ProgramProjectCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+         m_Error = "Source:       Account" _
+            & vbCrLf & "Member:     ProgramProjectCode" _
+            & vbCrLf & "Descript:   " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 

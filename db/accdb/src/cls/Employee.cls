@@ -11,25 +11,20 @@ Option Compare Database
 Option Explicit
 
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   FIELDS  -------------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-
-Private mHireDate As String
-Private mRpioCode As String
-Private mHROrgCode As String
-Private mRcCode As String
-Private mEmployeeNumber As String
-Private mLastName As String
-Private mFirstName As String
-Private mPayGrade As String
-Private mStep As String
-Private mJobTitle As String
 
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   CONSTRUCTORS --------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
+Private m_HireDate As String
+Private m_RpioCode As String
+Private m_HROrgCode As String
+Private m_RcCode As String
+Private m_EmployeeNumber As String
+Private m_LastName As String
+Private m_FirstName As String
+Private m_PayGrade As String
+Private m_Step As String
+Private m_JobTitle As String
+Private m_Error As String
+
 
 Public Sub Class_Initialize()
 End Sub
@@ -37,9 +32,8 @@ End Sub
 Public Sub Class_Terminate()
 End Sub
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   PROPERTIES  ---------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -50,9 +44,19 @@ End Sub
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let RpioCode(rp As String)
+    On Error GoTo ErrorHandler:
     If Not rp & "" = "" Then
-        mRpioCode = rp
+        m_RpioCode = rp
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      RpioCode" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -64,10 +68,23 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get RpioCode() As String
-    If Not mRpioCode & "" = "" Then
-        RpioCode = mRpioCode
+    On Error GoTo ErrorHandler:
+    If Not m_RpioCode & "" = "" Then
+        RpioCode = m_RpioCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      RpioCode" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
+
+
 
 '----------------------------------------------------------------------------------
 '   Type:        Property-Let
@@ -77,10 +94,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let HrOrgCode(oc As String)
+    On Error GoTo ErrorHandler:
     If Not oc & "" = "" Then
-       mHROrgCode = oc
+       m_HROrgCode = oc
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      HrOrgCode" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '----------------------------------------------------------------------------------
@@ -91,10 +119,22 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get HrOrgCode() As String
-    If Not mHROrgCode & "" = "" Then
-        HrOrgCode = mHROrgCode
+    On Error GoTo ErrorHandler:
+    If Not m_HROrgCode & "" = "" Then
+        HrOrgCode = m_HROrgCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      HrOrgCode" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -105,10 +145,23 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let EmployeeNumber(eid As String)
+    On Error GoTo ErrorHandler:
     If eid & "" = "" Then
-        mEmployeeNumber = eid
+        m_EmployeeNumber = eid
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      EmployeeNumber" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -119,10 +172,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get EmployeeNumber() As String
-    If Not mEmployeeNumber & "" = "" Then
-        EmployeeNumber = mEmployeeNumber
+    On Error GoTo ErrorHandler:
+    If Not m_EmployeeNumber & "" = "" Then
+        EmployeeNumber = m_EmployeeNumber
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      EmployeeNumber" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '----------------------------------------------------------------------------------
@@ -133,10 +197,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let LastName(ln As String)
+    On Error GoTo ErrorHandler:
     If ln & "" = "" Then
-        mLastName = ln
+        m_LastName = ln
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      LastName" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '----------------------------------------------------------------------------------
@@ -147,10 +222,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get LastName() As String
-    If Not mLastName & "" = "" Then
-        LastName = mLastName
+    On Error GoTo ErrorHandler:
+    If Not m_LastName & "" = "" Then
+        LastName = m_LastName
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      LastName" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '----------------------------------------------------------------------------------
@@ -161,10 +247,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let FirstName(fn As String)
+    On Error GoTo ErrorHandler:
     If fn & "" = "" Then
-    mFirstName = fn
+    m_FirstName = fn
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      FirstName" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '----------------------------------------------------------------------------------
@@ -175,10 +272,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get FirstName() As String
-    If Not mFirstName & "" = "" Then
-        FirstName = mFirstName
+    On Error GoTo ErrorHandler:
+    If Not m_FirstName & "" = "" Then
+        FirstName = m_FirstName
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      FirstName" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '----------------------------------------------------------------------------------
@@ -189,10 +297,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let RcCode(rc As String)
+    On Error GoTo ErrorHandler:
     If Not rc & "" = "" Then
-        mRcCode = rc
+        m_RcCode = rc
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      RcCode" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '----------------------------------------------------------------------------------
@@ -203,10 +322,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get RcCode() As String
-    If Not mRcCode & "" = "" Then
-        RcCode = mRcCode
+    On Error GoTo ErrorHandler:
+    If Not m_RcCode & "" = "" Then
+        RcCode = m_RcCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      RcCode" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '----------------------------------------------------------------------------------
@@ -217,10 +347,22 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let PayGrade(pg As String)
+    On Error GoTo ErrorHandler:
     If Not pg & "" = "" Then
-        mPayGrade = pg
+        m_PayGrade = pg
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      PayGrade" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -231,9 +373,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get PayGrade() As String
-    If Not mPayGrade & "" = "" Then
-        PayGrade = mPayGrade
+    On Error GoTo ErrorHandler:
+    If Not m_PayGrade & "" = "" Then
+        PayGrade = m_PayGrade
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      PayGrade" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -245,10 +397,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let Step(sp As String)
+    On Error GoTo ErrorHandler:
     If Not sp & "" = "" Then
-        mStep = sp
+        m_Step = sp
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      Step" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '----------------------------------------------------------------------------------
@@ -259,9 +422,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get Step() As String
-    If Not mStep & "" = "" Then
-        Step = mStep
+    On Error GoTo ErrorHandler:
+    If Not m_Step & "" = "" Then
+        Step = m_Step
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      Step" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -273,10 +446,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let JobTitle(jt As String)
+    On Error GoTo ErrorHandler:
     If Not jt & "" = "" Then
-        mJobTitle = jt
+        m_JobTitle = jt
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      JobTitle" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '----------------------------------------------------------------------------------
@@ -287,9 +471,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get JobTitle() As String
-    If Not mJobTitle & "" = "" Then
-        JobTitle = mJobTitle
+    On Error GoTo ErrorHandler:
+    If Not m_JobTitle & "" = "" Then
+        JobTitle = m_JobTitle
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      JobTitle" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -301,10 +495,21 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let HireDate(hd As Date)
+    On Error GoTo ErrorHandler:
     If Not hd & "" = "" Then
-        mHireDate = hd
+        m_HireDate = hd
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      HireDate" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '----------------------------------------------------------------------------------
@@ -315,9 +520,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get HireDate() As Date
-    If Not mHireDate & "" = "" Then
-        HireDate = mHireDate
+    On Error GoTo ErrorHandler:
+    If Not m_HireDate & "" = "" Then
+        HireDate = m_HireDate
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Employee" _
+            & vbCrLf & "Member:      HireDate" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 

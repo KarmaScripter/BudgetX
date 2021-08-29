@@ -25,24 +25,9 @@ Private m_Notification As String
 
 
 
-
-
-'---------------------------------------------------------------------------------
-'   Type            Constructor
-'   Name
-'   Parameters      Void
-'   Return          Void
-'   Purpose
-'---------------------------------------------------------------------------------
-Private Sub Class_Initialize()
-End Sub
-
-
-
-
 '---------------------------------------------------------------------------------
 '   Type            Property-Let
-'   Name
+'   Name            Base
 '   Parameters      Void
 '   Return          Void
 '   Purpose
@@ -55,7 +40,7 @@ Public Property Let Base(yr As String)
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   FederalHoliday" _
-            & vbCrLf & "Member:      " _
+            & vbCrLf & "Member:      Base" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -67,7 +52,7 @@ End Property
 
 '---------------------------------------------------------------------------------
 '   Type            Property-Get
-'   Name
+'   Name            Base
 '   Parameters      Void
 '   Return          Void
 '   Purpose
@@ -80,7 +65,7 @@ Public Property Get Base() As String
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   FederalHoliday" _
-            & vbCrLf & "Member:      " _
+            & vbCrLf & "Member:      Base" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -92,7 +77,7 @@ End Property
 
 '---------------------------------------------------------------------------------
 '   Type            Property-Let
-'   Name
+'   Name            ID
 '   Parameters      Void
 '   Return          Void
 '   Purpose
@@ -117,7 +102,7 @@ End Property
 
 '---------------------------------------------------------------------------------
 '   Type            Property-Get
-'   Name
+'   Name            ID
 '   Parameters      Void
 '   Return          String
 '   Purpose
@@ -143,7 +128,7 @@ End Property
 
 '---------------------------------------------------------------------------------
 '   Type            Property-Let
-'   Name
+'   Name            Name
 '   Parameters      Void
 '   Return          Void
 '   Purpose
@@ -167,7 +152,7 @@ End Property
 
 '---------------------------------------------------------------------------------
 '   Type            Property-Let
-'   Name
+'   Name            Name
 '   Parameters      Void
 '   Return          Void
 '   Purpose
@@ -196,7 +181,7 @@ End Property
 
 '---------------------------------------------------------------------------------
 '   Type            Property-Let
-'   Name
+'   Name            Day()
 '   Parameters      Void
 '   Return          Void
 '   Purpose
@@ -218,9 +203,10 @@ ErrorHandler:
 End Property
 
 
+
 '---------------------------------------------------------------------------------
 '   Type            Property-Let
-'   Name
+'   Name            Day
 '   Parameters      Void
 '   Return          Void
 '   Purpose

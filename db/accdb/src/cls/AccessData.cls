@@ -1,8 +1,19 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "AccessData"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
+
+
 Private mBudgetPath As BudgetPath
-Private mError As String
+Private m_Error As String
 Private mNotification As String
 Private mDataModels As Collection
 Private mConnection As ADODB.Connection
@@ -10,33 +21,13 @@ Private mCommand As ADODB.Command
 Private mData As ADODB.Recordset
 Private mRecord As ADODB.Record
 
-'----------------------------------------------------------------------------------
-'   Type        Constructor/Initializer
-'   Name        Class_Terminate
-'   Parameters  Void
-'   Retval      AccessData
-'   Purpose
-'---------------------------------------------------------------------------------
+
+
 Private Sub Class_Initialize()
     Set mBudgetPath = New BudgetPath
     Set mData = New ADODB.Recordset
 End Sub
  
-
-'----------------------------------------------------------------------------------
-'   Type        Destructor
-'   Name        Class_Terminate
-'   Parameters  Void
-'   Retval      AccessData
-'   Purpose
-'---------------------------------------------------------------------------------
-Private Sub Class_Terminate()
-    Set mBudgetPath = Nothing
-    Set mData = Nothing
-End Sub
-
-
-
 
 '----------------------------------------------------------------------------------
 '   Type        Property Get
@@ -53,14 +44,15 @@ Public Property Get Data() As ADODB.Connection
     Set Data = cnn
 ErrorHandler:
     If Err.Number > 0 Then
-        mError = "Source:   AccessData" _
-            & vbCrLf & "Member:     " _
+        m_Error = "Source:   AccessData" _
+            & vbCrLf & "Member:     Data" _
             & vbCrLf & "Descript:   " & Err.Description
     End If
-    MessageFactory.ShowError (mError)
+    MessageFactory.ShowError (m_Error)
     Set cnn = Nothing
     Exit Property
 End Property
+
 
 
 '----------------------------------------------------------------------------------
@@ -78,11 +70,11 @@ Public Property Get References() As ADODB.Connection
     Set References = cnn
 ErrorHandler:
     If Err.Number > 0 Then
-        mError = "Source:   AccessData" _
-            & vbCrLf & "Member:     AccessData" _
+        m_Error = "Source:   AccessData" _
+            & vbCrLf & "Member:     References" _
             & vbCrLf & "Descript:   " & Err.Description
     End If
-    MessageFactory.ShowError (mError)
+    MessageFactory.ShowError (m_Error)
     Set cnn = Nothing
     Exit Property
 End Property
@@ -104,11 +96,11 @@ Public Property Get Divisions() As ADODB.Connection
     Set Divisions = cnn
 ErrorHandler:
     If Err.Number > 0 Then
-        mError = "Source:   AccessData" _
-            & vbCrLf & "Member:     AccessData" _
+        m_Error = "Source:   AccessData" _
+            & vbCrLf & "Member:     Divisions" _
             & vbCrLf & "Descript:   " & Err.Description
     End If
-    MessageFactory.ShowError (mError)
+    MessageFactory.ShowError (m_Error)
     Set cnn = Nothing
     Exit Property
 End Property
@@ -134,11 +126,11 @@ Public Function GetReferenceModel(pTableName As String) As ADODB.Recordset
     End If
 ErrorHandler:
     If Err.Number > 0 Then
-        mError = "Source:   AccessData" _
+        m_Error = "Source:   AccessData" _
             & vbCrLf & "Member:     GetReferenceModel(String)" _
             & vbCrLf & "Descript: " & Err.Description
     End If
-    MessageFactory.ShowError (mError)
+    MessageFactory.ShowError (m_Error)
     Exit Function
 End Function
 
@@ -168,11 +160,11 @@ Public Function CreateCommand(pSQL As String) As ADODB.Command
     End If
 ErrorHandler:
     If Err.Number > 0 Then
-        mError = "Source:   AccessData" _
+        m_Error = "Source:   AccessData" _
             & vbCrLf & "Member:     CreateCommand(String)" _
             & vbCrLf & "Descript: " & Err.Description
     End If
-    MessageFactory.ShowError (mError)
+    MessageFactory.ShowError (m_Error)
     Exit Function
 End Function
 
@@ -194,11 +186,11 @@ Public Function GetModel(pTableName As String) As ADODB.Recordset
     End If
 ErrorHandler:
     If Err.Number > 0 Then
-        mError = "Source:       AccessData" _
+        m_Error = "Source:       AccessData" _
             & vbCrLf & "Member:     ExcelExport(String)" _
             & vbCrLf & "Descript:   " & Err.Description
     End If
-    MessageFactory.ShowError (mError)
+    MessageFactory.ShowError (m_Error)
     Exit Function
 End Function
 
@@ -212,41 +204,91 @@ End Function
 '---------------------------------------------------------------------------------
 Public Sub ImportExcelData(pFilePath As String)
     On Error GoTo ErrorHandler:
-    Dim mFilePath As String
-    Dim mList() As String
-    Dim mCount As Integer
-    Dim mWorksheet As Excel.Worksheet
-    mFilePath = pFilePath
-    Dim mExcel As Excel.Application
-    Set mExcel = CreateObject("Excel.Application")
-    mExcel.Visible = False
-    mExcel.DisplayAlerts = False
-    mExcel.Workbooks.Open mFilePath
-    If mExcel.Worksheets.count > 1 Then
+    Dim p_FilePath As String
+    Dim p_List() As String
+    Dim p_Count As Integer
+    Dim p_Worksheet As Excel.Worksheet
+    p_FilePath = pFilePath
+    Dim p_Excel As Excel.Application
+    Set p_Excel = CreateObject("Excel.Application")
+    p_Excel.Visible = False
+    p_Excel.DisplayAlerts = False
+    p_Excel.Workbooks.Open p_FilePath
+    If p_Excel.Worksheets.count > 1 Then
         Dim i As Integer
-        For Each mWorksheet In mExcel.Worksheets
-            ReDim Preserve mList(mCount)
-            mList(mCount) = mWorksheet.Name
-            mCount = mCount + 1
+        For Each p_Worksheet In p_Excel.Worksheets
+            ReDim Preserve p_List(p_Count)
+            p_List(p_Count) = p_Worksheet.Name
+            p_Count = p_Count + 1
         Next
-        For i = LBound(mList()) To UBound(mList())
-            DoCmd.TransferSpreadsheet acImport, acSpreadsheetTypeExcel12, mList(i), _
-                mFilePath, True, mList(i) & "!A1:IU9999"
+        For i = LBound(p_List()) To UBound(p_List())
+            DoCmd.TransferSpreadsheet acImport, acSpreadsheetTypeExcel12, p_List(i), _
+                p_FilePath, True, p_List(i) & "!A1:IU9999"
         Next i
     Else
-        DoCmd.TransferSpreadsheet acImport, acSpreadsheetTypeExcel12, mList(0), _
-            mFilePath, True, mList(i) & "!A1:IU9999"
+        DoCmd.TransferSpreadsheet acImport, acSpreadsheetTypeExcel12, p_List(0), _
+            p_FilePath, True, p_List(i) & "!A1:IU9999"
     End If
-    mExcel.ActiveWorkbook.Close (True)
-    mExcel.Quit
-    Set mExcel = Nothing
+    p_Excel.ActiveWorkbook.Close (True)
+    p_Excel.Quit
+    Set p_Excel = Nothing
 ErrorHandler:
     If Err.Number > 0 Then
-        mError = "Source:       AccessData" _
+        m_Error = "Source:       AccessData" _
             & vbCrLf & "Member:     ImportExcelData(String)" _
             & vbCrLf & "Descript:   " & Err.Description
     End If
-    MessageFactory.ShowError (mError)
+    MessageFactory.ShowError (m_Error)
     Exit Sub
 End Sub
 
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Sub-Procedure
+'   Name        KillData
+'   Parameters  Void
+'   Retval      Void
+'   Purpose     Frees resources used by the Database
+'---------------------------------------------------------------------------------
+Private Sub KillData()
+    On Error GoTo ErrorHandler:
+    If Not mData Is Nothing Then
+        Set mData = Nothing
+    End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       AccessData" _
+            & vbCrLf & "Member:     KillData" _
+            & vbCrLf & "Descript:   " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Sub
+End Sub
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Sub-Procedure
+'   Name        KillFiles
+'   Parameters  Void
+'   Retval      Void
+'   Purpose     Frees resources used by the BudgetPath object
+'---------------------------------------------------------------------------------
+Private Sub KillFiles()
+    On Error GoTo ErrorHandler:
+    If Not mBudgetPath Is Nothing Then
+        Set mBudgetPath = Nothing
+    End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       AccessData" _
+            & vbCrLf & "Member:     KillFiles" _
+            & vbCrLf & "Descript:   " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Sub
+End Sub

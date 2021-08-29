@@ -1,25 +1,30 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "BudgetPath"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
 
-Private mReferenceModels As String
-Private mViewModels As String
-Private mDataModels As String
-Private mExcelReport As String
-Private mExcelBudget As String
-Private mBudgetFolder As String
-Private mDivisionModels As String
-Private mPath As String
+Private m_ReferenceModels As String
+Private m_ViewModels As String
+Private m_DataModels As String
+Private m_ExcelReport As String
+Private m_ExcelBudget As String
+Private m_BudgetFolder As String
+Private m_DivisionModels As String
+Private m_Path As String
+Private m_Error As String
 
-'---------------------------------------------------------------------------------
-'   Type:            Constructor
-'   Name:
-'   Parameters:      Void
-'   Retval:          BudgetPath
-'   Purpose:
-'---------------------------------------------------------------------------------
+
+
 Private Sub Class_Initialize()
-    mViewModels = "Provider=Microsoft.Access.OLEDB.10.0;" _
+    m_ViewModels = "Provider=Microsoft.Access.OLEDB.10.0;" _
         & "Persist Security Info=False;" _
         & "Data Source=" _
         & CurrentProject.path _
@@ -27,7 +32,7 @@ Private Sub Class_Initialize()
         & "User ID=Admin;" _
         & "Data Provider=Microsoft.ACE.OLEDB.12.0"
         
-    mDataModels = "Provider=Microsoft.Access.OLEDB.10.0;" _
+    m_DataModels = "Provider=Microsoft.Access.OLEDB.10.0;" _
         & "Persist Security Info=False;" _
         & "Data Source=" _
         & CurrentProject.path _
@@ -35,7 +40,7 @@ Private Sub Class_Initialize()
         & "User ID=Admin;" _
         & "Data Provider=Microsoft.ACE.OLEDB.12.0"
      
-    mReferenceModels = "Provider=Microsoft.Access.OLEDB.10.0;" _
+    m_ReferenceModels = "Provider=Microsoft.Access.OLEDB.10.0;" _
         & "Persist Security Info=False;" _
         & "Data Source=" _
         & CurrentProject.path _
@@ -43,7 +48,7 @@ Private Sub Class_Initialize()
         & "User ID=Admin;" _
         & "Data Provider=Microsoft.ACE.OLEDB.12.0"
         
-    mDivisionModels = "Provider=Microsoft.Access.OLEDB.10.0;" _
+    m_DivisionModels = "Provider=Microsoft.Access.OLEDB.10.0;" _
         & "Persist Security Info=False;" _
         & "Data Source=" _
         & CurrentProject.path _
@@ -51,9 +56,9 @@ Private Sub Class_Initialize()
         & "User ID=Admin;" _
         & "Data Provider=Microsoft.ACE.OLEDB.12.0"
       
-    mExcelReport = CurrentProject.path & "\etc\templates\reports\ReportBase.xlsx"
+    m_ExcelReport = CurrentProject.path & "\etc\templates\reports\ReportBase.xlsx"
         
-    mExcelBudget = CurrentProject.path & "\etc\templates\reports\budgets\BudgetBase.xlsx"
+    m_ExcelBudget = CurrentProject.path & "\etc\templates\reports\budgets\BudgetBase.xlsx"
 End Sub
 
 
@@ -65,9 +70,19 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get References() As String
-    If Not mReferenceModels & "" = "" Then
-        References = mReferenceModels
+    On Error GoTo ErrorHandler:
+    If Not m_ReferenceModels & "" = "" Then
+        References = m_ReferenceModels
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       BudgetPath" _
+            & vbCrLf & "Member:      References" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -81,9 +96,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get Data() As String
-    If Not mDataModels & "" = "" Then
-        Data = mDataModels
+    On Error GoTo ErrorHandler:
+    If Not m_DataModels & "" = "" Then
+        Data = m_DataModels
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       BudgetPath" _
+            & vbCrLf & "Member:      Data" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -96,9 +121,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get Divisions() As String
-    If Not mDivisionModels & "" = "" Then
-        Divisions = mDivisionModels
+    On Error GoTo ErrorHandler:
+    If Not m_DivisionModels & "" = "" Then
+        Divisions = m_DivisionModels
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       BudgetPath" _
+            & vbCrLf & "Member:      Divisions" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -112,9 +147,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get ReportTemplate() As String
-    If Not mExcelReport & "" = "" Then
-        ReportTemplate = mExcelReport
+    On Error GoTo ErrorHandler:
+    If Not m_ExcelReport & "" = "" Then
+        ReportTemplate = m_ExcelReport
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       BudgetPath" _
+            & vbCrLf & "Member:      ReportTemplate" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -129,9 +174,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get BudgetTemplate() As String
-    If Not mExcelBudget & "" = "" Then
-        BudgetTemplate = mExcelBudget
+    On Error GoTo ErrorHandler:
+    If Not m_ExcelBudget & "" = "" Then
+        BudgetTemplate = m_ExcelBudget
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       BudgetPath" _
+            & vbCrLf & "Member:      BudgetTemplate" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -144,10 +199,20 @@ End Property
 '   Retval:          Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Property Let External(fp As String)
+Public Property Let ExternalFile(fp As String)
+    On Error GoTo ErrorHandler:
     If Not fp & "" = "" And Not Dir(fp) = "" Then
-        mPath = fp
+        m_Path = fp
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       BudgetPath" _
+            & vbCrLf & "Member:      ExternalFile" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -159,8 +224,18 @@ End Property
 '   Retval          String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Get External() As String
-    If Not mPath & "" = "" Then
-        External = mPath
+Public Property Get ExternalFile() As String
+    On Error GoTo ErrorHandler:
+    If Not m_Path & "" = "" Then
+        ExternalFile = m_Path
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       BudgetPath" _
+            & vbCrLf & "Member:      ExternalFile" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
