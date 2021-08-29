@@ -1,28 +1,23 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "ProgramArea"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
 
-Private strAreaCode As String
-Private strAreaName As String
-Private strProgramProject As String
-Private intAreaId As Integer
 
-
-
-Private Sub Class_Initialize()
-    strAreaCode = ""
-    strAreaName = ""
-    strProgramProject = ""
-    intAreaId = 0
-End Sub
-
-Private Sub Class_Terminate()
-    strAreaCode = ""
-    strAreaName = ""
-    strProgramProject = ""
-    intAreaId = 0
-End Sub
-
+Private m_Code As String
+Private m_Name As String
+Private m_ProgramProjectCode As String
+Private m_ProgramProjectName As String
+Private m_ID As Integer
+Private m_Error As String
 
 
 '----------------------------------------------------------------------------------
@@ -33,9 +28,19 @@ End Sub
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let ID(num As Integer)
+    On Error GoTo ErrorHandler:
     If Not num < 0 Then
-        intAreaId = num
+        m_ID = num
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      ProgramArea" _
+            & vbCrLf & "Member:     ID" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -48,9 +53,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get ID() As Integer
-    If Not intAreaId < 0 Then
-        ID = intAreaId
+    On Error GoTo ErrorHandler:
+    If Not m_ID < 0 Then
+        ID = m_ID
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      ProgramArea" _
+            & vbCrLf & "Member:     ID" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -63,9 +78,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let Code(cd As String)
+    On Error GoTo ErrorHandler:
     If Not cd & "" = "" Then
-        strAreaCode = cd
+         m_Code = cd
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      ProgramArea" _
+            & vbCrLf & "Member:     Code" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -78,9 +103,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get Code() As String
-    If Not strAreaCode & "" = "" Then
-        Code = strAreaCode
+    On Error GoTo ErrorHandler:
+    If Not m_Code & "" = "" Then
+        Code = m_Code
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      ProgramArea" _
+            & vbCrLf & "Member:     Code" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -93,9 +128,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let Name(nm As String)
+    On Error GoTo ErrorHandler:
     If Not nm & "" = "" Then
-        strAreaName = nm
+         m_Name = nm
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      ProgramArea" _
+            & vbCrLf & "Member:     Name" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -108,9 +153,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get Name() As String
-    If Not strAreaName & "" = "" Then
-        Name = strAreaName
+    On Error GoTo ErrorHandler:
+    If Not m_Name & "" = "" Then
+        Name = m_Name
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      ProgramArea" _
+            & vbCrLf & "Member:     Name" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -123,9 +178,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let ProgramProjectCode(pp As String)
+    On Error GoTo ErrorHandler:
     If Not pp & "" = "" Then
-        strProgramProject = pp
+         m_ProgramProjectCode = pp
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      ProgramArea" _
+            & vbCrLf & "Member:     ProgramProjectCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -138,7 +203,72 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get ProgramProjectCode() As String
-    If Not strProgramProject & "" = "" Then
-        ProgramProjectCode = strProgramProject
+    On Error GoTo ErrorHandler:
+    If Not m_ProgramProjectCode & "" = "" Then
+        ProgramProjectCode = m_ProgramProjectCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      ProgramArea" _
+            & vbCrLf & "Member:     ProgramProjectCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Property Get
+'   Name
+'   Parameters  Void
+'   Retval      String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Let ProgramProjectName(ppn As String)
+    On Error GoTo ErrorHandler:
+    If Not ppn & "" = "" Then
+         m_ProgramProjectName = ppn
+    End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      ProgramArea" _
+            & vbCrLf & "Member:     ProgramProjectName" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
+End Property
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Property Get
+'   Name
+'   Parameters  Void
+'   Retval      String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Get ProgramProjectName() As String
+    On Error GoTo ErrorHandler:
+    If Not m_ProgramProjectName & "" = "" Then
+        ProgramProjectName = m_ProgramProjectName
+    End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      ProgramArea" _
+            & vbCrLf & "Member:     ProgramProjectCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
+End Property
+
+
