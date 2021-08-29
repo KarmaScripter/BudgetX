@@ -1,46 +1,48 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "Change"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   FIELDS  -------------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
 
-Private mTableName As String
-Private mFieldName As String
-Private mAction As String
-Private mTimeStamp As String
-Private mOldValue As String
-Private mNewValue As String
-Private mChangeId As Integer
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   CONSTRUCTORS   ------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
+Private m_TableName As String
+Private m_FieldName As String
+Private m_Action As String
+Private m_TimeStamp As String
+Private m_OldValue As String
+Private m_NewValue As String
+Private m_ChangeId As Integer
+Private m_Error As String
 
 
 Private Sub Class_Initialize()
-    mTableName = ""
-    mFieldName = ""
-    mAction = ""
-    mOldValue = ""
-    mNewValue = ""
-    mTimeStamp = Now
-    mChangeId = 0
+    m_TableName = ""
+    m_FieldName = ""
+    m_Action = ""
+    m_OldValue = ""
+    m_NewValue = ""
+    m_TimeStamp = Now
+    m_ChangeId = 0
 End Sub
 
 Private Sub Class_Terminate()
-    mTableName = ""
-    mFieldName = ""
-    mAction = ""
-    mOldValue = ""
-    mNewValue = ""
-    mTimeStamp = Now
-    mChangeId = 0
+    m_TableName = ""
+    m_FieldName = ""
+    m_Action = ""
+    m_OldValue = ""
+    m_NewValue = ""
+    m_TimeStamp = Now
+    m_ChangeId = 0
 End Sub
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------  METHODS      ---------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 '----------------------------------------------------------------------------------
@@ -51,9 +53,19 @@ End Sub
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let ID(cid As Integer)
+    On Error GoTo ErrorHandler:
     If cid > 0 Then
-        mChangeId = cid
+        m_ChangeId = cid
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      Change" _
+            & vbCrLf & "Member:      ID" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -65,9 +77,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get ID() As Integer
-    If mChangeId > 0 Then
-        ID = mChangeId
+    On Error GoTo ErrorHandler:
+    If m_ChangeId > 0 Then
+        ID = m_ChangeId
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      Change" _
+            & vbCrLf & "Member:      ID" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -78,10 +100,20 @@ End Property
 '   RetVal      Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let tableName(table As String)
+Public Property Let TableName(table As String)
+    On Error GoTo ErrorHandler:
     If Not table & "" = "" Then
-        mTableName = table
+        m_TableName = table
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      Change" _
+            & vbCrLf & "Member:      TableName" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -92,10 +124,20 @@ End Property
 '   RetVal      String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Get tableName() As String
-    If Not mTableName & "" = "" Then
-        tableName = mTableName
+Public Property Get TableName() As String
+    On Error GoTo ErrorHandler:
+    If Not m_TableName & "" = "" Then
+        TableName = m_TableName
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      Change" _
+            & vbCrLf & "Member:      TableName" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -107,9 +149,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let FieldName(field As String)
+    On Error GoTo ErrorHandler:
     If Not field & "" = "" Then
-        mFieldName = field
+        m_FieldName = field
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      Change" _
+            & vbCrLf & "Member:      FieldName" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -121,9 +173,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get FieldName() As String
-    If Not mFieldName & "" = "" Then
-        FieldName = mFieldName
+    On Error GoTo ErrorHandler:
+    If Not m_FieldName & "" = "" Then
+        FieldName = m_FieldName
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      Change" _
+            & vbCrLf & "Member:      FieldName" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -135,9 +197,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let Action(act As String)
+    On Error GoTo ErrorHandler:
     If Not act & "" = "" Then
-        mAction = act
+        m_Action = act
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      Change" _
+            & vbCrLf & "Member:      Action" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -149,9 +221,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get Action() As String
-    If Not mAction & "" = "" Then
-        Action = mAction
+    On Error GoTo ErrorHandler:
+    If Not m_Action & "" = "" Then
+        Action = m_Action
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      Change" _
+            & vbCrLf & "Member:      Action" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -163,9 +245,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let TimeStamp(tm As String)
+    On Error GoTo ErrorHandler:
     If Not tm & "" = "" Then
-        mTimeStamp = tm
+        m_TimeStamp = tm
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      Change" _
+            & vbCrLf & "Member:      TimeStamp" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -177,9 +269,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get TimeStamp() As String
-    If Not mTimeStamp & "" = "" Then
-        TimeStamp = mTimeStamp
+    On Error GoTo ErrorHandler:
+    If Not m_TimeStamp & "" = "" Then
+        TimeStamp = m_TimeStamp
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      Change" _
+            & vbCrLf & "Member:      TimeStamp" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -191,9 +293,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let OldValue(ov As String)
+    On Error GoTo ErrorHandler:
     If Not ov & "" = "" Then
-        mOldValue = ov
+        m_OldValue = ov
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      Change" _
+            & vbCrLf & "Member:      OldValue" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -205,10 +317,20 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get OldValue() As String
-    If Not mOldValue & "" = "" Then
-        OldValue = mOldValue
+    If Not m_OldValue & "" = "" Then
+        OldValue = m_OldValue
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      Change" _
+            & vbCrLf & "Member:      OldValue" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
+
 
 
 '----------------------------------------------------------------------------------
@@ -219,9 +341,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let NewValue(nv As String)
+    On Error GoTo ErrorHandler:
     If Not nv & "" = "" Then
-        mNewValue = nv
+        m_NewValue = nv
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      Change" _
+            & vbCrLf & "Member:      NewValue" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -233,8 +365,18 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get NewValue() As String
-    If Not mNewValue & "" = "" Then
-        NewValue = mNewValue
+    On Error GoTo ErrorHandler:
+    If Not m_NewValue & "" = "" Then
+        NewValue = m_NewValue
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      Change" _
+            & vbCrLf & "Member:      NewValue" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 

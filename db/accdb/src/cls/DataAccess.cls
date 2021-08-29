@@ -55,8 +55,8 @@ Public Property Get IsConnected() As Boolean
     End If
 ErrorHandler:
     If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     DataType" _
+        m_Error = "Source:       DataAccess" _
+            & vbCrLf & "Member:     IsConnected" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -110,8 +110,8 @@ Public Function GetDataSet(table As String) As DAO.Recordset
     Set GetDataSet = rs
 ErrorHandler:
     If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     DataType" _
+        m_Error = "Source:       DataAccess" _
+            & vbCrLf & "Member:     GetDataSet" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -144,8 +144,8 @@ Public Function GetDataRecord(table As String, primarykey As String, ID As Integ
     End If
 ErrorHandler:
     If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     DataType" _
+        m_Error = "Source:       DataAccess" _
+            & vbCrLf & "Member:     GetDataRecord" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -165,13 +165,13 @@ End Function
 '---------------------------------------------------------------------------------
 Public Sub CloseDatabase()
     On Error GoTo ErrorHandler:
-    If Not IsNull(mDatabase) Then
+    If Not mDatabase Is Nothing Then
         Set mDatabase = Nothing
     End If
 ErrorHandler:
     If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     DataType" _
+        m_Error = "Source:       DataAccess" _
+            & vbCrLf & "Member:     CloseDatabase" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -195,8 +195,8 @@ Public Sub CloseWorkspace()
     End If
 ErrorHandler:
     If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     DataType" _
+        m_Error = "Source:       DataAccess" _
+            & vbCrLf & "Member:     CloseWorkspace" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -228,8 +228,8 @@ Public Sub UpdateData(table As String, field As String, Value As Variant)
     End If
 ErrorHandler:
     If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     DataType" _
+        m_Error = "Source:       DataAccess" _
+            & vbCrLf & "Member:     UpdateData" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -257,8 +257,8 @@ Public Sub AddRecord(table As String, field As String, Value As Variant)
     End With
 ErrorHandler:
     If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     DataType" _
+        m_Error = "Source:       DataAccess" _
+            & vbCrLf & "Member:     AddRecord" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -288,8 +288,8 @@ Public Sub UpdateRecord(table As String, field As String, NewValue As Variant, I
     End If
 ErrorHandler:
     If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     DataType" _
+        m_Error = "Source:       DataAccess" _
+            & vbCrLf & "Member:     UpdateRecord" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -315,8 +315,8 @@ Public Sub DeleteRecord(table As String, pk As String, ID As Integer)
     Set rs = DB.OpenRecordset(SQL)
 ErrorHandler:
     If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     DataType" _
+        m_Error = "Source:       DataAccess" _
+            & vbCrLf & "Member:     DeleteRecord" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If

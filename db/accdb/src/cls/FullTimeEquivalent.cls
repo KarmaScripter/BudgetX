@@ -1,25 +1,31 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "FullTimeEquivalent"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
 Option Compare Database
-
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   FIELDS   -----------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-
-Private mRpioCode As String
-Private mBFY As String
-Private mBudgetLevel As String
-Private mFundCode As String
-Private mAhCode As String
-Private mOrgCode As String
-Private mAccountCode As String
-Private mActivityCode As String
-Private mBocCode As String
-Private mRcCode As String
-Private mAmount As Double
+Option Explicit
 
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   CONSTRUCTORS --------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
+
+Private m_RpioCode As String
+Private m_BFY As String
+Private m_BudgetLevel As String
+Private m_FundCode As String
+Private m_AhCode As String
+Private m_OrgCode As String
+Private m_AccountCode As String
+Private m_ActivityCode As String
+Private m_BocCode As String
+Private m_RcCode As String
+Private m_Amount As Double
+Private m_Error As String
+
+
 
 Public Sub Class_Initialize()
 End Sub
@@ -28,9 +34,7 @@ Public Sub Class_Terminate()
 End Sub
 
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   METHODS        ------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 
@@ -42,9 +46,19 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get BFY() As String
-    If Not mBFY & "" = "" Then
-        BFY = mBFY
+    On Error GoTo ErrorHandler:
+    If Not m_BFY & "" = "" Then
+        BFY = m_BFY
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         BFY" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -57,9 +71,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let BFY(year As String)
+    On Error GoTo ErrorHandler:
     If Not year & "" = "" Then
-        mBFY = year
+        m_BFY = year
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         BFY" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -72,9 +96,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get RPIO() As String
-    If Not mRpioCode & "" = "" Then
-        RPIO = mRpioCode
+    On Error GoTo ErrorHandler:
+    If Not m_RpioCode & "" = "" Then
+        RPIO = m_RpioCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         RPIO" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -87,9 +121,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let RPIO(rp As String)
+    On Error GoTo ErrorHandler:
     If Not rp & "" = "" Then
-        mRpioCode = rp
+        m_RpioCode = rp
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         RPIO" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -102,9 +146,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let BudgetLevel(bl As String)
+    On Error GoTo ErrorHandler:
     If Not bl & "" = "" Then
-        mBudgetLevel = bl
+        m_BudgetLevel = bl
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         BudgetLevel" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -117,9 +171,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get BudgetLevel() As String
-    If Not mBudgetLevel & "" = "" Then
-        BudgetLevel = mBudgetLevel
+    On Error GoTo ErrorHandler:
+    If Not m_BudgetLevel & "" = "" Then
+        BudgetLevel = m_BudgetLevel
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         BudgetLevel" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -132,9 +196,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let FundCode(fc As String)
+    On Error GoTo ErrorHandler:
     If Not fc & "" = "" Then
-        mFundCode = fc
+        m_FundCode = fc
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         FundCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -147,9 +221,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get FundCode() As String
-    If Not mFundCode & "" = "" Then
-        FundCode = mFundCode
+    On Error GoTo ErrorHandler:
+    If Not m_FundCode & "" = "" Then
+        FundCode = m_FundCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         FundCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -162,9 +246,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let AhCode(AH As String)
+    On Error GoTo ErrorHandler:
     If Not AH & "" = "" Then
-        mAhCode = AH
+        m_AhCode = AH
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         AhCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -177,9 +271,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get AhCode() As String
-    If Not mAhCode & "" = "" Then
-        AhCode = mAhCode
+    On Error GoTo ErrorHandler:
+    If Not m_AhCode & "" = "" Then
+        AhCode = m_AhCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         AhCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -192,9 +296,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let OrgCode(ORG As String)
+    On Error GoTo ErrorHandler:
     If Not ORG & "" = "" Then
-        mOrgCode = ORG
+        m_OrgCode = ORG
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         OrgCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -207,9 +321,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get OrgCode() As String
-    If Not mOrgCode & "" = "" Then
-        OrgCode = mOrgCode
+    On Error GoTo ErrorHandler:
+    If Not m_OrgCode & "" = "" Then
+        OrgCode = m_OrgCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         OrgCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -221,9 +345,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let AccountCode(ac As String)
+    On Error GoTo ErrorHandler:
     If Not ac & "" = "" Then
-        mAccountCode = ac
+        m_AccountCode = ac
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         AccountCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -236,9 +370,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get AccountCode() As String
-    If Not mAccountCode & "" = "" Then
-        AccountCode = mAccountCode
+    On Error GoTo ErrorHandler:
+    If Not m_AccountCode & "" = "" Then
+        AccountCode = m_AccountCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         AccountCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -251,9 +395,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let RcCode(rc As String)
+    On Error GoTo ErrorHandler:
     If Not rc & "" = "" Then
-        mRcCode = rc
+        m_RcCode = rc
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         RcCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -266,9 +420,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get RcCode() As String
-    If Not mRcCode & "" = "" Then
-        RcCode = mRcCode
+    On Error GoTo ErrorHandler:
+    If Not m_RcCode & "" = "" Then
+        RcCode = m_RcCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         RcCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -281,9 +445,19 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let Amount(funds As Double)
+    On Error GoTo ErrorHandler:
     If Not IsNull(funds) Or Not funds < 0 Then
-        mAmount = funds
+        m_Amount = funds
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         Amount" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property
 
 
@@ -296,7 +470,17 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get Amount() As Double
-    If Not IsNull(mAmount) Or Not mAmount < 0 Then
-        Amount = mAmount
+    On Error GoTo ErrorHandler:
+    If Not IsNull(m_Amount) Or Not m_Amount < 0 Then
+        Amount = m_Amount
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:      FullTimeEquivalent" _
+            & vbCrLf & "Member:         Amount" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
 End Property

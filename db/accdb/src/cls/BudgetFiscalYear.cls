@@ -34,9 +34,6 @@ Private m_Notification As String
 Private m_Base As String
 
 
-
-
-
 '---------------------------------------------------------------------------------
 '   Type            Constructor
 '   Name
@@ -68,7 +65,7 @@ Public Property Let Base(yr As String)
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      " _
+            & vbCrLf & "Member:      Base" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -93,7 +90,7 @@ Public Property Get Base() As String
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      " _
+            & vbCrLf & "Member:      Base" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -117,7 +114,7 @@ Public Property Let ID(num As Integer)
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:     GetCalendarDate" _
+            & vbCrLf & "Member:     ID" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -141,7 +138,7 @@ Public Property Get ID() As Integer
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:     GetCalendarDate" _
+            & vbCrLf & "Member:     ID" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -170,7 +167,7 @@ Public Property Let SweepDate(sd As Date)
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      " _
+            & vbCrLf & "Member:      SweepDate" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -197,7 +194,7 @@ Public Property Get SweepDate() As Date
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      " _
+            & vbCrLf & "Member:      SweepDate" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -225,7 +222,7 @@ Public Property Let BFY(by As String)
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      " _
+            & vbCrLf & "Member:      BFY" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -249,7 +246,7 @@ Public Property Get BFY() As String
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      " _
+            & vbCrLf & "Member:      BFY" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -275,7 +272,7 @@ Public Property Let EFY(by As String)
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      " _
+            & vbCrLf & "Member:      EFY" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -300,7 +297,7 @@ Public Property Get EFY() As String
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      " _
+            & vbCrLf & "Member:      EFY" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -328,7 +325,7 @@ Public Property Let ExpirationYear(ex As String)
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      " _
+            & vbCrLf & "Member:      ExpirationYear" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -355,7 +352,7 @@ Public Property Get ExpirationYear() As String
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      " _
+            & vbCrLf & "Member:      ExpirationYear" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -456,7 +453,7 @@ Public Property Get CalendarYear() As String
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      " _
+            & vbCrLf & "Member:      CalendarYear" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -484,8 +481,8 @@ Public Function IsExpiring() As Boolean
     End If
 ErrorHandler:
     If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear Class" _
-            & vbCrLf & "Member: IsExpiring()" _
+        m_Error = "Source:      BudgetFiscalYear Class" _
+            & vbCrLf & "Member:     IsExpiring()" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
@@ -512,7 +509,7 @@ Public Function CalculateCalendarDaysUntil(sd As Date) As Integer
     End If
 ErrorHandler:
     If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
+        m_Error = "Source:      BudgetFiscalYear" _
             & vbCrLf & "Member:     CalculateDaysUntil(Date)" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
@@ -543,7 +540,7 @@ Public Function CalculateRemainingFullTimeDays() As Integer
     End If
 ErrorHandler:
     If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
+        m_Error = "Source:      BudgetFiscalYear" _
             & vbCrLf & "Member:     CalculateFiscalDaysRemaining()" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear

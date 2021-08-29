@@ -1,29 +1,29 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "Budget"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------  FIELDS      ----------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
 
-Private mAhCode As String
-Private mBFY As String
-Private mRcCode As String
-Private mFundCode As String
+
+Private m_AhCode As String
+Private m_BFY As String
+Private m_RcCode As String
+Private m_FundCode As String
 Private Args As BudgetArgs
-Private mDivision As String
-Private mControlNumber As String
-
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'-------------------------------------------------------------- CONSTRUCTORS -----------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
+Private m_Division As String
+Private m_ControlNumber As String
+Private m_Error As String
 
 Private Sub Class_Initialize()
     Set Args = New BudgetArgs
 End Sub
-
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'--------------------------------------------------------------- PROPERTIES  -----------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 '---------------------------------------------------------------------------------
@@ -34,10 +34,19 @@ End Sub
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let AhCode(ac As String)
+    On Error GoTo ErrorHandler:
     If Not ac & "" = "" Then
-        mAhCode = ac
-        Args.AhCode = mAhCode
+        m_AhCode = ac
+        Args.AhCode = m_AhCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Budget" _
+            & vbCrLf & "Member:     AhCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
 End Property
 
 
@@ -49,9 +58,18 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get AhCode() As String
-    If Not mAhCode & "" = "" Then
-        AhCode = mAhCode
+    On Error GoTo ErrorHandler:
+    If Not m_AhCode & "" = "" Then
+        AhCode = m_AhCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Budget" _
+            & vbCrLf & "Member:     AhCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
 End Property
 
 
@@ -63,10 +81,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let BFY(fy As String)
+    On Error GoTo ErrorHandler:
     If Not fy & "" = "" Then
-        mBFY = fy
-        Args.BFY = mBFY
+        m_BFY = fy
+        Args.BFY = m_BFY
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Budget" _
+            & vbCrLf & "Member:     BFY" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
 End Property
 
 
@@ -78,9 +105,18 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get BFY() As String
-    If Not mBFY & "" = "" Then
-        BFY = mBFY
+    On Error GoTo ErrorHandler:
+    If Not m_BFY & "" = "" Then
+        BFY = m_BFY
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Budget" _
+            & vbCrLf & "Member:     BFY" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
 End Property
 
 
@@ -92,10 +128,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let RcCode(rc As String)
+    On Error GoTo ErrorHandler:
     If Not rc & "" = "" Then
-        mRcCode = rc
-        Args.RcCode = mRcCode
+        m_RcCode = rc
+        Args.RcCode = m_RcCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Budget" _
+            & vbCrLf & "Member:     RcCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
 End Property
 
 
@@ -107,9 +152,18 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get RcCode() As String
-    If Not mRcCode & "" = "" Then
-        RcCode = mRcCode
+    On Error GoTo ErrorHandler:
+    If Not m_RcCode & "" = "" Then
+        RcCode = m_RcCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Budget" _
+            & vbCrLf & "Member:     RcCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
 End Property
 
 
@@ -122,10 +176,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let FundCode(fc As String)
+    On Error GoTo ErrorHandler:
     If Not fc & "" = "" Then
-        mFundCode = fc
-        Args.FundCode = mFundCode
+        m_FundCode = fc
+        Args.FundCode = m_FundCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Budget" _
+            & vbCrLf & "Member:     FundCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
 End Property
 
 
@@ -137,9 +200,18 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get FundCode() As String
-    If Not mFundCode & "" = "" Then
-        FundCode = mFundCode
+    On Error GoTo ErrorHandler:
+    If Not m_FundCode & "" = "" Then
+        FundCode = m_FundCode
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Budget" _
+            & vbCrLf & "Member:     FundCode" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
 End Property
 
 
@@ -151,9 +223,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get PublicLaw() As String
-    If Not mBFY & "" = "" Then
-        PublicLaw = DLookup("PublicLaw", "Appropriations", "Appropriations.BFY = '" & mBFY & "'")
+    On Error GoTo ErrorHandler:
+    If Not m_BFY & "" = "" Then
+        PublicLaw = DLookup("PublicLaw", "Appropriations", _
+            "Appropriations.BFY = '" & m_BFY & "'")
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Budget" _
+            & vbCrLf & "Member:     PublicLaw" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
 End Property
 
 
@@ -165,9 +247,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get AppropriationBill() As String
-    If Not mBFY & "" = "" Then
-        AppropriationBill = DLookup("Title", "Appropriations", "Appropriations.BFY = '" & mBFY & "'")
+    On Error GoTo ErrorHandler:
+    If Not m_BFY & "" = "" Then
+        AppropriationBill = DLookup("Title", "Appropriations", _
+            "Appropriations.BFY = '" & m_BFY & "'")
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Budget" _
+            & vbCrLf & "Member:     AppropriationBill" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
 End Property
 
 
@@ -179,9 +271,19 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get DivisionName() As String
-    If Not mRcCode & "" = "" Then
-        DivisionName = DLookup("Title", "Divisions", "Divisions.Code = '" & mRcCode & "'")
+    On Error GoTo ErrorHandler:
+    If Not m_RcCode & "" = "" Then
+        DivisionName = DLookup("Title", "Divisions", _
+            "Divisions.Code = '" & m_RcCode & "'")
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Budget" _
+            & vbCrLf & "Member:     DivisionName" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
 End Property
 
 
@@ -193,34 +295,36 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get DivisionCaption() As String
-    If Not mRcCode & "" = "" Then
-        DivisionCaption = DLookup("Caption", "Divisions", "Divisions.Code = '" & mRcCode & "'")
+    On Error GoTo ErrorHandler:
+    If Not m_RcCode & "" = "" Then
+        DivisionCaption = DLookup("Caption", "Divisions", _
+            "Divisions.Code = '" & m_RcCode & "'")
     End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:       Budget" _
+            & vbCrLf & "Member:     DivisionCaption" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
 End Property
 
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'--------------------------------------------------------------- METHODS  --------------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 '----------------------------------------------------------------------------------
 '   Type            Sub-Procedure
 '   Name            Generate
 '   Parameters      Void
-'   Purpose         Initializes BudgetArg members
+'   Purpose         Initializes BudgetArg m_embers
 '---------------------------------------------------------------------------------
 Public Sub Generate(bargs As BudgetArgs)
-
-    'Declarations
+    On Error GoTo ErrorHandler:
     Dim DB As DAO.Database
     Dim Data As DAO.Recordset
     Dim query As DAO.QueryDef
     Dim Budget As Report
-    
-    On Error GoTo ErrorHandler:
-
-    'Initialize memebers
     If Not Args.AhCode & "" = "" Then
         AhCode = Args.AhCode
     Else
@@ -242,22 +346,17 @@ Public Sub Generate(bargs As BudgetArgs)
     query.Parameters("FiscalYearArgs") = BFY
     query.Parameters("RcCodeArgs") = RcCode
     query.Parameters("FundCodeArgs") = FundCode
-    
-    'Assign recordset to report
     Set Data = query.OpenRecordset(dbOpenDynaset)
     Budget.Recordset = Data
-    
-    'Open Report
     DoCmd.OpenReport (Budget.Name)
-    
-    'Close Report
     query.Close
-    
 ErrorHandler:
-    Dim msg As String
-    msg = "Budget Object 'Generate' Function Error!"
-    MessageFactory.Message = msg
-    MessageFactory.ShowError msg
-    Resume Next
+    If Err.Number > 0 Then
+        m_Error = "Source:       Budget" _
+            & vbCrLf & "Member:     Generate" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
 End Sub
 
