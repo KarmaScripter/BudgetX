@@ -36,13 +36,7 @@ Private Sub SetButtonVisibility()
     Me.UndoButton.Visible = Not Me.UndoButton.Visible
     Me.UpdateButton.Visible = Not Me.UpdateButton.Visible
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: SetButtonVisibility" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -107,13 +101,7 @@ Public Sub Update()
         & "WHERE Allocations.PrcId = '" & PRC.ID & "'"
     Set Data = DB.OpenRecordset(SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: Update()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -158,13 +146,7 @@ Private Sub SetComboBoxColors()
     Me!BocCodeComboBox.BackColor = RGB(33, 33, 33)
     Me!BocCodeComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -211,13 +193,7 @@ Private Sub SetTextBoxColors()
     Me!AmountTextBox.BackColor = RGB(10, 10, 10)
     Me!AmountTextBox.BorderColor = RGB(52, 52, 52)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: SetTextBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -233,13 +209,7 @@ Private Sub ClearFilters()
     m_BudgetLevelFilter = ""
     m_FiscalYearFilter = ""
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: ClearFilters()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -266,13 +236,7 @@ Private Sub ClearTextBoxValues()
     Me.FundCodeTextBox = Null
     Me.OrgCodeTextBox = Null
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: ClearTextBoxValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -298,13 +262,7 @@ Private Sub ClearComboBoxValues()
     Me.FundCodeComboBox.Value = ""
     Me.OrgCodeComboBox.Value = ""
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: ClearComboBoxValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -324,13 +282,7 @@ Private Sub ExitButton_Click()
         ObjectName:="AccountEditor", Save:=acSaveYes
     DoCmd.OpenForm FormName:=m_Owner
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member:     ExitButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -348,13 +300,7 @@ Private Sub Form_Load()
     ClearComboBoxValues
     Me.IdTextBox.Value = Me.OpenArgs
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: Form_Load()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -371,13 +317,7 @@ Private Sub ActivityCodeComboBox_AfterUpdate()
     Me.ActivityCodeTextBox.BorderColor = RGB(68, 114, 196)
     Me.ActivityCodeTextBox.BackColor = RGB(33, 33, 33)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: ActivityCodeComboBox_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -395,13 +335,7 @@ Private Sub AhCodeComboBox_AfterUpdate()
     Me.AhCodeTextBox.BorderColor = RGB(68, 114, 196)
     Me.AhCodeTextBox.BackColor = RGB(33, 33, 33)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: AhCodeComboBox_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -417,13 +351,7 @@ Private Sub MenuButton_Click()
     On Error GoTo ErrorHandler:
     SetButtonVisibility
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: MenuButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -442,13 +370,7 @@ Private Sub OrgCodeComboBox_AfterUpdate()
     Me.OrgCodeTextBox.BorderColor = RGB(68, 114, 196)
     Me.OrgCodeTextBox.BackColor = RGB(33, 33, 33)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: OrgCodeComboBox_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -467,13 +389,7 @@ Private Sub RcCodeComboBox_AfterUpdate()
     Me.RcCodeTextBox.BorderColor = RGB(68, 114, 196)
     Me.RcCodeTextBox.BackColor = RGB(33, 33, 33)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: RcCodeComboBox_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -490,13 +406,7 @@ Private Sub BfyComboBox_AfterUpdate()
     Me.BfyTextBox.BorderColor = RGB(68, 114, 196)
     Me.BfyTextBox.BackColor = RGB(33, 33, 33)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: BfyComboBox_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -514,13 +424,7 @@ Private Sub BocCodeComboBox_AfterUpdate()
     Me.BocCodeTextBox.BorderColor = RGB(68, 114, 196)
     Me.BocCodeTextBox.BackColor = RGB(33, 33, 33)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: BocCodeComboBox_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -538,13 +442,7 @@ Private Sub BudgetLevelComboBox_AfterUpdate()
     Me.BudgetLevelTextBox.BorderColor = RGB(68, 114, 196)
     Me.BudgetLevelTextBox.BackColor = RGB(33, 33, 33)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: BudgetLevelComboBox_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -612,13 +510,7 @@ Private Sub AccountCodeComboBox_AfterUpdate()
     Me.AccountCodeTextBox.BorderColor = RGB(68, 114, 196)
     Me.AccountCodeTextBox.BackColor = RGB(33, 33, 33)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: AccountCodeComboBox_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -636,13 +528,7 @@ Private Sub UpdateButton_Click()
     DoCmd.OpenQuery ("UpdateAccountEditorData")
     DoCmd.SetWarnings (True)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: UpdateButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -658,13 +544,7 @@ Private Sub RefreshButton_Click()
     ClearComboBoxValues
     ClearTextBoxValues
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: RefreshButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -679,13 +559,7 @@ Private Sub CalculatorButton_Click()
     On Error GoTo ErrorHandler:
     Calculator.Calculate
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: CalculatorButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -735,13 +609,7 @@ Private Sub CopyButton_Click()
         & " Me.AccountCodeTextBox.Text, Me.BocCodeTextBox.Text, Me.RcCodeTextBox.Text, Me.ActivityCodeTextBox.Text)"
     DoCmd.RunSQL (pSQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: CopyButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -786,13 +654,7 @@ Private Sub InsertButton_Click()
         & "Me.AccountCodeTextBox.Text, Me.BocCodeTextBox.Text, Me.RcCodeTextBox.Text, Me.ActivityCodeTextBox.Text)"
     DoCmd.RunSQL (pSQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: InsertButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -818,13 +680,7 @@ Private Sub UpdateBudgetLevel()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: UpdateBudgetLevel()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -849,13 +705,7 @@ Private Sub UpdateBfy()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: UpdateBfy()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -880,13 +730,7 @@ Private Sub UpdateRpioCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: UpdateRpioCode()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -911,13 +755,7 @@ Private Sub UpdateAhCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: UpdateAhCode()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -942,13 +780,7 @@ Private Sub UpdateOrgCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: UpdateOrgCode()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -973,13 +805,7 @@ Private Sub UpdateAccountCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: UpdateAccountCode()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1004,13 +830,7 @@ Private Sub UpdateBocCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: UpdateBocCode()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1035,13 +855,7 @@ Private Sub UpdateRcCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: UpdateRcCode()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1067,13 +881,7 @@ Private Sub UpdateAmount()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountEditor" _
-            & vbCrLf & "Member: UpdateAmount()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1093,13 +901,7 @@ Private Sub UndoButton_Click()
         DoCmd.RunCommand acCmdUndo
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: SaveButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1119,14 +921,31 @@ Private Sub SaveButton_Click()
         DoCmd.RunCommand acCmdSave
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: SaveButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
+    ProcessError
+    Exit Sub
+End Sub
+
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
         Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
-    Exit Sub
 End Sub
+
 
 

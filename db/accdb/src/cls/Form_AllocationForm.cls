@@ -41,13 +41,7 @@ Private Sub Form_Open(Cancel As Integer)
     Me.Filter = FiscalYearFilter & pAnd & BudgetLevelFilter
     Me.RecordSource = "SELECT * FROM Allocations WHERE " & Me.Filter
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      AllocationForm" _
-            & vbCrLf & "Member:     Form_Open()" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -68,13 +62,7 @@ Private Sub Form_Timer()
     On Error GoTo ErrorHandler:
     HideButtons
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: Form_Timer()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -104,13 +92,7 @@ Private Sub HideButtons()
     Me.SaveButton.Visible = False
     Me.CompassBudgetStatusQueryButton.Visible = False
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     HideButtons()" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -141,13 +123,7 @@ Private Sub Form_Load()
     Me.ProgramProjectNameComboBox.RowSource = "SELECT DISTINCT Allocations.ProgramProjectName" _
         & " FROM Allocations;"
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     Form_Load()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -168,13 +144,7 @@ Private Sub SetComboBoxColors()
     Me.ProgramProjectNameComboBox.BackColor = RGB(33, 33, 33)
     Me.ProgramProjectNameComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -202,13 +172,7 @@ Private Sub SetButtonVisibility()
     Me.SaveButton.Visible = Not Me.SaveButton.Visible
     Me.CompassBudgetStatusQueryButton.Visible = Not Me.CompassBudgetStatusQueryButton.Visible
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     SetButtonVisibility()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -229,13 +193,7 @@ Private Sub ClearFilters()
     ProgramProjectNameFilter = vbNullString
     Me.Filter = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:  ClearFilters()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -253,13 +211,7 @@ Private Sub ClearComboBoxes()
     Me.ProgramProjectNameComboBox = vbNullString
     ClearFilters
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: ClearComboBoxes" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -278,13 +230,7 @@ Private Sub ResetOptionGroupValues()
     BudgetLevelFilter = "[BudgetLevel] = '7'"
     FiscalYearFilter = "[BFY] = '2021'"
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     ResetOptionGroupValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -315,13 +261,7 @@ Private Sub BudgetLevelOptionGroup_AfterUpdate()
     Me.RecordSource = m_SqlQuery
     Me.Requery
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     BudgetLevelOptionGroup_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -392,13 +332,7 @@ Private Function GetBudgetLevelFilter()
                 & pAnd & ProgramProjectNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: GetBudgetLevelFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -429,13 +363,7 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     Me.RecordSource = m_SqlQuery
     Me.Requery
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:      FiscalYearOptionGroup_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -505,13 +433,7 @@ Private Function GetFiscalYearFilter()
                 & pAnd & ProgramProjectNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: GetFiscalYearFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -538,13 +460,7 @@ Private Sub FundNameComboBox_Change()
         & " Allocations.BudgetLevel = '7'" _
         & pAnd & Me.Filter
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: FundNameComboBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -619,12 +535,7 @@ Private Function GetFundNameFilter()
                 & pAnd & ProgramProjectNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     GetFundNameFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -647,13 +558,7 @@ Private Sub ProgramProjectNameComboBox_Change()
     Me.RecordSource = m_SqlQuery
     Me.Requery
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:      ProgramProjectNameComboBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -728,12 +633,7 @@ Private Function GetProgramProjectNameFilter()
                 & pAnd & ProgramProjectNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     GetProgramProjectNameFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -750,13 +650,7 @@ Private Sub Form_Close()
     Me.Filter = vbNullString
     m_SqlQuery = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     Form_Close()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -775,12 +669,7 @@ Private Sub CompassBudgetStatusQueryButton_Click()
         OpenArgs:=Me.Name
     DoCmd.Close ObjectType:=acForm, ObjectName:=Me.Name, Save:=acSaveYes
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     CompassBudgetStatusQueryButton_Click()" _
-            & vbCrLf & "Descript: " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -829,13 +718,7 @@ Private Sub EditButton_Click()
     DoCmd.Close ObjectType:=acForm, _
         ObjectName:="AllocationForm", Save:=acSaveYes
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: EditButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -851,12 +734,7 @@ Private Sub CalculatorButton_Click()
     On Error GoTo ErrorHandler:
     Calculator.Calculate
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: CalculatorButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -922,12 +800,7 @@ Private Function GetColumnNames() As String()
     Next i
     GetColumnNames = m_Array()
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       AllocationForm" _
-            & vbCrLf & "Member:     GetColumnNames" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -989,16 +862,7 @@ Private Sub ExcelButton_Click()
     m_Excel.WindowState = xlMaximized
     m_Excel.Visible = True
 ErrorHandler:
-    If Err.Number <> 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     ExcelButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-        Set m_Excel = Nothing
-        Set m_Allocations = Nothing
-        Set m_Worksheet = Nothing
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1015,13 +879,7 @@ Private Sub MenuButton_Click()
     On Error GoTo ErrorHandler:
     SetButtonVisibility
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: MenuButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1047,13 +905,7 @@ Private Sub RefreshButton_Click()
     Me.RecordSource = m_SqlQuery
     Me.Requery
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     RefreshButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1071,13 +923,7 @@ Private Sub ExitButton_Click()
     DoCmd.Close acForm, Me.Name, acSaveYes
     DoCmd.OpenForm FormName:="Main", WindowMode:=acDialog
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: ExitButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1135,13 +981,7 @@ Private Sub UpdateBfy()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: UpdateBfy()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1167,13 +1007,7 @@ Private Sub UpdateRpioCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: UpdateRpioCode()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1199,13 +1033,7 @@ Private Sub UpdateAhCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: UpdateAhCode()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1232,13 +1060,7 @@ Private Sub UpdateOrgCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: UpdateOrgCode()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1265,13 +1087,7 @@ Private Sub UpdateAccountCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: UpdateAccountCode()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1298,13 +1114,7 @@ Private Sub UpdateBocCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: UpdateBocCode()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1331,13 +1141,7 @@ Private Sub UpdateRcCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: UpdateRcCode()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1365,13 +1169,7 @@ Private Sub UpdateAmount()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     UpdateAmount()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1389,13 +1187,7 @@ Private Sub UndoButton_Click()
         DoCmd.RunCommand acCmdUndo
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: SaveButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -1415,13 +1207,7 @@ Private Sub SaveButton_Click()
         DoCmd.RunCommand acCmdSave
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member: SaveButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
