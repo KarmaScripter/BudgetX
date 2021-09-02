@@ -1,17 +1,11 @@
+Attribute VB_Name = "Strings"
 Option Compare Database
 Option Explicit
 
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   FIELDS   ------------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-
-Private mError As String
+Private m_Error As String
 
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   METHODS  ------------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -41,14 +35,8 @@ Public Static Function ToProperCase(ByVal pString As String) As String
     Next i
     ToProperCase = result
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Member:      ToProperCase(String)" _
-            & vbCrLf & "Source:       String" _
-            & vbCrLf & "Descrip:      " & Err.Description & "'"
-        Err.Clear
-        Exit Function
-    End If
-    MessageFactory.ShowError mError
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -72,14 +60,8 @@ Public Function ToCamelCase(ByVal pString As String) As String
     End If
     ToCamelCase = result
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Member:      ToProperCase(String)" _
-            & vbCrLf & "Source:       Strings" _
-            & vbCrLf & "Descrip:      " & Err.Description & "'"
-        Err.Clear
-        Exit Function
-    End If
-    MessageFactory.ShowError mError
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -110,14 +92,8 @@ Public Function ToPascalCase(ByVal pString As String) As String
     Next i
     ToPascalCase = Join(words, "")
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Member:      ToPascalCase(String)" _
-            & vbCrLf & "Source:       Strings" _
-            & vbCrLf & "Descrip:      " & Err.Description & "'"
-        Err.Clear
-        Exit Function
-    End If
-    MessageFactory.ShowError mError
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -133,25 +109,19 @@ End Function
 '                   Capitalize the first character and add a space before
 '                   each capitalized letter (except the first character).
 '---------------------------------------------------------------------------------
-Public Function SearchArray(mArray As Variant, pString As String) As Integer
+Public Function SearchArray(pArray As Variant, pString As String) As Integer
     Dim FindStrInArray As Integer
     FindStrInArray = -1
     Dim i As Integer
-    For i = LBound(mArray) To UBound(mArray)
-        If pString = mArray(i) Then
+    For i = LBound(pArray) To UBound(pArray)
+        If pString = pArray(i) Then
             FindStrInArray = i
             Exit For
         End If
     Next i
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Member:      SearchArray(String)" _
-            & vbCrLf & "Source:       Strings" _
-            & vbCrLf & "Descrip:      " & Err.Description & "'"
-        Err.Clear
-        Exit Function
-    End If
-    MessageFactory.ShowError mError
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -166,10 +136,10 @@ End Function
 '                   Capitalize the first character and add a space before
 '                   each capitalized letter (except the first character).
 '---------------------------------------------------------------------------------
-Public Function SplitIntoArray(pString As String, mSeparator As String) As Variant
+Public Function SplitIntoArray(pString As String, m_Separator As String) As Variant
     Dim Arr As Variant
     If Len(pString) > 0 Then
-        Arr = Split(pString, mSeparator)
+        Arr = Split(pString, m_Separator)
         Dim i As Integer
         For i = LBound(Arr) To UBound(Arr)
             Arr(i) = Trim(Arr(i))
@@ -179,12 +149,30 @@ Public Function SplitIntoArray(pString As String, mSeparator As String) As Varia
     End If
     SplitIntoArray = Arr
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Member:      SplitToArray(String)" _
-            & vbCrLf & "Source:       Strings" _
-            & vbCrLf & "Descrip:      " & Err.Description & "'"
-        Err.Clear
-        Exit Function
-    End If
-    MessageFactory.ShowError mError
+    ProcessError
+    Exit Function
 End Function
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+End Sub
+
+
+

@@ -2,20 +2,13 @@ Attribute VB_Name = "SqlServer"
 Option Compare Database
 
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   FIELDS   ------------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
 
 Public pid As Variant
-Private mCompactPath As String
-Private mCompactArg As String
-Private mShellArgPath As String
-Private mError As String
+Private m_CompactPath As String
+Private m_CompactArg As String
+Private m_ShellArgPath As String
+Private m_Error As String
 
-
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   METHODS  ------------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 '----------------------------------------------------------------------------------
@@ -26,16 +19,35 @@ Private mError As String
 '----------------------------------------------------------------------------------
 Public Sub RunCompact()
     On Error GoTo ErrorHandler:
-    mCompactPath = Replace(CurrentProject.path, "accdb", "sqlce\gui\CompactView.exe")
-    mCompactArg = " " & Replace(CurrentProject.path, "accdb", "sqlce\gui\Data.sdf")
-    mShellArgPath = mCompactPath & mCompactArg
+    m_CompactPath = Replace(CurrentProject.path, "accdb", "sqlce\gui\CompactView.exe")
+    m_CompactArg = " " & Replace(CurrentProject.path, "accdb", "sqlce\gui\Data.sdf")
+    m_ShellArgPath = m_CompactPath & m_CompactArg
     vPID = Shell(mShellArgPath, 3)
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   SqlServer" _
-            & vbCrLf & "Member:     RunCompact()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Sub
 End Sub
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+End Sub
+
+
+

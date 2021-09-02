@@ -49,13 +49,7 @@ Public Property Let RpioCode(rp As String)
         m_RpioCode = rp
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      RpioCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -73,13 +67,7 @@ Public Property Get RpioCode() As String
         RpioCode = m_RpioCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      RpioCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -99,13 +87,7 @@ Public Property Let HrOrgCode(oc As String)
        m_HROrgCode = oc
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      HrOrgCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -124,13 +106,7 @@ Public Property Get HrOrgCode() As String
         HrOrgCode = m_HROrgCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      HrOrgCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -150,13 +126,7 @@ Public Property Let EmployeeNumber(eid As String)
         m_EmployeeNumber = eid
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      EmployeeNumber" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -177,13 +147,7 @@ Public Property Get EmployeeNumber() As String
         EmployeeNumber = m_EmployeeNumber
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      EmployeeNumber" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -202,13 +166,7 @@ Public Property Let LastName(ln As String)
         m_LastName = ln
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      LastName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -227,13 +185,7 @@ Public Property Get LastName() As String
         LastName = m_LastName
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      LastName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -252,13 +204,7 @@ Public Property Let FirstName(fn As String)
     m_FirstName = fn
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      FirstName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -277,13 +223,7 @@ Public Property Get FirstName() As String
         FirstName = m_FirstName
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      FirstName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -302,13 +242,7 @@ Public Property Let RcCode(rc As String)
         m_RcCode = rc
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      RcCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -327,13 +261,7 @@ Public Property Get RcCode() As String
         RcCode = m_RcCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      RcCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -352,13 +280,7 @@ Public Property Let PayGrade(pg As String)
         m_PayGrade = pg
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      PayGrade" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -378,13 +300,7 @@ Public Property Get PayGrade() As String
         PayGrade = m_PayGrade
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      PayGrade" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -402,13 +318,7 @@ Public Property Let Step(sp As String)
         m_Step = sp
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      Step" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -427,13 +337,7 @@ Public Property Get Step() As String
         Step = m_Step
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      Step" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -451,13 +355,7 @@ Public Property Let JobTitle(jt As String)
         m_JobTitle = jt
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      JobTitle" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -476,13 +374,7 @@ Public Property Get JobTitle() As String
         JobTitle = m_JobTitle
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      JobTitle" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -500,13 +392,7 @@ Public Property Let HireDate(hd As Date)
         m_HireDate = hd
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Employee" _
-            & vbCrLf & "Member:      HireDate" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 

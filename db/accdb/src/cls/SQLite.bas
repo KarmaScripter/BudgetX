@@ -2,20 +2,12 @@ Attribute VB_Name = "SQLite"
 Option Compare Database
 
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   FIELDS   ------------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-
 Public pid As Variant
-Private mSQLitePath As String
-Private mSQLiteArg As String
-Private mShellArgPath As String
-Private mError As String
+Private m_SQLitePath As String
+Private m_SQLiteArg As String
+Private m_ShellArgPath As String
+Private m_Error As String
 
-
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   METHODS  ------------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -27,18 +19,40 @@ Private mError As String
 '----------------------------------------------------------------------------------
 Public Sub Run()
     On Error GoTo ErrorHandler:
-    mSQLitePath = Replace(CurrentProject.path, "accdb", "sqlite\gui\SQLiteDatabaseBrowserPortable.exe")
-    mSQLiteArg = " " & Replace(CurrentProject.path, "accdb", "sqlite\gui\Data.db")
-    mShellArgPath = mSQLitePath & mSQLiteArg
+    m_SQLitePath = Replace(CurrentProject.path, "accdb", "sqlite\gui\SQLiteDatabaseBrowserPortable.exe")
+    m_SQLiteArg = " " & Replace(CurrentProject.path, "accdb", "sqlite\gui\Data.db")
+    m_ShellArgPath = m_SQLitePath & m_SQLiteArg
     vPID = Shell(mShellArgPath, 3)
 ErrorHandler:
     If Err.Number > 0 Then
-        mError = "Source:       SQLite" _
+        m_Error = "Source:       SQLite" _
             & vbCrLf & "Member:     Run()" _
             & vbCrLf & "Descript:   " & Err.Description
     End If
     MessageFactory.ShowError (mError)
     Exit Sub
 End Sub
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+End Sub
+
 
 

@@ -51,9 +51,13 @@ End Sub
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let ID(bocid As Integer)
+    On Error GoTo ErrorHandler:
     If Not bocid > 0 Then
         m_ID = bocid
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -65,9 +69,13 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get ID() As Integer
+    On Error GoTo ErrorHandler:
     If Not m_ID > 0 Then
         ID = m_ID
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -79,9 +87,13 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let Code(cd As String)
+    On Error GoTo ErrorHandler:
     If Not cd & "" = "" Then
         m_RcCode = cd
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -93,9 +105,13 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get Code() As String
+    On Error GoTo ErrorHandler:
     If Not m_RcCode & "" = "" Then
         Code = m_RcCode
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -107,9 +123,13 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let Name(nm As String)
+    On Error GoTo ErrorHandler:
     If Not nm & "" = "" Then
         m_RcName = nm
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -121,9 +141,13 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get Name() As String
+    On Error GoTo ErrorHandler:
     If Not m_RcName & "" = "" Then
         Name = m_RcName
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -135,9 +159,13 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let Title(tl As String)
+    On Error GoTo ErrorHandler:
     If Not tl & "" = "" Then
         m_Title = tl
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -149,9 +177,13 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get Title() As String
+    On Error GoTo ErrorHandler:
     If Not m_Title & "" = "" Then
         Title = m_Title
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -163,9 +195,13 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let Caption(cp As String)
+    On Error GoTo ErrorHandler:
     If Not cp & "" = "" Then
         m_Caption = cp
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -177,9 +213,13 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get Caption() As String
+    On Error GoTo ErrorHandler:
     If Not m_Caption & "" = "" Then
         Caption = m_Caption
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
