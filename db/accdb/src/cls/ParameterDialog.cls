@@ -2,185 +2,234 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "Division"
+Attribute VB_Name = "ParameterDialog"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
 Option Compare Database
 Option Explicit
 
-
-Private m_RcName As String
-Private m_RcCode As String
-Private m_Caption As String
-Private m_Title As String
-Private m_ID As Integer
+Private SelectedYear As String
+Private SelectedLevel As String
+Private SelectedFund As String
+Private SelectedAccount As String
+Private SelectedObjectClass As String
+Private SelectedRcCode As String
 Private m_Error As String
 
 
-
-'----------------------------------------------------------------------------------
-'   Type        Constructor
-'   Name
-'   Parameters  Void
-'   RetVal
-'   Purpose
-'---------------------------------------------------------------------------------
-Private Sub Class_Initialize()
+Public Sub Class_Initialize()
 End Sub
 
-
-'----------------------------------------------------------------------------------
-'   Type        Destructor
-'   Name
-'   Parameters  Void
-'   RetVal
-'   Purpose
-'---------------------------------------------------------------------------------
-Private Sub Class_Terminate()
+Public Sub Class_Terminate()
 End Sub
 
 
 
+
+
+
 '----------------------------------------------------------------------------------
-'   Type        Property
+'   Type        Property Get
 '   Name
 '   Parameters  Void
-'   RetVal
+'   Retval      String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let ID(bocid As Integer)
-    If Not bocid > 0 Then
-        m_ID = bocid
+Public Property Get FiscalYear()
+    If Not IsNull(SelectedYear) And SelectedYear <> "" Then
+        FiscalYear = SelectedYear
     End If
 End Property
 
 
+
 '----------------------------------------------------------------------------------
-'   Type        Property
+'   Type        Property Get
 '   Name
 '   Parameters  Void
-'   RetVal
+'   Retval      String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Get ID() As Integer
-    If Not m_ID > 0 Then
-        ID = m_ID
+Public Property Get Level()
+    If Not IsNull(SelectedLevel) And SelectedLevel <> "" Then
+        Level = SelectedLevel
     End If
 End Property
 
 
+
 '----------------------------------------------------------------------------------
-'   Type        Property
+'   Type        Property Get
 '   Name
 '   Parameters  Void
-'   RetVal
+'   Retval      String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let Code(cd As String)
-    If Not cd & "" = "" Then
-        m_RcCode = cd
+Public Property Get Fund()
+    If Not IsNull(SelectedFund) And SelectedFund <> "" Then
+        Fund = SelectedFund
     End If
 End Property
 
 
+
 '----------------------------------------------------------------------------------
-'   Type        Property
+'   Type        Property Get
 '   Name
 '   Parameters  Void
-'   RetVal
+'   Retval      String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Get Code() As String
-    If Not m_RcCode & "" = "" Then
-        Code = m_RcCode
+Public Property Get PRC()
+    If Not IsNull(SelectedAccount) And SelectedAccount <> "" Then
+        PRC = SelectedAccount
     End If
 End Property
 
 
+
 '----------------------------------------------------------------------------------
-'   Type        Property
+'   Type        Property Get
 '   Name
 '   Parameters  Void
-'   RetVal
+'   Retval      String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let Name(nm As String)
-    If Not nm & "" = "" Then
-        m_RcName = nm
+Public Property Get BOC()
+    If Not IsNull(SelectedObjectClass) And SelectedObjectClass <> "" Then
+        BOC = SelectedObjectClass
     End If
 End Property
 
-
 '----------------------------------------------------------------------------------
-'   Type        Property
+'   Type
 '   Name
-'   Parameters  Void
-'   RetVal
+'   Parameters
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Get Name() As String
-    If Not m_RcName & "" = "" Then
-        Name = m_RcName
+Private Sub CloseButton_Click()
+    If Not IsNull(SelectedYear) Then
+        SelectedYear = vbNull
     End If
-End Property
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property
-'   Name
-'   Parameters  Void
-'   RetVal
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Let Title(tl As String)
-    If Not tl & "" = "" Then
-        m_Title = tl
+    
+    
+    If Not IsNull(SelectedLevel) Then
+        SelectedLevel = vbNull
     End If
-End Property
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property
-'   Name
-'   Parameters  Void
-'   RetVal
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Get Title() As String
-    If Not m_Title & "" = "" Then
-        Title = m_Title
+    
+    
+    If Not IsNull(SelectedFund) Then
+        SelectedFund = vbNull
     End If
-End Property
+        
+    If Not IsNull(SelectedAccount) Then
+        SelectedAccount = vbNull
+    End If
+    
+    If Not IsNull(SelectedObjectClass) Then
+        SelectedObjectClass = vbNull
+    End If
+    
+    If Not IsNull(SelectedRcCode) Then
+        SelectedRcCode = vbNull
+    End If
+    
+End Sub
 
 
 '----------------------------------------------------------------------------------
-'   Type        Property
+'   Type
 '   Name
-'   Parameters  Void
-'   RetVal
+'   Parameters
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let Caption(cp As String)
-    If Not cp & "" = "" Then
-        m_Caption = cp
-    End If
-End Property
+Private Sub ExecuteButton_Click()
+    '---- Private variable declaration
+End Sub
 
 
 '----------------------------------------------------------------------------------
-'   Type        Property
+'   Type
 '   Name
-'   Parameters  Void
-'   RetVal
+'   Parameters
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Get Caption() As String
-    If Not m_Caption & "" = "" Then
-        Caption = m_Caption
+Private Sub FiscalYearComboBox_Change()
+    Dim cbo As ComboBox
+    Set cbo = New ComboBox
+    cbo = Me!BocCodeComboBox
+        SelectedYear = cbo.SelText
+End Sub
+
+
+'----------------------------------------------------------------------------------
+'   Type
+'   Name
+'   Parameters
+'   Purpose
+'---------------------------------------------------------------------------------
+Private Sub BudgetLevelComboBox_Change()
+    Dim cbo As ComboBox
+    Set cbo = New ComboBox
+    cbo = Me!BocCodeComboBox
+        SelectedLevel = cbo.SelText
+End Sub
+
+
+'----------------------------------------------------------------------------------
+'   Type
+'   Name
+'   Parameters
+'   Purpose
+'---------------------------------------------------------------------------------
+Private Sub FundCodeComboBox_Change()
+    Dim cbo As ComboBox
+    Set cbo = New ComboBox
+    cbo = Me!BocCodeComboBox
+        SelectedFund = cbo.SelText
+End Sub
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Property Get
+'   Name
+'   Parameters  Void
+'   Retval      String
+'   Purpose
+'---------------------------------------------------------------------------------
+Private Sub AccountCodeComboBox_Change()
+    Dim cbo As ComboBox
+    Set cbo = New ComboBox
+    cbo = Me!AccountCodeComboBox
+    
+    If Not IsNull(SelectedAccount) And SelectedAccount <> "" Then
+         SelectedAccount = cbo.SelText
     End If
-End Property
+End Sub
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Property Get
+'   Name
+'   Parameters  Void
+'   Retval      String
+'   Purpose
+'---------------------------------------------------------------------------------
+Private Sub BocCodeComboBox_Change()
+    Dim cbo As ComboBox
+    Set cbo = New ComboBox
+    cbo = Me!BocCodeComboBox
+    
+    If Not IsNull(SelectedObjectClass) And SelectedObjectClass <> "" Then
+        SelectedObjectClass = cbo.SelText
+    End If
+End Sub
+
 
 
 

@@ -55,13 +55,7 @@ Public Property Let Base(pBase As DAO.field)
         Set m_Base = pBase
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -80,13 +74,7 @@ Public Property Get Base() As DAO.field
         Set Base = m_Base
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -104,13 +92,7 @@ Public Property Get Name() As String
     If Not m_Base Is Nothing Then
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     Name" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -129,13 +111,75 @@ Public Property Get Ordinal() As Integer
         Ordinal = m_Base.OrdinalPosition
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     Ordinal" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
+    ProcessError
+    Exit Property
+End Property
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Property Get
+'   Name:        Ordinal
+'   Parameters:  Void
+'   RetVal:      Integer
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get IsNumeric() As Boolean
+    On Error GoTo ErrorHandler:
+    If Not m_Base Is Nothing Then
+        Select Case m_Base.Type
+            Case adVarChar:
+                IsNumeric = False
+            Case adNumeric:
+                IsNumeric = True
+            Case adCurrency:
+                IsNumeric = True
+            Case adDecimal:
+                IsNumeric = True
+            Case adDouble:
+                IsNumeric = True
+            Case adDate:
+                IsNumeric = False
+            Case adInteger:
+                IsNumeric = True
+            Case Else:
+                IsNumeric = False
+        End Select
     End If
-    MessageFactory.ShowError (m_Error)
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Property Get
+'   Name:        Ordinal
+'   Parameters:  Void
+'   RetVal:      Integer
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get IsText() As Boolean
+    On Error GoTo ErrorHandler:
+    If Not m_Base Is Nothing Then
+        Select Case m_Base.Type
+            Case adVarChar:
+                IsText = True
+            Case adVarWChar:
+                IsText = True
+            Case adWChar:
+                IsText = True
+            Case Else
+                IsText = False
+        End Select
+    End If
+ErrorHandler:
+    ProcessError
     Exit Property
 End Property
 
@@ -155,13 +199,7 @@ Public Property Get Value() As Variant
         Value = m_Base.Value
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     Value" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -180,13 +218,7 @@ Public Property Get DataType() As String
         DataType = m_Base.Type
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     DataType" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -206,13 +238,7 @@ Public Property Let Caption(pCaption As String)
         m_Caption = pCaption
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     Caption" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -235,19 +261,13 @@ Public Property Get Caption() As String
         Caption = m_Caption
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     Ordinal" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
 
 
-'----------------------------------------------------------------------------------
+'---------------------------------------------------------------------------------
 '   Type:        Property Get
 '   Name:        IsConnected
 '   Parameters:  Void
@@ -263,17 +283,27 @@ Public Property Get IsConnected() As Boolean
         IsConnected = False
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
 
 
 
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+End Sub
 

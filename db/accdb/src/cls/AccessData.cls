@@ -116,7 +116,7 @@ End Property
 
 '----------------------------------------------------------------------------------
 '   Type        Function
-'   Name        ReferenceData
+'   Name        GetReferenceModel
 '   Parameters  Void
 '   Retval      ADODB.Recordset
 '   Purpose     Function to create and return the pTableName
@@ -133,7 +133,7 @@ Public Function GetReferenceModel(pTableName As String) As ADODB.Recordset
     End If
 ErrorHandler:
     If Err.Number > 0 Then
-        m_Error = "Source:   AccessData" _
+        m_Error = "Source:      AccessData" _
             & vbCrLf & "Member:     GetReferenceModel(String)" _
             & vbCrLf & "Descript: " & Err.Description
         Err.Clear
@@ -305,3 +305,27 @@ ErrorHandler:
     MessageFactory.ShowError (m_Error)
     Exit Sub
 End Sub
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+End Sub
+
+
+

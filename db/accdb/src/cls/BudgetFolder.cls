@@ -92,6 +92,33 @@ End Property
 
 
 
+'---------------------------------------------------------------------------------
+'   Type:            Read-Only Property
+'   Name:
+'   Parameters:      Void
+'   Retval:          Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get FileCount() As Integer
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+        Set m_FileSys = New FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystemObject")
+        FileCount = m_FileSys.GetFolder(m_Base).Files.count
+    End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:   BudgetFolder" _
+            & vbCrLf & "Member:     GetFiles()" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Property
+End Property
+
+
+
 
 '---------------------------------------------------------------------------------
 '   Type:            Function Procedure
@@ -257,9 +284,9 @@ End Function
 '---------------------------------------------------------------------------------
 Public Static Function GetCurrentDirectory() As String
     On Error GoTo ErrorHandler:
-    Dim m_Current As String
-    m_Current = CurDir()
-    GetCurrentDirectory = m_Current
+    Dim p_Current As String
+    p_Current = CurDir()
+    GetCurrentDirectory = p_Current
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFolder" _
@@ -386,47 +413,47 @@ End Function
 
 
 '---------------------------------------------------------------------------------
-'   Type:            Function Procedure
-'   Name:
+'   Type:            Read-Only Property
+'   Name:            DateCreated
 '   Parameters:      Void
 '   Retval:          String
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Function GetDateCreated() As Date
+Public Property Get DateCreated() As Date
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
         Set m_FileSys = New FileSystemObject
         Set m_FileSys = CreateObject("Scripting.FileSystemObject")
         m_DateCreated = m_FileSys.GetFolder(m_Base).DateCreated
-        GetDateCreated = m_DateCreated
+        DateCreated = m_DateCreated
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFolder" _
-            & vbCrLf & "Member:     GetDateCreated()" _
+            & vbCrLf & "Member:     DateCreated()" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
-    Exit Function
-End Function
+    Exit Property
+End Property
 
 
 '---------------------------------------------------------------------------------
-'   Type:            Function Procedure
-'   Name:
+'   Type:            Read-Only Property
+'   Name:            LastAccessed
 '   Parameters:      Void
 '   Retval:          String
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Function GetLastAccessed() As Date
+Public Property Get LastAccessed() As Date
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
         Set m_FileSys = New FileSystemObject
         Set m_FileSys = CreateObject("Scripting.FileSystemObject")
         m_LastAccessed = m_FileSys.GetFolder(m_Base).DateLastAccessed
-        GetLastAccessed = m_LastAccessed
+        LastAccessed = m_LastAccessed
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
@@ -437,8 +464,8 @@ ErrorHandler:
         Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
-    Exit Function
-End Function
+    Exit Property
+End Property
 
 
 
@@ -627,10 +654,10 @@ End Function
 Public Sub AddSubFolder(pFolderName As String)
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
+        Dim p_Folder As New Scripting.FileSystemObject
         Set m_FileSys = New FileSystemObject
         Set m_FileSys = CreateObject("Scripting.FileSystemObject")
         Set m_SubFolders = m_FileSys.GetFolder(m_Base).SubFolders
-        Dim p_Folder As New Scripting.FileSystemObject
         Set p_Folder = m_SubFolders.add(pFolderName)
     End If
 ErrorHandler:
@@ -652,12 +679,18 @@ End Sub
 '   Retval:          Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Function GetFiles() As Scripting.Files
+Public Function GetFiles() As Collection
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
+        Dim p_File As New Scripting.FileSystemObject
+        Dim p_FileCollection As Collection
+        Set p_FileCollection = New Collection
+        Set m_FileSys = New Scripting.FileSystemObject
         Set m_FileSys = CreateObject("Scripting.FileSystemObject")
-        Set GetFiles = m_FileSys.GetFolder(m_Base).Files
+        For Each p_File In m_FileSys.GetFolder(m_Base).Files
+            p_FileCollection.add p_File
+        Next p_File
+        Set GetFiles = p_FileCollection
     End If
 ErrorHandler:
     If Err.Number > 0 Then
@@ -669,33 +702,87 @@ ErrorHandler:
     MessageFactory.ShowError (m_Error)
     Exit Function
 End Function
+
 
 
 
 '---------------------------------------------------------------------------------
 '   Type:            Sub-Procedure
-'   Name:
+'   Name:            ContainsFile
 '   Parameters:      Void
 '   Retval:          Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Function CountFiles() As Integer
+Public Function ContainsFile(pFile As String) As Boolean
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
+        Dim p_Files As Scripting.Files
+        Dim p_File As Scripting.File
         Set m_FileSys = New FileSystemObject
-        Set m_FileSys = CreateObject("Scripting.FileSystemObject")
-        CountFiles = m_FileSys.GetFolder(m_Base).Files.count
+        Set m_FileSys = CreateObject("Scripting.Folder")
+        Set p_Files = m_FileSys.GetFolder(m_Base).Files
+        If p_Files.count > 0 Then
+            For Each p_File In p_Files
+                If p_File.Name = pFile Then
+                    ContainsFile = True
+                    Exit Function
+                End If
+            Next p_File
+        End If
     End If
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFolder" _
-            & vbCrLf & "Member:     GetFiles()" _
+            & vbCrLf & "Member:     ContainsFile(String)" _
             & vbCrLf & "Descript:   " & Err.Description
         Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
     Exit Function
 End Function
+
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Sub-Procedure
+'   Name:            ContainsSubFolder
+'   Parameters:      Void
+'   Retval:          Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function ContainsSubFolder(pFolder As String) As Boolean
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+        Dim p_Folders As Scripting.folders
+        Dim p_Folder As Scripting.folder
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystemObject")
+        Set p_Folders = m_FileSys.GetFolder(pFolder)
+        If p_Folders.count > 0 Then
+            For Each p_Folder In p_Folders
+                If p_Folder.Name = pFolder Then
+                    ContainsSubFolder = True
+                    Exit Function
+                End If
+            Next p_Folder
+        End If
+    End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:   BudgetFolder" _
+            & vbCrLf & "Member:     ContainsSubFolder(String)" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Function
+End Function
+
+
+
 
 
 
@@ -708,6 +795,8 @@ End Function
 '---------------------------------------------------------------------------------
 Public Sub Move(des As String)
     On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+    End If
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFolder" _
@@ -731,6 +820,8 @@ End Sub
 '---------------------------------------------------------------------------------
 Public Sub Copy(dest As String)
     On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+    End If
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFolder" _
@@ -753,6 +844,11 @@ End Sub
 '---------------------------------------------------------------------------------
 Public Sub Delete()
     On Error GoTo ErrorHandler:
+    If Not Dir(m_Base) & "" = "" Then
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystemObject")
+        m_FileSys.DeleteFolder (m_Base)
+    End If
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   BudgetFolder" _
@@ -772,15 +868,15 @@ End Sub
 '   Retval:          Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Function CreateTextFile(pFileName As String) As Scripting.TextStream
+Public Function CreateTextFile(pFilePath As String) As Scripting.TextStream
     On Error GoTo ErrorHandler:
-    If Not pFileName & "" = "" And _
+    If Not pFilePath & "" = "" And _
         Not m_Base & "" = "" Then
-            Dim m_TextFile As Scripting.TextStream
+            Dim p_TextFile As Scripting.TextStream
             Set m_FileSys = New FileSystemObject
             Set m_FileSys = CreateObject("Scripting.FileSystemObject")
-            Set m_TextFile = m_FileSys.CreateTextFile(filename:=pFileName, Overwrite:=True)
-            CreateTextFile = m_TextFile
+            Set p_TextFile = m_FileSys.CreateTextFile(filename:=pFilePath, Overwrite:=True)
+            CreateTextFile = p_TextFile
     End If
 ErrorHandler:
     If Err.Number > 0 Then
@@ -804,19 +900,19 @@ End Function
 '---------------------------------------------------------------------------------
 Public Sub Browse()
     On Error GoTo ErrorHandler:
+    Dim p_Dialog As FileDialog
+    Dim p_Result As Integer
     Set m_FileSys = New FileSystemObject
     Set m_FileSys = CreateObject("Scripting.FileSystemObject")
-    Dim m_Dialog As FileDialog
-    Dim result As Integer
-    Set m_Dialog = Application.FileDialog(msoFileDialogFilePicker)
-    m_Dialog.AllowMultiSelect = False
-    m_Dialog.Title = "Select a file"
-    m_Dialog.InitialFileName = "C:\"
-    m_Dialog.Filters.Clear
-    m_Dialog.Filters.add "Text files", "*.txt"
-    m_Dialog.Filters.add "All files", "*.*"
-    If m_Dialog.Show = -1 Then
-       m_FileSys.OpenTextFile (m_Dialog.Item)
+    Set p_Dialog = Application.FileDialog(msoFileDialogFilePicker)
+    p_Dialog.AllowMultiSelect = False
+    p_Dialog.Title = "Select a file"
+    p_Dialog.InitialFileName = "C:\"
+    p_Dialog.Filters.Clear
+    p_Dialog.Filters.add "Text files", "*.txt"
+    p_Dialog.Filters.add "All files", "*.*"
+    If p_Dialog.Show = -1 Then
+       m_FileSys.OpenTextFile (p_Dialog.Item)
     End If
 ErrorHandler:
     If Err.Number > 0 Then
@@ -869,15 +965,15 @@ End Sub
 '---------------------------------------------------------------------------------
 Public Sub OpenFolderDialog()
     On Error GoTo ErrorHandler:
-    Dim m_Dialog As FileDialog
-    Dim result As Integer
-    Set m_Dialog = Application.FileDialog(msoFileDialogFolderPicker)
-    m_Dialog.AllowMultiSelect = False
-    m_Dialog.Title = "Select an Folder"
-    m_Dialog.InitialFileName = "C:\"
-    m_Dialog.Filters.Clear
-    If m_Dialog.Show = -1 Then
-       Debug.Print m_Dialog.SelectedItems(1)
+    Dim p_Dialog As FileDialog
+    Dim p_Result As Integer
+    Set p_Dialog = Application.FileDialog(msoFileDialogFolderPicker)
+    p_Dialog.AllowMultiSelect = False
+    p_Dialog.Title = "Select an Folder"
+    p_Dialog.InitialFileName = "C:\"
+    p_Dialog.Filters.Clear
+    If p_Dialog.Show = -1 Then
+       Debug.Print p_Dialog.SelectedItems(1)
     End If
 ErrorHandler:
     If Err.Number > 0 Then
@@ -921,5 +1017,28 @@ ErrorHandler:
     End If
     Exit Sub
 End Sub
+
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+End Sub
+
 
 

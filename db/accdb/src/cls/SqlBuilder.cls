@@ -143,6 +143,58 @@ End Property
 
 
 
+'----------------------------------------------------------------------------------
+'   Type        Property Let
+'   Name        Command
+'   Parameters  String
+'   Retval      Void
+'   Purpose     Replace
+'---------------------------------------------------------------------------------
+Private Function GetNames(pData As Scripting.Dictionary) As String()
+    On Error GoTo ErrorHandler:
+    If Not pData Is Nothing Then
+        Dim i As Integer
+        Dim p_Names() As String
+        For i = 0 To i = pData.count
+            p_Names(i) = pData.Keys(i)
+        Next i
+        GetNames = p_Names
+    End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:   SqlBuilder" _
+            & vbCrLf & "Member:     GetNames(Scripting.Dictionary)" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Function
+End Function
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Function
+'   Name        GetValues
+'   Parameters  String
+'   Retval      Void
+'   Purpose     Replace
+'---------------------------------------------------------------------------------
+Private Function GetValues(pData As Scripting.Dictionary) As Variant()
+    On Error GoTo ErrorHandler:
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:   SqlBuilder" _
+            & vbCrLf & "Member:     GetValues(Scripting.Dictionary)" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Function
+End Function
+
 
 
 '----------------------------------------------------------------------------------
@@ -213,6 +265,29 @@ ErrorHandler:
     MessageFactory.ShowError (m_Error)
     Exit Function
 End Function
+
+
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+End Sub
 
 
 

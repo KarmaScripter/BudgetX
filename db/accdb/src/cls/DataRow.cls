@@ -67,13 +67,7 @@ Public Property Let Base(pBase As Record)
         Set m_Base = pBase(0)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataRow" _
-            & vbCrLf & "Member:     Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -92,13 +86,7 @@ Public Property Get Base() As Record
         Set Base = m_Base
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataRow" _
-            & vbCrLf & "Member:     Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -147,13 +135,7 @@ Public Property Get Values() As Variant()
         Values = p_Values
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataRow" _
-            & vbCrLf & "Member:     Fields" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -172,13 +154,7 @@ Public Property Get Index() As DataColumn
         Set Index = GetIndex(m_Base.Fields)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataRow" _
-            & vbCrLf & "Member:     Index" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -202,13 +178,7 @@ Private Function GetValues(pData As DAO.Fields) As Variant()
         GetValues = p_Values
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataRow" _
-            & vbCrLf & "Member:     GetValues(DAO.Fields)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -231,13 +201,7 @@ Private Function GetNames(pData As DAO.Fields) As String()
         GetNames = p_Names
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataRow" _
-            & vbCrLf & "Member:     GetNames(DAO.Fields)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -261,13 +225,7 @@ Private Function GetIndex(pData As DAO.Fields) As DataColumn
         Set GetIndex = p_Index
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataRow" _
-            & vbCrLf & "Member:     GetNames(DAO.Fields)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -295,13 +253,7 @@ Private Function GetDataColumns(pData As DAO.Fields) As DataColumn()
         GetDataColumns = p_DataColumns
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataRow" _
-            & vbCrLf & "Member:     GetDataColumns(DAO.Fields)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -323,17 +275,31 @@ Public Property Get IsConnected() As Boolean
         IsConnected = False
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataRow" _
-            & vbCrLf & "Member:     Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
 
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+End Sub
 
 
 

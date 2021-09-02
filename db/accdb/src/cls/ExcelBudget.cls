@@ -24,12 +24,10 @@ Private m_PivotFields As Excel.PivotFields
 Private m_PivotItems As Excel.PivotItems
 Private m_Error As String
 Private m_Notification As String
-Private m_Database As DAO.Database
-Private m_Recordset As DAO.Recordset
+Private m_Data As DAO.Database
+Private m_DataSet As DAO.Recordset
 Private m_Query As DAO.QueryDef
 Private m_Connection As ADODB.Connection
-Private m_Data As ADODB.Recordset
-Private m_DataCommand As ADODB.Command
 
 
 
@@ -255,7 +253,7 @@ End Sub
 Public Sub OpenExcelFile(filename As String, FilePath As String)
     On Error GoTo ErrorHandler:
     Dim view As ADODB.Connection
-    Dim m_Recordset As ADODB.Recordset
+    Dim m_DataSet As ADODB.Recordset
     Set view = New ADODB.Connection
     view.Open "Provider=Microsoft.ACE.OLEDB.12.0;" _
         & "Data Source=" & filename & _
@@ -317,8 +315,8 @@ End Sub
 '---------------------------------------------------------------------------------------
 Function ExportQuery(ByVal pQuery As String)
     On Error GoTo ErrorHandler:
-    Set m_Database = Application.CurrentDb
-    Set m_Recordset = m_Database.OpenRecordset(pQuery)
+    Set m_Data = Application.CurrentDb
+    Set m_DataSet = m_Data.OpenRecordset(pQuery)
     Dim m_IsOpen As Boolean
     Dim iCols As Integer
     Const xlCenter = -4108
@@ -328,21 +326,21 @@ Function ExportQuery(ByVal pQuery As String)
     m_Excel.Visible = False   '
     Set m_Workbook = m_Excel.Workbooks.add()
     Set m_Worksheet = m_Workbook.Sheets(1)
-    With m_Recordset
+    With m_DataSet
         If .RecordCount <> 0 Then
-            For iCols = 0 To m_Recordset.Fields.count - 1
-                m_Worksheet.Cells(1, iCols + 1).Value = m_Recordset.Fields(iCols).Name
+            For iCols = 0 To m_DataSet.Fields.count - 1
+                m_Worksheet.Cells(1, iCols + 1).Value = m_DataSet.Fields(iCols).Name
             Next
             With m_Worksheet.Range(m_Worksheet.Cells(1, 1), _
-                m_Worksheet.Cells(1, m_Recordset.Fields.count))
+                m_Worksheet.Cells(1, m_DataSet.Fields.count))
                 .Font.Bold = True
                 .Font.ColorIndex = 2
                 .Interior.ColorIndex = 1
                 .HorizontalAlignment = xlCenter
             End With
-            m_Worksheet.Range("A2").CopyFromRecordset m_Recordset
+            m_Worksheet.Range("A2").CopyFromRecordset m_DataSet
             m_Worksheet.Range(m_Worksheet.Cells(1, 1), _
-                m_Worksheet.Cells(1, m_Recordset.Fields.count)).Columns.AutoFit
+                m_Worksheet.Cells(1, m_DataSet.Fields.count)).Columns.AutoFit
             m_Worksheet.Range("A1").Select
         End If
     End With
@@ -369,7 +367,7 @@ End Function
 '---------------------------------------------------------------------------------------
 Public Function ExportRecordset(pData As DAO.Recordset)
     On Error GoTo ErrorHandler:
-    Set m_Recordset = pData
+    Set m_DataSet = pData
     Dim m_IsOpen As Boolean
     Dim iCols As Integer
     Const xlCenter = -4108
@@ -439,6 +437,178 @@ ErrorHandler:
     End If
     MessageFactory.ShowError (m_Error)
     Exit Sub
+End Sub
+
+
+
+
+'---------------------------------------------------------------------------------------
+' Type:         Sub Procedure
+' Name:         KillExcel()
+' Parameters:   Void
+' Retval:       Void
+' Purpose:      Releases resources used by the Excel Application
+'---------------------------------------------------------------------------------------
+Private Sub KillExcel()
+    On Error GoTo ErrorHandler:
+    If Not m_Excel Is Nothing Then
+        Set m_Excel = Nothing
+    End If
+    If Not m_Workbook Is Nothing Then
+        Set m_Workbook = Nothing
+    End If
+    If Not m_Workbook Is Nothing Then
+        Set m_Worksheet = Nothing
+    End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:   ExcelBudget" _
+            & vbCrLf & "Member:     KillExcel()" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Sub
+End Sub
+
+
+
+'---------------------------------------------------------------------------------------
+' Type:         Sub Procedure
+' Name:         KillExcel()
+' Parameters:   Void
+' Retval:       Void
+' Purpose:      Releases resources used by the Excel Application
+'---------------------------------------------------------------------------------------
+Private Sub KillChart()
+    On Error GoTo ErrorHandler:
+    If Not m_Chart Is Nothing Then
+        Set m_Chart = Nothing
+    End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:   ExcelBudget" _
+            & vbCrLf & "Member:     KillExcel()" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Sub
+End Sub
+
+
+
+'---------------------------------------------------------------------------------------
+' Type:         Sub Procedure
+' Name:         KillExcel()
+' Parameters:   Void
+' Retval:       Void
+' Purpose:      Releases resources used by the Pivot Table
+'---------------------------------------------------------------------------------------
+Private Sub KillPivot()
+    On Error GoTo ErrorHandler:
+    If Not m_PivotTable Is Nothing Then
+        Set m_PivotTable = Nothing
+    End If
+    If Not m_PivotFields Is Nothing Then
+        Set m_PivotFields = Nothing
+    End If
+    If Not m_PivotItems Is Nothing Then
+        Set m_PivotItems = Nothing
+    End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:   ExcelBudget" _
+            & vbCrLf & "Member:     KillPivot()" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Sub
+End Sub
+
+
+
+
+
+
+'---------------------------------------------------------------------------------------
+' Type:         Sub Procedure
+' Name:         KillData()
+' Parameters:   Void
+' Retval:       Void
+' Purpose:      Releases resources used by the Database
+'---------------------------------------------------------------------------------------
+Private Sub KillData()
+    On Error GoTo ErrorHandler:
+    If Not m_Data Is Nothing Then
+        Set m_Data = Nothing
+    End If
+    If Not m_DataSet Is Nothing Then
+        Set m_DataSet = Nothing
+    End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:   ExcelBudget" _
+            & vbCrLf & "Member:     KillData()" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Sub
+End Sub
+
+
+
+
+
+
+
+'---------------------------------------------------------------------------------------
+' Type:         Sub Procedure
+' Name:         KillFiles()
+' Parameters:   Void
+' Retval:       Void
+' Purpose:      Releases resources used by the BudgetPath class
+'---------------------------------------------------------------------------------------
+Private Sub KillFiles()
+    On Error GoTo ErrorHandler:
+    If Not m_BudgetPath Is Nothing Then
+        Set m_BudgetPath = Nothing
+    End If
+ErrorHandler:
+    If Err.Number > 0 Then
+        m_Error = "Source:   ExcelBudget" _
+            & vbCrLf & "Member:     KillFiles()" _
+            & vbCrLf & "Descript: " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+    Exit Sub
+End Sub
+
+
+
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
 End Sub
 
 
