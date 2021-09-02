@@ -10,14 +10,13 @@ Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'--------------------------------------------------------        FIELDS        ---------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 Dim mActiveControl As control ' Open
 Dim mPickDate As Date ' Open
 Dim gBooTime As Boolean ' Load
 Public SelectedDate As Date
+Private mError As String
 
 
 
@@ -2368,6 +2367,29 @@ Private Sub txtDays_DblClick(Cancel As Integer)
    Me.txtDays = -Me.txtDays
 End Sub
 
+
+
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        mError = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (mError)
+End Sub
 
 
 
