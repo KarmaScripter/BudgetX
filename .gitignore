@@ -12,3 +12,4 @@ db/accdb/PDF.html
 db/accdb/Reference.accdb
 db/accdb/Views.laccdb
 *.laccdb
+db/accdb/models/Database.mdb
