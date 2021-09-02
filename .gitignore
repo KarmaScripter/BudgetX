@@ -11,3 +11,4 @@ db/accdb/models/Reference.accdb
 db/accdb/PDF.html
 db/accdb/Reference.accdb
 db/accdb/Views.laccdb
+*.laccdb
