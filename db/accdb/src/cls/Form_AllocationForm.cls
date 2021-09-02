@@ -23,7 +23,6 @@ Private m_Error As String
 Private m_SqlQuery As String
 
 
-
 '---------------------------------------------------------------------------------
 '   Type:        Sub-Procedure
 '   Name:
@@ -103,7 +102,7 @@ Private Sub HideButtons()
     Me.ExcelButton.Visible = False
     Me.UndoButton.Visible = False
     Me.SaveButton.Visible = False
-    Me.CompassStatusOfFundsButton.Visible = False
+    Me.CompassBudgetStatusQueryButton.Visible = False
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   AllocationForm" _
@@ -201,7 +200,7 @@ Private Sub SetButtonVisibility()
     Me.ExcelButton.Visible = Not Me.ExcelButton.Visible
     Me.UndoButton.Visible = Not Me.UndoButton.Visible
     Me.SaveButton.Visible = Not Me.SaveButton.Visible
-    Me.CompassStatusOfFundsButton.Visible = Not Me.CompassStatusOfFundsButton.Visible
+    Me.CompassBudgetStatusQueryButton.Visible = Not Me.CompassBudgetStatusQueryButton.Visible
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   AllocationForm" _
@@ -549,6 +548,8 @@ ErrorHandler:
     Exit Sub
 End Sub
 
+
+
 '----------------------------------------------------------------------------------
 '   Type:        Function
 '   Name:        GetFundNameFilter
@@ -767,13 +768,16 @@ End Sub
 '   Retval:      Void
 '   Purpose:
 '----------------------------------------------------------------------------------
-Private Sub CompassStatusOfFundsButton_Click()
+Private Sub CompassBudgetStatusQueryButton_Click()
     On Error GoTo ErrorHandler:
-    DoCmd.OpenForm "CompassBudgetStatusQuery"
+    Me.Visible = False
+    DoCmd.OpenForm FormName:="CompassBudgetStatusQuery", WindowMode:=acWindowNormal, _
+        OpenArgs:=Me.Name
+    DoCmd.Close ObjectType:=acForm, ObjectName:=Me.Name, Save:=acSaveYes
 ErrorHandler:
     If Err.Number > 0 Then
         m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     CompassStatusOfFundsButton_Click()" _
+            & vbCrLf & "Member:     CompassBudgetStatusQueryButton_Click()" _
             & vbCrLf & "Descript: " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
@@ -902,18 +906,18 @@ End Function
 '---------------------------------------------------------------------------------
 Private Function GetColumnNames() As String()
     On Error GoTo ErrorHandler:
-    Dim m_Fields As Collection
+    Dim p_Fields As Collection
     Dim field As DAO.field
-    Dim m_Data As DAO.Recordset
+    Dim p_Data As DAO.Recordset
     Dim i As Integer
     Dim j As Integer
     Dim m_Array() As String
-    Set m_Data = GetReportData
-    j = m_Data.Fields.count - 1
+    Set p_Data = GetReportData
+    j = p_Data.Fields.count - 1
     ReDim m_Array(j)
     For i = LBound(m_Array()) To UBound(m_Array())
-        If Not m_Data.Fields(i).Name & "" = "" Then
-            m_Array(i) = m_Data.Fields(i).Name
+        If Not p_Data.Fields(i).Name & "" = "" Then
+            m_Array(i) = p_Data.Fields(i).Name
         End If
     Next i
     GetColumnNames = m_Array()
@@ -1435,13 +1439,29 @@ Private Sub DeleteButton_Click()
         DoCmd.RunCommand acCmdDelete
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AllocationForm" _
-            & vbCrLf & "Member:     DeleteButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
+    ProcessError
+    Exit Sub
+End Sub
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
         Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
-    Exit Sub
 End Sub
+
+
 
