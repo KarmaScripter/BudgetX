@@ -33,13 +33,7 @@ Public Property Let ID(num As Integer)
         m_ID = num
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      ProgramArea" _
-            & vbCrLf & "Member:     ID" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -58,13 +52,7 @@ Public Property Get ID() As Integer
         ID = m_ID
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      ProgramArea" _
-            & vbCrLf & "Member:     ID" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -83,13 +71,7 @@ Public Property Let Code(cd As String)
          m_Code = cd
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      ProgramArea" _
-            & vbCrLf & "Member:     Code" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -108,13 +90,7 @@ Public Property Get Code() As String
         Code = m_Code
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      ProgramArea" _
-            & vbCrLf & "Member:     Code" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -133,13 +109,7 @@ Public Property Let Name(nm As String)
          m_Name = nm
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      ProgramArea" _
-            & vbCrLf & "Member:     Name" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -158,13 +128,7 @@ Public Property Get Name() As String
         Name = m_Name
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      ProgramArea" _
-            & vbCrLf & "Member:     Name" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -183,13 +147,7 @@ Public Property Let ProgramProjectCode(pp As String)
          m_ProgramProjectCode = pp
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      ProgramArea" _
-            & vbCrLf & "Member:     ProgramProjectCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -208,13 +166,7 @@ Public Property Get ProgramProjectCode() As String
         ProgramProjectCode = m_ProgramProjectCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      ProgramArea" _
-            & vbCrLf & "Member:     ProgramProjectCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -236,13 +188,7 @@ Public Property Let ProgramProjectName(ppn As String)
          m_ProgramProjectName = ppn
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      ProgramArea" _
-            & vbCrLf & "Member:     ProgramProjectName" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -261,13 +207,7 @@ Public Property Get ProgramProjectName() As String
         ProgramProjectName = m_ProgramProjectName
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      ProgramArea" _
-            & vbCrLf & "Member:     ProgramProjectCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 

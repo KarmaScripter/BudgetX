@@ -31,7 +31,7 @@ End Sub
 
 '----------------------------------------------------------------------------------
 '   Type        Property Get
-'   Name
+'   Name        ID
 '   Parameters  Void
 '   Retval      String
 '   Purpose
@@ -42,13 +42,7 @@ Public Property Let ID(intId As Integer)
         m_ID = intId
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   Organization" _
-            & vbCrLf & "Member:      ID" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -56,23 +50,18 @@ End Property
 
 '----------------------------------------------------------------------------------
 '   Type        Property Get
-'   Name
+'   Name        ID
 '   Parameters  Void
 '   Retval      String
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get ID() As Integer
+    On Error GoTo ErrorHandler:
     If Not m_ID > -1 Then
         ID = m_ID
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   Organization" _
-            & vbCrLf & "Member:      ID" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -80,23 +69,18 @@ End Property
 
 '----------------------------------------------------------------------------------
 '   Type        Property Get
-'   Name
+'   Name        Code
 '   Parameters  Void
 '   Retval      String
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let Code(cd As String)
+    On Error GoTo ErrorHandler:
     If Not cd & "" = "" Then
         m_Code = cd
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   Organization" _
-            & vbCrLf & "Member:      Code" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -105,23 +89,18 @@ End Property
 
 '----------------------------------------------------------------------------------
 '   Type        Property Get
-'   Name
+'   Name        Code
 '   Parameters  Void
 '   Retval      String
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get Code() As String
+    On Error GoTo ErrorHandler:
     If Not m_Code & "" = "" Then
         Code = m_Code
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   Organization" _
-            & vbCrLf & "Member:      Code" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    On Error GoTo ErrorHandler:
     Exit Property
 End Property
 
@@ -135,17 +114,12 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let Name(OrgName As String)
+    On Error GoTo ErrorHandler:
     If Not OrgName & "" = "" Then
         m_Name = OrgName
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   Organization" _
-            & vbCrLf & "Member:      Name" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    On Error GoTo ErrorHandler:
     Exit Property
 End Property
 
@@ -159,17 +133,12 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get Name() As String
+    On Error GoTo ErrorHandler:
     If Not m_Name & "" = "" Then
         Name = m_Name
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   Organization" _
-            & vbCrLf & "Member:      Name" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
