@@ -56,13 +56,7 @@ Public Property Let Base(pBase As DAO.Recordset)
         Set m_Base = pBase
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataTable" _
-            & vbCrLf & "Member:     Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -81,13 +75,7 @@ Public Property Get Base() As DAO.Recordset
         Set Base = m_Base
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataTable" _
-            & vbCrLf & "Member:     Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -105,13 +93,7 @@ End Property
 Public Property Let Name(pName As String)
     On Error GoTo ErrorHandler:
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataTable" _
-            & vbCrLf & "Member:     Name" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -130,13 +112,7 @@ Public Property Get Name() As String
         Name = m_Name
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataTable" _
-            & vbCrLf & "Member:     Name" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -156,13 +132,7 @@ Public Property Get RowCount() As Integer
         RowCount = m_Base.RecordCount
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataTable" _
-            & vbCrLf & "Member:     RowCount" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -182,13 +152,7 @@ Public Property Get ColumnCount() As Integer
         ColumnCount = m_Base.Fields.count
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataTable" _
-            & vbCrLf & "Member:     RowCount" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -212,13 +176,7 @@ Public Property Get Columns() As DataColumn()
         Columns = GetDataColumns(m_Base.Fields)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataTable" _
-            & vbCrLf & "Member:     Columns" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -270,13 +228,7 @@ Public Property Get Schema() As DataSchema
         Schema = m_DataSchema
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataTable" _
-            & vbCrLf & "Member:     Rows" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -307,13 +259,7 @@ Private Function GetDataColumns(pData As DAO.Fields) As DataColumn()
         GetDataColumns = p_DataColumns
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataRow" _
-            & vbCrLf & "Member:     GetDataColumns(DAO.Fields)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -342,13 +288,7 @@ Private Function GetDataRows(pData As DAO.Recordset) As DataRow()
         GetDataRows = p_DataRows
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataTable" _
-            & vbCrLf & "Member:     GetDataColumns(DAO.Fields)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -371,13 +311,7 @@ Public Property Get IsConnected() As Boolean
         IsConnected = False
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -403,16 +337,33 @@ Private Sub KillData()
         Set m_Base = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataTable" _
-            & vbCrLf & "Member:     KillData" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
+
+
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+End Sub
 
 
 

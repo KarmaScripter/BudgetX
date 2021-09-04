@@ -105,13 +105,7 @@ Public Property Get Fields() As DAO.Fields
         Set Fields = m_Base.Fields
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataRow" _
-            & vbCrLf & "Member:     Fields" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -181,6 +175,7 @@ ErrorHandler:
     ProcessError
     Exit Function
 End Function
+
 
 
 '----------------------------------------------------------------------------------
@@ -264,7 +259,7 @@ End Function
 '   Name:        IsConnected
 '   Parameters:  Void
 '   RetVal:      Boolean
-'   Purpose:     Function returns boolean value indicating if Workspace is open
+'   Purpose:     Function returns boolean value indicating if Recordset is valid
 '---------------------------------------------------------------------------------
 Public Property Get IsConnected() As Boolean
     On Error GoTo ErrorHandler:

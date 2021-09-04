@@ -58,13 +58,7 @@ Public Property Let ID(cid As Integer)
         m_ChangeId = cid
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      Change" _
-            & vbCrLf & "Member:      ID" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -82,13 +76,7 @@ Public Property Get ID() As Integer
         ID = m_ChangeId
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      Change" _
-            & vbCrLf & "Member:      ID" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -106,13 +94,7 @@ Public Property Let TableName(table As String)
         m_TableName = table
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      Change" _
-            & vbCrLf & "Member:      TableName" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -130,13 +112,7 @@ Public Property Get TableName() As String
         TableName = m_TableName
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      Change" _
-            & vbCrLf & "Member:      TableName" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -154,13 +130,7 @@ Public Property Let FieldName(field As String)
         m_FieldName = field
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      Change" _
-            & vbCrLf & "Member:      FieldName" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -178,13 +148,7 @@ Public Property Get FieldName() As String
         FieldName = m_FieldName
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      Change" _
-            & vbCrLf & "Member:      FieldName" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -202,13 +166,7 @@ Public Property Let Action(act As String)
         m_Action = act
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      Change" _
-            & vbCrLf & "Member:      Action" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -226,13 +184,7 @@ Public Property Get Action() As String
         Action = m_Action
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      Change" _
-            & vbCrLf & "Member:      Action" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -250,13 +202,7 @@ Public Property Let TimeStamp(tm As String)
         m_TimeStamp = tm
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      Change" _
-            & vbCrLf & "Member:      TimeStamp" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -274,13 +220,7 @@ Public Property Get TimeStamp() As String
         TimeStamp = m_TimeStamp
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      Change" _
-            & vbCrLf & "Member:      TimeStamp" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -298,13 +238,7 @@ Public Property Let OldValue(ov As String)
         m_OldValue = ov
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      Change" _
-            & vbCrLf & "Member:      OldValue" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -321,13 +255,7 @@ Public Property Get OldValue() As String
         OldValue = m_OldValue
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      Change" _
-            & vbCrLf & "Member:      OldValue" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -346,13 +274,7 @@ Public Property Let NewValue(nv As String)
         m_NewValue = nv
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      Change" _
-            & vbCrLf & "Member:      NewValue" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -370,13 +292,7 @@ Public Property Get NewValue() As String
         NewValue = m_NewValue
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      Change" _
-            & vbCrLf & "Member:      NewValue" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 

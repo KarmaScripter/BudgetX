@@ -63,13 +63,7 @@ Public Property Let Base(yr As String)
         m_Base = yr
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -88,13 +82,7 @@ Public Property Get Base() As String
         Base = m_Base
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -112,13 +100,7 @@ Public Property Let ID(num As Integer)
         m_ID = num
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:     ID" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -136,13 +118,7 @@ Public Property Get ID() As Integer
         ID = m_ID
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:     ID" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -165,13 +141,7 @@ Public Property Let SweepDate(sd As Date)
             m_SweepDate = sd
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      SweepDate" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -192,13 +162,7 @@ Public Property Get SweepDate() As Date
             SweepDate = m_SweepDate
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      SweepDate" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -220,13 +184,7 @@ Public Property Let BFY(by As String)
         m_BFY = str(year(Now()))
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      BFY" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -244,13 +202,7 @@ Public Property Get BFY() As String
         BFY = m_BFY
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      BFY" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -270,13 +222,7 @@ Public Property Let EFY(by As String)
         m_EFY = m_BFY
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      EFY" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -295,13 +241,7 @@ Public Property Get EFY() As String
         EFY = m_EFY
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      EFY" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -323,13 +263,7 @@ Public Property Let ExpirationYear(ex As String)
             m_ExpiringYear = m_EFY
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      ExpirationYear" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -350,13 +284,7 @@ Public Property Get ExpirationYear() As String
         ExpirationYear = m_ExpiringYear
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      ExpirationYear" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -376,13 +304,7 @@ Public Property Get CalendarDate() As Date
         CalendarDate = m_CalendarDate
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:     CalendarDate" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -401,13 +323,7 @@ Public Property Get CalendarMonth() As Date
         CalendarMonth = m_Month
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:     CalendarMonth" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -426,13 +342,7 @@ Public Property Get CalendarDay() As Date
         CalendarDay = m_Day
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:     CalendarDay" _
-            & vbCrLf & "Descript:    " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -451,13 +361,7 @@ Public Property Get CalendarYear() As String
         CalendarYear = m_CalendarYear
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFiscalYear" _
-            & vbCrLf & "Member:      CalendarYear" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -480,13 +384,7 @@ Public Function IsExpiring() As Boolean
         IsExpiring = False
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      BudgetFiscalYear Class" _
-            & vbCrLf & "Member:     IsExpiring()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -508,13 +406,7 @@ Public Function CalculateCalendarDaysUntil(sd As Date) As Integer
         CalculateCalendarDaysUntil = DateDiff("d", Now, sd)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      BudgetFiscalYear" _
-            & vbCrLf & "Member:     CalculateDaysUntil(Date)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -539,13 +431,7 @@ Public Function CalculateRemainingFullTimeDays() As Integer
         CalculateRemainingFullTimeDays = DateDiff("d", Now, dt)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      BudgetFiscalYear" _
-            & vbCrLf & "Member:     CalculateFiscalDaysRemaining()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 

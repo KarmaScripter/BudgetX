@@ -40,13 +40,8 @@ Public Property Let AhCode(ac As String)
         Args.AhCode = m_AhCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Budget" _
-            & vbCrLf & "Member:     AhCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -63,13 +58,8 @@ Public Property Get AhCode() As String
         AhCode = m_AhCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Budget" _
-            & vbCrLf & "Member:     AhCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -87,13 +77,8 @@ Public Property Let BFY(fy As String)
         Args.BFY = m_BFY
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Budget" _
-            & vbCrLf & "Member:     BFY" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -110,13 +95,8 @@ Public Property Get BFY() As String
         BFY = m_BFY
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Budget" _
-            & vbCrLf & "Member:     BFY" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -134,13 +114,8 @@ Public Property Let RcCode(rc As String)
         Args.RcCode = m_RcCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Budget" _
-            & vbCrLf & "Member:     RcCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -157,13 +132,8 @@ Public Property Get RcCode() As String
         RcCode = m_RcCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Budget" _
-            & vbCrLf & "Member:     RcCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -182,13 +152,8 @@ Public Property Let FundCode(fc As String)
         Args.FundCode = m_FundCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Budget" _
-            & vbCrLf & "Member:     FundCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -205,13 +170,8 @@ Public Property Get FundCode() As String
         FundCode = m_FundCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Budget" _
-            & vbCrLf & "Member:     FundCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -229,13 +189,8 @@ Public Property Get PublicLaw() As String
             "Appropriations.BFY = '" & m_BFY & "'")
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Budget" _
-            & vbCrLf & "Member:     PublicLaw" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -253,13 +208,8 @@ Public Property Get AppropriationBill() As String
             "Appropriations.BFY = '" & m_BFY & "'")
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Budget" _
-            & vbCrLf & "Member:     AppropriationBill" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -277,13 +227,8 @@ Public Property Get DivisionName() As String
             "Divisions.Code = '" & m_RcCode & "'")
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Budget" _
-            & vbCrLf & "Member:     DivisionName" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -301,13 +246,8 @@ Public Property Get DivisionCaption() As String
             "Divisions.Code = '" & m_RcCode & "'")
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Budget" _
-            & vbCrLf & "Member:     DivisionCaption" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -351,13 +291,8 @@ Public Sub Generate(bargs As BudgetArgs)
     DoCmd.OpenReport (Budget.Name)
     query.Close
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       Budget" _
-            & vbCrLf & "Member:     Generate" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
+    Exit Sub
 End Sub
 
 

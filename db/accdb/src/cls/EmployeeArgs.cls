@@ -39,9 +39,13 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let EmployeeNumber(eid As String)
+    On Error GoTo ErrorHandler:
     If eid & "" = "" Then
         m_EmployeeNumber = eid
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -53,9 +57,13 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get EmployeeNumber() As String
+    On Error GoTo ErrorHandler:
     If Not m_EmployeeNumber & "" = "" Then
         EmployeeNumber = m_EmployeeNumber
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -66,9 +74,13 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let LastName(ln As String)
+    On Error GoTo ErrorHandler:
     If ln & "" = "" Then
         m_LastName = ln
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -80,9 +92,13 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get LastName() As String
+    On Error GoTo ErrorHandler:
     If Not m_LastName & "" = "" Then
         LastName = m_LastName
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -93,9 +109,13 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let FirstName(fn As String)
+    On Error GoTo ErrorHandler:
     If fn & "" = "" Then
     m_FirstName = fn
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -107,9 +127,13 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get FirstName() As String
+    On Error GoTo ErrorHandler:
     If Not m_FirstName & "" = "" Then
         FirstName = m_FirstName
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -120,9 +144,13 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let RcCode(rc As String)
+    On Error GoTo ErrorHandler:
     If Not rc & "" = "" Then
         m_RcCode = rc
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -134,9 +162,13 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get RcCode() As String
+    On Error GoTo ErrorHandler:
     If Not m_RcCode & "" = "" Then
         RcCode = m_RcCode
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -147,9 +179,13 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let PayGrade(pg As String)
+    On Error GoTo ErrorHandler:
     If Not pg & "" = "" Then
         m_PayGrade = pg
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -161,9 +197,13 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get PayGrade() As String
+    On Error GoTo ErrorHandler:
     If Not m_PayGrade & "" = "" Then
         PayGrade = m_PayGrade
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -174,9 +214,13 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let JobTitle(jt As String)
+    On Error GoTo ErrorHandler:
     If Not jt & "" = "" Then
         m_JobTitle = jt
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -188,9 +232,13 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get JobTitle() As String
+    On Error GoTo ErrorHandler:
     If Not m_JobTitle & "" = "" Then
         JobTitle = m_JobTitle
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 

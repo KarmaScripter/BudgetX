@@ -109,13 +109,7 @@ Public Static Function Exists(pPath As String) As Boolean
         End If
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     Exists(String)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -137,13 +131,7 @@ Public Function GetStreamReader() As Scripting.TextStream
             Format:=TristateUseDefault)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     GetStreamReader" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -166,13 +154,7 @@ Public Function GetStreamWriter() As Scripting.TextStream
                 Format:=TristateUseDefault)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     GetStreamReader" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -195,13 +177,7 @@ Public Function CreateText(pFileName As String) As Scripting.TextStream
             Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     Create()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -223,13 +199,7 @@ Public Function GetDrive() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     GetDrive()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -251,13 +221,7 @@ Public Function GetParentFolder() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     GetPath()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -280,13 +244,7 @@ Public Function GetFullPath() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     GetFullPath()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -307,12 +265,7 @@ Public Function GetDateCreated() As Date
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     GetDateCreated()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -333,13 +286,7 @@ Public Function GetLastAccessed() As Date
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     GetLastAccessed()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -361,13 +308,7 @@ Public Function GetLastModified() As Date
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     GetLastModified()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -389,13 +330,7 @@ Public Function GetName() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     GetFileName()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -417,13 +352,7 @@ Public Function GetType() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     GetType()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -444,13 +373,7 @@ Public Function GetSize() As Variant
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     GetFileName()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -473,13 +396,7 @@ Public Function GetExtension() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     GetExtension()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -498,13 +415,7 @@ Public Function GetLength() As Long
         GetLength = FileLen(m_Base)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     GetLength()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -533,13 +444,7 @@ Public Function ReadAll() As String
         Set m_Stream = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     ReadAll()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -568,13 +473,7 @@ Public Function Readline() As String
         Set m_Stream = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     Readline" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -595,13 +494,7 @@ Public Sub Move(des As String)
             m_File.Move (des)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     Move(String)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -623,13 +516,7 @@ Public Sub Copy(dest As String)
         m_File.Copy Destination:=dest, OverWriteFiles:=True
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     Copy(String, String)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -652,13 +539,7 @@ Public Sub Delete()
         Kill (m_Path)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     Delete()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -678,13 +559,7 @@ Public Sub Rename(pName As String)
             Name m_Path As pName
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     Rename(String)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -722,13 +597,7 @@ Public Sub RecursiveDelete(pFilePath As String, pFileName As String)
         RecursiveDelete CStr(p_File), pFileName
     Next p_File
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     RecursiveDelete(String, String)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -755,13 +624,7 @@ Public Sub Browse()
        Debug.Print p_Dialog.SelectedItems(1)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     BrowseFile()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
  
@@ -789,13 +652,7 @@ Public Function UnZip(pSource As String, pDestination As String) As String
         Kill pSource
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFile" _
-            & vbCrLf & "Member:     BrowseFile()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    p_FailedReason = Err.Description
+    ProcessError
     Exit Function
 End Function
 
@@ -813,13 +670,7 @@ Public Static Function GetCurrentDirectory() As String
     m_CurrentDirectory = CurDir()
     GetCurrentDirectory = m_CurrentDirectory
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   BudgetFolder" _
-            & vbCrLf & "Member:     GetCurrentDirectory()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -845,13 +696,7 @@ Public Sub OpenSaveDialog()
        Debug.Print p_Dialog.SelectedItems(1)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       BudgetFile" _
-            & vbCrLf & "Member:     OpenSaveDialog()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -873,13 +718,7 @@ Public Function GetAttribute() As VbFileAttribute
         GetAttribute = p_Attribute
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       BudgetFile" _
-            & vbCrLf & "Member:     GetAttribute()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 

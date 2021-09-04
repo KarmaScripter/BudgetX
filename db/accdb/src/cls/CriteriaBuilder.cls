@@ -53,13 +53,7 @@ Public Property Let Names(pNames() As String)
             Names = m_Names
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   CriteriaBuilder" _
-            & vbCrLf & "Member:     Names(String())" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -80,13 +74,7 @@ Public Property Get Names() As String()
             Names = m_Names
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   CriteriaBuilder" _
-            & vbCrLf & "Member:     Names()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -114,13 +102,7 @@ Public Property Let Values(pValues() As Variant)
             Values = m_Values
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   CriteriaBuilder" _
-            & vbCrLf & "Member:     Values(Variant())" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -140,13 +122,7 @@ Public Property Get Values() As Variant()
         Values = m_Values
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   CriteriaBuilder" _
-            & vbCrLf & "Member:     Values()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -177,13 +153,7 @@ Public Function GetNameValuePairs() As Scripting.Dictionary
             Set GetNameValuePairs = p_Criteria
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   CriteriaBuilder" _
-            & vbCrLf & "Member:     CreateCriteria()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -211,13 +181,7 @@ Public Function GetDataAccessCriteria(pData As DAO.Recordset) As Scripting.Dicti
         Set GetDataAccessCriteria = p_Criteria.Items
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   CriteriaBuilder" _
-            & vbCrLf & "Member:     GetDataAccessCriteria(DAO.Recordset)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -246,13 +210,7 @@ Public Function GetAccessDataCriteria(pData As ADODB.Recordset) As Scripting.Dic
         Set GetAccessDataCriteria = p_Criteria.Items
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   CriteriaBuilder" _
-            & vbCrLf & "Member:     GetAccessDataCriteria(ADODB.Recordset) " _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 

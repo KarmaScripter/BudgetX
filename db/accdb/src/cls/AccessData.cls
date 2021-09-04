@@ -47,13 +47,7 @@ Public Property Get Data() As ADODB.Connection
     cnn.Open m_BudgetPath.Data
     Set Data = cnn
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccessData" _
-            & vbCrLf & "Member:     Data" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Set cnn = Nothing
     Exit Property
 End Property
@@ -74,13 +68,7 @@ Public Property Get References() As ADODB.Connection
     cnn.Open m_BudgetPath.References
     Set References = cnn
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccessData" _
-            & vbCrLf & "Member:     References" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Set cnn = Nothing
     Exit Property
 End Property
@@ -101,14 +89,7 @@ Public Property Get Divisions() As ADODB.Connection
     cnn.Open m_BudgetPath.Divisions
     Set Divisions = cnn
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccessData" _
-            & vbCrLf & "Member:     Divisions" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Set cnn = Nothing
+    ProcessError
     Exit Property
 End Property
 
@@ -132,13 +113,7 @@ Public Function GetReferenceModel(pTableName As String) As ADODB.Recordset
         Set GetReferenceModel = rst
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      AccessData" _
-            & vbCrLf & "Member:     GetReferenceModel(String)" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -167,13 +142,7 @@ Public Function CreateCommand(pSQL As String) As ADODB.Command
         Set CreateCommand = cmd
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccessData" _
-            & vbCrLf & "Member:     CreateCommand(String)" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -194,13 +163,7 @@ Public Function GetModel(pTableName As String) As ADODB.Recordset
         Set GetModel = rst
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       AccessData" _
-            & vbCrLf & "Member:     ExcelExport(String)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -243,13 +206,7 @@ Public Sub ImportExcelData(pFilePath As String)
     p_Excel.Quit
     Set p_Excel = Nothing
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       AccessData" _
-            & vbCrLf & "Member:     ImportExcelData(String)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -269,13 +226,7 @@ Private Sub KillData()
         Set m_Data = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       AccessData" _
-            & vbCrLf & "Member:     KillData" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -296,13 +247,7 @@ Private Sub KillFiles()
         Set m_BudgetPath = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       AccessData" _
-            & vbCrLf & "Member:     KillFiles" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 

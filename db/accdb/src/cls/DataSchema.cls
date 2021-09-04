@@ -48,13 +48,7 @@ End Sub
 Public Property Let Base(pBase As DAO.Recordset)
     On Error GoTo ErrorHandler:
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -70,13 +64,7 @@ End Property
 Public Property Get Base() As DAO.Recordset
     On Error GoTo ErrorHandler:
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -97,13 +85,7 @@ Public Property Get IsConnected() As Boolean
         IsConnected = False
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataColumn" _
-            & vbCrLf & "Member:     Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
