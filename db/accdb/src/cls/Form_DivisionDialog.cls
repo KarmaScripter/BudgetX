@@ -46,13 +46,7 @@ Private Sub Form_Load()
     Args.BFY = "2021"
     FiscalYearFilter = "[BFY] = '2021'"
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member:     Form_Load()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -83,13 +77,7 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
             Me.Filter = GetFiscalYearFilter
     End Select
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: Form_Load()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -123,13 +111,7 @@ Private Function GetFiscalYearFilter() As String
                 & pAnd & BocNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: Form_Load()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -150,13 +132,7 @@ Private Sub ObjectClassComboBox_Change()
     BocNameFilter = "[BocName] = '" & Me.ObjectClassComboBox.Value & "'"
     Me.Filter = GetBocNameFilter
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: ObjectClassComboBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -201,13 +177,7 @@ Private Function GetBocNameFilter() As String
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: GetBocNameFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -235,13 +205,7 @@ Private Sub FundNameComboBox_Change()
     SetComboBoxVisibility
     SetButtonVisibility
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: FundNameComboBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -291,13 +255,7 @@ Private Function GetFundNameFilter() As String
                 & pAnd & BocNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: GetFundNameFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -312,13 +270,7 @@ Private Sub AcceptButton_Click()
     On Error GoTo ErrorHandler:
     Me.Visible = Not Me.Visible
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: AcceptButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -335,13 +287,7 @@ Private Sub RefreshButton_Click()
     ClearFilterValues
     ClearOptionGroupValues
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: RefreshButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -368,13 +314,7 @@ Private Sub SetComboBoxVisibility()
             Me.ObjectClassGroupBox.Visible = Not Me.ObjectClassGroupBox.Visible
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: SetComboBoxVisibility()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -394,13 +334,7 @@ Private Sub SetComboBoxColors()
     Me!FundNameComboBox.BackColor = RGB(33, 33, 33)
     Me!FundNameComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -421,13 +355,7 @@ Private Sub ClearOptionGroupValues()
             Me.FiscalYearOptionGroup.Value = 2
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: ClearOptionGroupValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -445,13 +373,7 @@ Private Sub SetButtonVisibility()
     Me.RefreshButton.Visible = Not Me.RefreshButton.Visible
     Me.AcceptButton.Visible = Not Me.AcceptButton.Visible
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: SetButtonVisibility()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -468,13 +390,7 @@ Private Sub ClearComboBoxValues()
     Me.ObjectClassComboBox.Value = vbNullString
     Me.FundNameComboBox.Value = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: ClearComboBoxValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -499,13 +415,7 @@ Private Sub ClearFilterValues()
     FundNameFilter = vbNullString
     Me.Filter = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: ClearFilterValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -522,15 +432,35 @@ Private Sub ExitButton_Click()
     ClearFilterValues
     DoCmd.Close acForm, Me.Name
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionDialog" _
-            & vbCrLf & "Member: ExitButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
+    ProcessError
+    Exit Sub
+End Sub
+
+
+
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
         Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
-    Exit Sub
 End Sub
+
+
 
 
 
