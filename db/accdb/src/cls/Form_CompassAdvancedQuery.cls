@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "Form_CompassBudgetStatusQuery"
+Attribute VB_Name = "Form_CompassAdvancedQuery"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = True
@@ -12,52 +12,13 @@ Option Explicit
 
 
 Private m_Error As String
-Private m_Caller As String
-
-
-
-'---------------------------------------------------------------------------------
-'   Type:            Sub-Procedure
-'   Name:            Form_Open()
-'   Parameters:      Void
-'   Retval:          Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub Form_Open(Cancel As Integer)
-    On Error GoTo ErrorHandler:
-    If Not IsNull(Me.OpenArgs) Then
-        m_Caller = CStr(Me.OpenArgs)
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Sub
-End Sub
 
 
 
 
 '---------------------------------------------------------------------------------
 '   Type:            Sub-Procedure
-'   Name:            ExitButton_Click()
-'   Parameters:      Void
-'   Retval:          Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub Form_Load()
-    On Error GoTo ErrorHandler:
-    SetButtonVisibility
-    Me.Caption = "CDW Compass Budget Status Query"
-ErrorHandler:
-    ProcessError
-    Exit Sub
-End Sub
-
-
-
-
-'---------------------------------------------------------------------------------
-'   Type:            Sub-Procedure
-'   Name:            ExitButton_Click()
+'   Name:
 '   Parameters:      Void
 '   Retval:          Void
 '   Purpose:
@@ -79,6 +40,22 @@ End Sub
 
 '---------------------------------------------------------------------------------
 '   Type:            Sub-Procedure
+'   Name:
+'   Parameters:      Void
+'   Retval:          Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub CalculatorButton_Click()
+    On Error GoTo ErrorHandler:
+    Calculator.Calculate
+ErrorHandler:
+    ProcessError
+    Exit Sub
+End Sub
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Sub-Procedure
 '   Name:            ExitButton_Click()
 '   Parameters:      Void
 '   Retval:          Void
@@ -86,13 +63,9 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ExitButton_Click()
     On Error GoTo ErrorHandler:
-    Me.Visible = False
-    If Not m_Caller & "" = "" Then
-        DoCmd.OpenForm FormName:=m_Caller, WindowMode:=acDialog
-    Else
-        DoCmd.OpenForm FormName:="Main", WindowMode:=acDialog
-    End If
-    DoCmd.Close acForm, Me.Name, acSaveNo
+    DoCmd.Close ObjectType:=acForm, ObjectName:="CompassAdvancedQuery", _
+        Save:=acSaveNo
+    DoCmd.OpenForm FormName:="DataWarehouse", WindowMode:=acDialog
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -100,10 +73,26 @@ End Sub
 
 
 
+'---------------------------------------------------------------------------------
+'   Type:            Sub-Procedure
+'   Name:
+'   Parameters:      Void
+'   Retval:          Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub Form_Load()
+    On Error GoTo ErrorHandler:
+    SetButtonVisibility
+ErrorHandler:
+    ProcessError
+    Exit Sub
+End Sub
+
+
 
 '---------------------------------------------------------------------------------
 '   Type:            Sub-Procedure
-'   Name:            ExitButton_Click()
+'   Name:
 '   Parameters:      Void
 '   Retval:          Void
 '   Purpose:
@@ -115,8 +104,6 @@ ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
-
-
 
 
 
@@ -137,9 +124,6 @@ Private Sub ProcessError()
     End If
     MessageFactory.ShowError (m_Error)
 End Sub
-
-
-
 
 
 

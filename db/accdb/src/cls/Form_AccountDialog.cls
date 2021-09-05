@@ -7,8 +7,11 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Option Explicit
 
-Private PRC As AccountArgs
+
+
+Private Args As AccountArgs
 Private pAnd As String
 Private m_BudgetLevel As String
 Private m_FiscalYear As String
@@ -19,6 +22,9 @@ Private m_BocCode As String
 Private m_AccountCode As String
 Private m_ActivityCode As String
 Private m_RcCode As String
+Private m_Error As String
+
+
 
 
 '---------------------------------------------------------------------------------
@@ -30,17 +36,11 @@ Private m_RcCode As String
 '---------------------------------------------------------------------------------
 Private Sub Form_Load()
     On Error GoTo ErrorHandler:
-    Set PRC = New AccountArgs
+    Set Args = New AccountArgs
     ClearComboBoxValues
     SetButtonVisibility
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -79,13 +79,7 @@ Private Sub SetComboBoxColors()
     Me!BocCodeComboBox.BackColor = RGB(33, 33, 33)
     Me!BocCodeComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -109,13 +103,7 @@ Private Sub ClearComboBoxValues()
     Me.FundCodeComboBox.Value = ""
     Me.OrgCodeComboBox.Value = ""
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -132,13 +120,7 @@ Public Sub SetButtonVisibility()
     Me.AcceptButton.Visible = Not Me.AcceptButton.Visible
     Me.RefreshButton.Visible = Not Me.RefreshButton.Visible
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -152,20 +134,14 @@ End Sub
 '---------------------------------------------------------------------------------
 Public Sub SetGoButtonVisibility()
     On Error GoTo ErrorHandler:
-    If IsNull(PRC.BFY) And _
-        IsNull(PRC.FundCode) And _
+    If IsNull(Args.BFY) And _
+        IsNull(Args.FundCode) And _
         Me!GoButton.Visible = False Then
             Me!GoButton.Visible = True
         Else: Me!GoButton.Visible = False
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -179,16 +155,10 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ActivityCodeComboBox_AfterUpdate()
     On Error GoTo ErrorHandler:
-    PRC.ActivityCode = Me!ActivityCodeComboBox.SelText
-    ActivityCode = PRC.ActivityCode
+    Args.ActivityCode = Me!ActivityCodeComboBox.SelText
+    m_ActivityCode = Args.ActivityCode
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -202,16 +172,10 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub AhCodeComboBox_AfterUpdate()
     On Error GoTo ErrorHandler:
-    PRC.AhCode = Me!AhCodeComboBox.SelText
-    AH = PRC.AhCode
+    Args.AhCode = Me!AhCodeComboBox.SelText
+    AH = Args.AhCode
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -225,16 +189,10 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub OrgCodeComboBox_AfterUpdate()
     On Error GoTo ErrorHandler:
-    PRC.OrgCode = Me!OrgCodeComboBox.SelText
-    ORG = PRC.OrgCode
+    Args.OrgCode = Me!OrgCodeComboBox.SelText
+    ORG = Args.OrgCode
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -249,16 +207,10 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub RcCodeComboBox_AfterUpdate()
     On Error GoTo ErrorHandler:
-    PRC.RcCode = Me!RcCodeComboBox.SelText
-    rc = PRC.RcCode
+    Args.RcCode = Me!RcCodeComboBox.SelText
+    RC = Args.RcCode
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -273,18 +225,12 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub BfyComboBox_AfterUpdate()
     On Error GoTo ErrorHandler:
-    PRC.BFY = Me!BfyComboBox.SelText
-    FiscalYear = PRC.BFY
+    Args.BFY = Me!BfyComboBox.SelText
+    FiscalYear = Args.BFY
     Me!AcceptButton.Visible = Not Me!AcceptButton.Visible
     Me!RefreshButton.Visible = Not Me!RefreshButton.Visible
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -298,16 +244,10 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub BocCodeComboBox_AfterUpdate()
     On Error GoTo ErrorHandler:
-    PRC.BocCode = Me!BocCodeComboBox.SelText
-    BOC = PRC.BocCode
+    Args.BocCode = Me!BocCodeComboBox.SelText
+    BOC = Args.BocCode
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -321,16 +261,10 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub FundCodeComboBox_AfterUpdate()
     On Error GoTo ErrorHandler:
-    PRC.FundCode = Me!FundCodeComboBox.SelText
-    FundCode = PRC.FundCode
+    Args.FundCode = Me!FundCodeComboBox.SelText
+    m_FundCode = Args.FundCode
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -349,134 +283,377 @@ Private Sub RefreshButton_Click()
     Me!GoButton.Visible = Not Me!GoButton.Visible
     Me!RefreshButton.Visible = Not Me!RefreshButton.Visible
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
 
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Property Let
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
 Public Property Let Level(bl As String)
+    On Error GoTo ErrorHandler:
     If (bl & "") = "" Then
         m_BudgetLevel = bl
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
+'---------------------------------------------------------------------------------
+'   Type:        Property Get
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
 Public Property Get Level() As String
+    On Error GoTo ErrorHandler:
     If Not (m_BudgetLevel & "") = "" Then
-        BudgetLevel = m_BudgetLevel
+        m_BudgetLevel = m_BudgetLevel
     End If
-End Property
-
-Public Property Let FiscalYear(Code As String)
-    If (Code <> "") Then
-        m_FiscalYear = Code
-    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
+
+'---------------------------------------------------------------------------------
+'   Type:        Property Let
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Let FiscalYear(pCode As String)
+    On Error GoTo ErrorHandler:
+    If Not pCode & "" = "" Then
+        m_FiscalYear = pCode
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Property Get
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
 Public Property Get FiscalYear() As String
-    If (m_FiscalYear <> "" And Not IsNull(mFiscalYear)) Then
+    On Error GoTo ErrorHandler:
+    If Not m_FiscalYear & "" = "" Then
         FiscalYear = m_FiscalYear
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
-Public Property Let Fund(Code As String)
-    If (Code <> "") Then
-        m_FundCode = Code
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Property Let
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Let Fund(pCode As String)
+    On Error GoTo ErrorHandler:
+    If Not pCode & "" = "" Then
+        m_FundCode = pCode
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
+'---------------------------------------------------------------------------------
+'   Type:        Property Get
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
 Public Property Get Fund() As String
-    If (m_FundCode <> "" And Not IsNull(mFundCode)) Then
+    On Error GoTo ErrorHandler:
+    If Not m_FundCode & "" = "" Then
         Fund = m_FundCode
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
-Public Property Let BOC(Code As String)
-    If (Code <> "") Then
-        m_BocCode = Code
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Property Let
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Let BOC(pBOC As String)
+    On Error GoTo ErrorHandler:
+    If Not (pBOC & "") = "" Then
+        m_BocCode = pBOC
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
+'---------------------------------------------------------------------------------
+'   Type:        Property Get
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
 Public Property Get BOC() As String
-    If (m_BocCode <> "" And Not IsNull(mBocCode)) Then
+    On Error GoTo ErrorHandler:
+    If Not m_BocCode & "" = "" Then
         BOC = m_BocCode
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
-Public Property Let rc(Code As String)
-    If (Code <> "") Then
-        m_RcCode = Code
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Property Let
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Let RC(pRC As String)
+    On Error GoTo ErrorHandler:
+    If Not (pRC = "") = "" Then
+        m_RcCode = pRC
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
-Public Property Get rc() As String
-    If (m_RcCode <> "" And Not IsNull(mRcCode)) Then
-        rc = m_RcCode
+'---------------------------------------------------------------------------------
+'   Type:        Property Get
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get RC() As String
+    On Error GoTo ErrorHandler:
+    If Not m_RcCode & "" = "" Then
+        RC = m_RcCode
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
+
+'---------------------------------------------------------------------------------
+'   Type:        Property Let
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Let Code(pCode As String)
+    On Error GoTo ErrorHandler:
+    If Not pCode & "" = "" Then
+        m_AccountCode = pCode
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Property Get
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
 Public Property Get Code() As String
-    If (m_AccountCode <> "" And Not IsNull(mAccountCode)) Then
+    On Error GoTo ErrorHandler:
+    If Not m_AccountCode & "" = "" Then
         Code = m_AccountCode
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
-Public Property Let Code(Code As String)
-    If (Code <> "") Then
-        m_AccountCode = Code
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Property Let
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Let AH(pAH As String)
+    On Error GoTo ErrorHandler:
+    If Not (pAH & "" = "") Then
+        m_AhCode = pAH
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
-Public Property Let AH(ac As String)
-    If Not (ac & "" = "") Then
-        m_AhCode = ac
-    End If
-End Property
-
-
+'---------------------------------------------------------------------------------
+'   Type:        Property Get
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
 Public Property Get AH() As String
+    On Error GoTo ErrorHandler:
     If Not m_AhCode & "" = "" Then
         AH = m_AhCode
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
+'---------------------------------------------------------------------------------
+'   Type:        Property Get
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
 Public Property Get Activity() As String
+    On Error GoTo ErrorHandler:
     If Not m_ActivityCode & "" = "" Then
-        ActivityCode = m_ActivityCode
+        Activity = m_ActivityCode
     End If
-End Property
-
-Public Property Let Activity(ac As String)
-    If Not ac & "" = "" Then
-        m_Activity = ac
-    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
-Public Property Let ORG(Code As String)
-    If (Code <> "") Then
-        m_OrgCode = Code
+'---------------------------------------------------------------------------------
+'   Type:        Property Let
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Let Activity(pActivity As String)
+    On Error GoTo ErrorHandler:
+    If Not pActivity & "" = "" Then
+        m_ActivityCode = pActivity
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Property Let
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Let ORG(pORG As String)
+    On Error GoTo ErrorHandler:
+    If Not pORG & "" = "" Then
+        m_OrgCode = pORG
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Property Get
+'   Name:
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
 Public Property Get ORG() As String
-    If (m_OrgCode <> "" And Not IsNull(mOrgCode)) Then
+    On Error GoTo ErrorHandler:
+    If Not m_OrgCode & "" = "" Then
         ORG = m_OrgCode
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+End Sub
+
+
+
+
 
