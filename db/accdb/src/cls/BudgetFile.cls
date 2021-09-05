@@ -75,7 +75,7 @@ End Property
 
 
 '---------------------------------------------------------------------------------
-'   Type:            Property Let
+'   Type:            Property Get
 '   Name:
 '   Parameters:      String
 '   Retval:          Void
@@ -85,6 +85,246 @@ Public Property Get Base() As String
     If Not m_Base & "" = "" Then
         Base = m_Base
     End If
+End Property
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Read-Only Property
+'   Name:
+'   Parameters:      Void
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get ParentFolder() As String
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+        Set m_FileSys = New FileSystemObject
+        m_ParentFolder = m_FileSys.GetFile(m_Base).ParentFolder
+        ParentFolder = m_ParentFolder
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Read-Only Property
+'   Name:            Path
+'   Parameters:      Void
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get Path() As String
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+        Set m_FileSys = New FileSystemObject
+        m_Path = m_FileSys.GetAbsolutePathName(m_Base)
+        Path = m_Path
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Read-Only Property
+'   Name:
+'   Parameters:      Void
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get DateCreated() As Date
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+        Set m_FileSys = New FileSystemObject
+        m_DateCreated = m_FileSys.GetFile(m_Base).DateCreated
+        DateCreated = m_DateCreated
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Read-Only Property
+'   Name:
+'   Parameters:      Void
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get LastAccessed() As Date
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+        Set m_FileSys = New FileSystemObject
+        m_LastAccessed = m_FileSys.GetFile(m_Base).DateLastAccessed
+        LastAccessed = m_LastAccessed
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Read-Only Property
+'   Name:
+'   Parameters:      Void
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get LastModified() As Date
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+        Set m_FileSys = New FileSystemObject
+        m_LastModified = m_FileSys.GetFile(m_Base).DateLastModified
+        LastModified = m_LastModified
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Read-Only Property
+'   Name:
+'   Parameters:      String
+'   Retval:          Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get Name() As String
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+        Set m_FileSys = New FileSystemObject
+        m_Name = m_FileSys.GetFile(m_Base).ShortName
+        Name = m_Name
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Read-Only Property
+'   Name:
+'   Parameters:      String
+'   Retval:          Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get FileType() As String
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+        Set m_FileSys = New FileSystemObject
+        m_Type = m_FileSys.GetFile(m_Base).Type
+        FileType = m_Type
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Read-Only Property
+'   Name:
+'   Parameters:      String
+'   Retval:          Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get Size() As Variant
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+        Set m_FileSys = New FileSystemObject
+        Size = m_FileSys.GetFile(m_Base).Size
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+
+ 
+'---------------------------------------------------------------------------------
+'   Type:            Read-Only Property
+'   Name:            Extension
+'   Parameters:      String
+'   Retval:          Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get Extension() As String
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+        Set m_FileSys = New FileSystemObject
+        m_Extension = m_FileSys.GetExtensionName(m_Base)
+        Extension = m_Extension
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Read-Only Property
+'   Name:
+'   Parameters:      Void
+'   Retval:          Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get Length() As Long
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+        Length = FileLen(m_Base)
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Read-Only Property
+'   Name:
+'   Parameters:      Void
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get Drive() As String
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" Then
+        Set m_FileSys = New FileSystemObject
+        m_Drive = m_FileSys.GetFile(m_Base).Drive
+        Drive = m_Drive
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -184,246 +424,6 @@ End Function
 
 
 '---------------------------------------------------------------------------------
-'   Type:            Function Procedure
-'   Name:
-'   Parameters:      Void
-'   Retval:          String
-'   Purpose:
-'---------------------------------------------------------------------------------
-Public Function GetDrive() As String
-    On Error GoTo ErrorHandler:
-    If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
-        m_Drive = m_FileSys.GetFile(m_Base).Drive
-        GetDrive = m_Drive
-        Set m_FileSys = Nothing
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
-
-
-
-'---------------------------------------------------------------------------------
-'   Type:            Function Procedure
-'   Name:
-'   Parameters:      Void
-'   Retval:          String
-'   Purpose:
-'---------------------------------------------------------------------------------
-Public Function GetParentFolder() As String
-    On Error GoTo ErrorHandler:
-    If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
-        m_ParentFolder = m_FileSys.GetFile(m_Base).ParentFolder
-        GetParentFolder = m_ParentFolder
-        Set m_FileSys = Nothing
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
-
-
-
-
-'---------------------------------------------------------------------------------
-'   Type:            Function Procedure
-'   Name:            GetFullPath()
-'   Parameters:      Void
-'   Retval:          String
-'   Purpose:
-'---------------------------------------------------------------------------------
-Public Function GetFullPath() As String
-    On Error GoTo ErrorHandler:
-    If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
-        m_Path = m_FileSys.GetAbsolutePathName(m_Base)
-        GetFullPath = m_Path
-        Set m_FileSys = Nothing
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
-
-
-'---------------------------------------------------------------------------------
-'   Type:            Function Procedure
-'   Name:
-'   Parameters:      Void
-'   Retval:          String
-'   Purpose:
-'---------------------------------------------------------------------------------
-Public Function GetDateCreated() As Date
-    On Error GoTo ErrorHandler:
-    If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
-        m_DateCreated = m_FileSys.GetFile(m_Base).DateCreated
-        GetDateCreated = m_DateCreated
-        Set m_FileSys = Nothing
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
-
-
-'---------------------------------------------------------------------------------
-'   Type:            Function Procedure
-'   Name:
-'   Parameters:      Void
-'   Retval:          String
-'   Purpose:
-'---------------------------------------------------------------------------------
-Public Function GetLastAccessed() As Date
-    On Error GoTo ErrorHandler:
-    If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
-        m_LastAccessed = m_FileSys.GetFile(m_Base).DateLastAccessed
-        GetLastAccessed = m_LastAccessed
-        Set m_FileSys = Nothing
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
-
-
-
-'---------------------------------------------------------------------------------
-'   Type:            Function Procedure
-'   Name:
-'   Parameters:      Void
-'   Retval:          String
-'   Purpose:
-'---------------------------------------------------------------------------------
-Public Function GetLastModified() As Date
-    On Error GoTo ErrorHandler:
-    If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
-        m_LastModified = m_FileSys.GetFile(m_Base).DateLastModified
-        GetLastModified = m_LastModified
-        Set m_FileSys = Nothing
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
-
-
-
-'---------------------------------------------------------------------------------
-'   Type:            Function Procedure
-'   Name:
-'   Parameters:      String
-'   Retval:          Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Public Function GetName() As String
-    On Error GoTo ErrorHandler:
-    If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
-        m_Name = m_FileSys.GetFile(m_Base).ShortName
-        GetName = m_Name
-        Set m_FileSys = Nothing
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
-
-
-
-'---------------------------------------------------------------------------------
-'   Type:            Function Procedure
-'   Name:
-'   Parameters:      String
-'   Retval:          Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Public Function GetType() As String
-    On Error GoTo ErrorHandler:
-    If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
-        m_Type = m_FileSys.GetFile(m_Base).Type
-        GetType = m_Type
-        Set m_FileSys = Nothing
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
-
-
-
-'---------------------------------------------------------------------------------
-'   Type:            Function Procedure
-'   Name:
-'   Parameters:      String
-'   Retval:          Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Public Function GetSize() As Variant
-    On Error GoTo ErrorHandler:
-    If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
-        GetSize = m_FileSys.GetFile(m_Base).Size
-        Set m_FileSys = Nothing
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
-
-
-
- 
-'---------------------------------------------------------------------------------
-'   Type:            Function Procedure
-'   Name:            Extension
-'   Parameters:      String
-'   Retval:          Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Public Function GetExtension() As String
-    On Error GoTo ErrorHandler:
-    If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
-        m_Extension = m_FileSys.GetExtensionName(m_Base)
-        GetExtension = m_Extension
-        Set m_FileSys = Nothing
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
-
-
-
-'---------------------------------------------------------------------------------
-'   Type:            Sub-Procedure
-'   Name:
-'   Parameters:      Void
-'   Retval:          Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Public Function GetLength() As Long
-    On Error GoTo ErrorHandler:
-    If Not m_Base & "" = "" Then
-        GetLength = FileLen(m_Base)
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
-
-
-
-
-
-'---------------------------------------------------------------------------------
 '   Type:            Sub-Procedure
 '   Name:
 '   Parameters:      Void
@@ -464,13 +464,15 @@ Public Function Readline() As String
     If Not m_Base & "" = "" Then
         Set m_FileSys = New FileSystemObject
         Set m_File = m_FileSys.GetFile(m_Base)
-        Dim m_Out As String
-        Dim m_Stream As Scripting.TextStream
-        Set m_Stream = m_File.OpenAsTextStream
-        m_Out = m_Stream.Readline
-        Set m_FileSys = Nothing
-        Set m_File = Nothing
-        Set m_Stream = Nothing
+        If Not Dir(m_File) & "" = "" Then
+            Dim p_Out As String
+            Dim p_Stream As Scripting.TextStream
+            Set p_Stream = m_File.OpenAsTextStream
+            p_Out = p_Stream.Readline
+            Set m_FileSys = Nothing
+            Set m_File = Nothing
+            Set p_Stream = Nothing
+        End If
     End If
 ErrorHandler:
     ProcessError
@@ -645,7 +647,7 @@ Public Function UnZip(pSource As String, pDestination As String) As String
     Dim p_ZipToolPath As String
     Dim p_ShellCmd As String
     Dim p_Success As Boolean
-    p_ZipToolPath = CurrentProject.path & "\etc\7za"
+    p_ZipToolPath = CurrentProject.Path & "\etc\7za"
     p_ShellCmd = p_ZipToolPath & " x " & pSource & " -o" & pDestination & " -ry"
     p_Success = Shell(p_ShellCmd, vbHide)
     If p_Success = True Then
