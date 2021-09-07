@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "Form_DivisionSelector"
+Attribute VB_Name = "Form_ColumnDefinitionDialog"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = True
@@ -13,10 +13,10 @@ Option Explicit
 
 
 Public Args As AccountArgs
-Public FiscalYearFilter As String
-Public DivisionNameFilter As String
-Private m_RcCode As String
-Private m_BFY As String
+Private m_DataColumns As Scripting.Dictionary
+Private m_Name As String
+Private m_DataType As String
+Private m_Database As String
 Private pAnd As String
 Private m_Error As String
 
@@ -33,7 +33,8 @@ Private m_Error As String
 '---------------------------------------------------------------------------------
 Private Sub Form_Open(Cancel As Integer)
     On Error GoTo ErrorHandler:
-    Set Args = New AccountArgs
+    Me.DatabaseComboBox.RowSource = "SELECT DISTINCT SchemaTypes.Database FROM SchemaTypes;"
+    Me.DataTypeComboBox.RowSource = vbNullString
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -50,18 +51,11 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub Form_Load()
     On Error GoTo ErrorHandler:
-    ClearComboBoxValues
-    ClearFilterValues
+    Me.Caption = "Budget Execution"
     SetComboBoxColors
     pAnd = " AND "
-    DivisionNameFilter = vbNullString
-    Me.DivisionNameComboBox.RowSource = "SELECT DISTINCT Allocations.DivisionName" _
-        & " FROM Allocations" _
-        & " WHERE RcCode NOT IN ('06', '06R');"
-    Me.FiscalYearOptionGroup.Value = 2
-    Me.DivisionNameComboBox.Value = vbNullString
-    Args.BFY = "2021"
-    FiscalYearFilter = "[BFY] = '2021'"
+    ClearComboBoxValues
+    Set m_DataColumns = CreateObject("Scripting.Dictionary")
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -74,79 +68,36 @@ End Sub
 
 '----------------------------------------------------------------------------------
 '   Type:        Event Sub-Procedure
-'   Name:        FiscalYearOptionGroup_AfterUpdate
+'   Name:        DataTypeComboBox_Change
 '   Parameters:  Void
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub FiscalYearOptionGroup_AfterUpdate()
+Private Sub DatabaseComboBox_Change()
     On Error GoTo ErrorHandler:
-    m_BFY = vbNull
-    Me.Filter = vbNullString
-    FiscalYearFilter = vbNullString
-    Select Case Me.FiscalYearOptionGroup.Value
-        Case 1
-            m_BFY = "2020"
-            FiscalYearFilter = "[BFY] = '2020'"
-            Args.BFY = m_BFY
-            Me.Filter = GetFiscalYearFilter
-        Case 2
-            m_BFY = "2021"
-            FiscalYearFilter = "[BFY] = '2021'"
-            Args.BFY = "2021"
-            Me.Filter = GetFiscalYearFilter
-    End Select
+    m_Database = vbNullString
+    m_Database = Me.DatabaseComboBox.Value
+    Me.DataTypeComboBox.RowSource = "SELECT DISTINCT SchemaTypes.TypeName" _
+        & " FROM SchemaTypes" _
+        & " WHERE [Database] = '" & m_Database & "'"
 ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
 
-
-'----------------------------------------------------------------------------------
-'   Type:        Function
-'   Name:        GetFiscalYearFilter
-'   Parameters:  Void
-'   Retval:      String
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Function GetFiscalYearFilter() As String
-    On Error GoTo ErrorHandler:
-    If Not FiscalYearFilter = vbNullString And _
-        Not DivisionNameFilter = vbNullString Then
-            GetFiscalYearFilter = FiscalYearFilter _
-                & pAnd & DivisionNameFilter
-    End If
-    If Not FiscalYearFilter = vbNullString And _
-        DivisionNameFilter = vbNullString Then
-            GetFiscalYearFilter = FiscalYearFilter _
-                & pAnd & DivisionNameFilter
-    End If
-    If FiscalYearFilter = vbNullString And _
-        Not DivisionNameFilter = vbNullString Then
-            GetFiscalYearFilter = DivisionNameFilter
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
 
 
 '----------------------------------------------------------------------------------
 '   Type:        Event Sub-Procedure
-'   Name:        DivisionNameComboBox_Change
+'   Name:        DataTypeComboBox_Change()
 '   Parameters:  Void
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub DivisionNameComboBox_Change()
+Private Sub DataTypeComboBox_Change()
     On Error GoTo ErrorHandler:
-    Me.Filter = vbNullString
-    DivisionNameFilter = vbNullString
-    DivisionNameFilter = "[DivisionName] = '" _
-        & Me.DivisionNameComboBox.Value & "'"
-    Args.DivisionName = Me.DivisionNameComboBox.Value
-    Args.RcCode = DLookup("RcCode", "Allocations", "Allocations.DivisionName =" _
-        & "'" & Me.DivisionNameComboBox.Value & "'")
+    m_DataType = vbNullString
+    m_DataType = Me.DataTypeComboBox.Value
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -154,28 +105,31 @@ End Sub
 
 
 
+
 '----------------------------------------------------------------------------------
-'   Type:        Function
-'   Name:        GetRcCodeFilter
+'   Type:        Event Sub-Procedure
+'   Name:        GetSchemaData()
 '   Parameters:  Void
-'   Retval:      String
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Function GetRcCodeFilter() As String
+Private Function GetSchemaData() As Scripting.Dictionary
     On Error GoTo ErrorHandler:
-    If DivisionNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
-            GetRcCodeFilter = FiscalYearFilter
-    End If
-    If Not DivisionNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
-            GetRcCodeFilter = DivisionNameFilter _
-                & pAnd & FiscalYearFilter
+    If Not Me.ColumnNameTextBox.Value & "" = "" And _
+        Not m_DataType & "" = "" Then
+            m_Name = vbNullString
+            m_Name = Me.ColumnNameTextBox.text
+            m_DataColumns.add Key:="Name", Item:=m_Name
+            m_DataColumns.add Key:="Type", Item:=m_DataType
     End If
 ErrorHandler:
     ProcessError
     Exit Function
 End Function
+
+
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -184,9 +138,14 @@ End Function
 '   Parameters:  Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub AcceptButton_Click()
+Private Sub AddButton_Click()
     On Error GoTo ErrorHandler:
-    Me.Visible = Not Me.Visible
+    If Not Me.ColumnNameTextBox.Value & "" = "" And _
+        Not m_DataType & "" = "" Then
+            Dim p_DataColumn As Scripting.Dictionary
+            Set p_DataColumn = CreateObject("Scripting.Dictionary")
+            Set p_DataColumn = GetSchemaData
+    End If
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -202,9 +161,11 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub RefreshButton_Click()
     On Error GoTo ErrorHandler:
-    ClearComboBoxValues
-    ClearFilterValues
-    ClearOptionGroupValues
+    Me.ColumnNameTextBox.Value = "Enter Column Name"
+    Me.DataTypeComboBox.Value = vbNullString
+    Me.DatabaseComboBox.Value = vbNullString
+    Me.DataTypeComboBox.RowSource = vbNullString
+    Me.DatabaseComboBox.RowSource = "SELECT DISTINCT SchemaTypes.Database FROM SchemaTypes;"
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -219,30 +180,14 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub SetComboBoxColors()
     On Error GoTo ErrorHandler:
-    Me!DivisionNameComboBox.ForeColor = RGB(255, 255, 255)
-    Me!DivisionNameComboBox.BackColor = RGB(33, 33, 33)
-    Me!DivisionNameComboBox.BorderColor = RGB(68, 114, 196)
+    Me!ColumnNameTextBox.ForeColor = RGB(255, 255, 255)
+    Me!ColumnNameTextBox.BackColor = RGB(33, 33, 33)
+    Me!ColumnNameTextBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
 
-
-'----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ClearOptionGroupValues
-'   Parameters:  Void
-'   Retval:      Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub ClearOptionGroupValues()
-    On Error GoTo ErrorHandler:
-    Me.FiscalYearOptionGroup.Value = 2
-    FiscalYearFilter = "[BFY] = '2021'"
-ErrorHandler:
-    ProcessError
-    Exit Sub
-End Sub
 
 
 
@@ -256,34 +201,35 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ClearComboBoxValues()
     On Error GoTo ErrorHandler:
-    Me.DivisionNameComboBox.RowSource = "SELECT DISTINCT Allocations.DivisionName" _
-        & " FROM Allocations" _
-        & " WHERE RcCode NOT IN ('06', '06R');"
-    Me.DivisionNameComboBox.Value = vbNullString
+    Me.ColumnNameTextBox.Value = "Enter Column Name"
+    Me.DataTypeComboBox.Value = vbNullString
+    Me.DatabaseComboBox.Value = vbNullString
+    Me.DataTypeComboBox.RowSource = vbNullString
+    Me.DatabaseComboBox.RowSource = vbNullString
+    Me.DatabaseComboBox.RowSource = "SELECT DISTINCT SchemaTypes.Database FROM SchemaTypes;"
 ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
+
 
 
 '----------------------------------------------------------------------------------
 '   Type:        Sub-Procedure
-'   Name:        ClearFilterValues
+'   Name:        ClearComboBoxValues
 '   Parameters:  Void
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ClearFilterValues()
+Private Sub ColumnNameTextBox_Enter()
     On Error GoTo ErrorHandler:
-    m_BFY = vbNullString
-    FiscalYearFilter = vbNullString
-    m_RcCode = vbNullString
-    DivisionNameFilter = vbNullString
-    Me.Filter = vbNullString
+    Me.ColumnNameTextBox.Value = vbNullString
 ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -324,6 +270,7 @@ Private Sub ProcessError()
     End If
     MessageFactory.ShowError (m_Error)
 End Sub
+
 
 
 

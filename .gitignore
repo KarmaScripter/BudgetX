@@ -1,15 +1,5 @@
-db\accdb\models\Views.accdb
-db\accdb\models\Data.accdb
-db\accdb\models\References.accdb
-db\accdb\models\Divisions.accdb
+SELECT StatusOfFunds.BudgetLevel, StatusOfFunds.BFY, StatusOfFunds.AhCode, StatusOfFunds.FundCode, StatusOfFunds.OrgCode, StatusOfFunds.AccountCode, StatusOfFunds.ProgramProjectCode, StatusOfFunds.ProgramProjectName, StatusOfFunds.ProgramAreaCode, StatusOfFunds.ProgramAreaName, StatusOfFunds.BocCode, StatusOfFunds.LowerName
+FROM StatusOfFunds
+WHERE (((StatusOfFunds.BudgetLevel)='7') AND ((StatusOfFunds.BocCode) <> '17'))
+ORDER BY StatusOfFunds.BFY DESC , StatusOfFunds.FundCode, StatusOfFunds.AccountCode, StatusOfFunds.BocCode;
 
-db/accdb/models/Data.accdb
-db/accdb/models/Divisions.accdb
-db/accdb/models/Reference.accdb
-db/accdb/models/Views.accdb
-db/accdb/models/Reference.accdb
-db/accdb/PDF.html
-db/accdb/Reference.accdb
-db/accdb/Views.laccdb
-*.laccdb
-db/accdb/models/Database.mdb

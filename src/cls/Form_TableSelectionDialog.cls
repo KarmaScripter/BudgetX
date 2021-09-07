@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "Form_DivisionSelector"
+Attribute VB_Name = "Form_TableSelectionDialog"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = True
@@ -13,10 +13,10 @@ Option Explicit
 
 
 Public Args As AccountArgs
-Public FiscalYearFilter As String
-Public DivisionNameFilter As String
-Private m_RcCode As String
-Private m_BFY As String
+Public DataModelFilter As String
+Public TableNameFilter As String
+Private m_TableName As String
+Private m_DataModel As String
 Private pAnd As String
 Private m_Error As String
 
@@ -50,18 +50,19 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub Form_Load()
     On Error GoTo ErrorHandler:
+    Me.Caption = "Data Selector"
     ClearComboBoxValues
     ClearFilterValues
     SetComboBoxColors
     pAnd = " AND "
-    DivisionNameFilter = vbNullString
-    Me.DivisionNameComboBox.RowSource = "SELECT DISTINCT Allocations.DivisionName" _
-        & " FROM Allocations" _
-        & " WHERE RcCode NOT IN ('06', '06R');"
-    Me.FiscalYearOptionGroup.Value = 2
-    Me.DivisionNameComboBox.Value = vbNullString
-    Args.BFY = "2021"
-    FiscalYearFilter = "[BFY] = '2021'"
+    TableNameFilter = vbNullString
+    Me.DataModelOptionGroup.Value = 1
+    m_DataModel = "EXECUTION"
+    DataModelFilter = "[Model] = '" & m_DataModel & "'"
+    Me.Filter = DataModelFilter
+    Me.TableNameComboBox.RowSource = "SELECT DISTINCT ApplicationTables.TableName" _
+        & " FROM ApplicationTables" _
+        & " WHERE " & Me.Filter
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -74,27 +75,32 @@ End Sub
 
 '----------------------------------------------------------------------------------
 '   Type:        Event Sub-Procedure
-'   Name:        FiscalYearOptionGroup_AfterUpdate
+'   Name:        DataModelOptionGroup_AfterUpdate
 '   Parameters:  Void
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub FiscalYearOptionGroup_AfterUpdate()
+Private Sub DataModelOptionGroup_AfterUpdate()
     On Error GoTo ErrorHandler:
-    m_BFY = vbNull
+    Me.TableNameComboBox.Value = vbNullString
+    m_DataModel = vbNullString
     Me.Filter = vbNullString
-    FiscalYearFilter = vbNullString
-    Select Case Me.FiscalYearOptionGroup.Value
+    DataModelFilter = vbNullString
+    Select Case Me.DataModelOptionGroup.Value
         Case 1
-            m_BFY = "2020"
-            FiscalYearFilter = "[BFY] = '2020'"
-            Args.BFY = m_BFY
-            Me.Filter = GetFiscalYearFilter
+            m_DataModel = "EXECUTION"
+            DataModelFilter = "[Model] = 'EXECUTION'"
+            Me.Filter = DataModelFilter
+            Me.TableNameComboBox.RowSource = "SELECT DISTINCT ApplicationTables.TableName" _
+                & " FROM ApplicationTables" _
+                & " WHERE " & Me.Filter
         Case 2
-            m_BFY = "2021"
-            FiscalYearFilter = "[BFY] = '2021'"
-            Args.BFY = "2021"
-            Me.Filter = GetFiscalYearFilter
+            m_DataModel = "REFERENCE"
+            DataModelFilter = "[Model] = 'REFERENCE'"
+            Me.Filter = DataModelFilter
+            Me.TableNameComboBox.RowSource = "SELECT DISTINCT ApplicationTables.TableName" _
+                & " FROM ApplicationTables" _
+                & " WHERE " & Me.Filter
     End Select
 ErrorHandler:
     ProcessError
@@ -103,79 +109,25 @@ End Sub
 
 
 '----------------------------------------------------------------------------------
-'   Type:        Function
-'   Name:        GetFiscalYearFilter
-'   Parameters:  Void
-'   Retval:      String
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Function GetFiscalYearFilter() As String
-    On Error GoTo ErrorHandler:
-    If Not FiscalYearFilter = vbNullString And _
-        Not DivisionNameFilter = vbNullString Then
-            GetFiscalYearFilter = FiscalYearFilter _
-                & pAnd & DivisionNameFilter
-    End If
-    If Not FiscalYearFilter = vbNullString And _
-        DivisionNameFilter = vbNullString Then
-            GetFiscalYearFilter = FiscalYearFilter _
-                & pAnd & DivisionNameFilter
-    End If
-    If FiscalYearFilter = vbNullString And _
-        Not DivisionNameFilter = vbNullString Then
-            GetFiscalYearFilter = DivisionNameFilter
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
-
-
-'----------------------------------------------------------------------------------
 '   Type:        Event Sub-Procedure
-'   Name:        DivisionNameComboBox_Change
+'   Name:        TableNameComboBox_Change
 '   Parameters:  Void
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub DivisionNameComboBox_Change()
+Private Sub TableNameComboBox_Change()
     On Error GoTo ErrorHandler:
     Me.Filter = vbNullString
-    DivisionNameFilter = vbNullString
-    DivisionNameFilter = "[DivisionName] = '" _
-        & Me.DivisionNameComboBox.Value & "'"
-    Args.DivisionName = Me.DivisionNameComboBox.Value
-    Args.RcCode = DLookup("RcCode", "Allocations", "Allocations.DivisionName =" _
-        & "'" & Me.DivisionNameComboBox.Value & "'")
+    TableNameFilter = vbNullString
+    TableNameFilter = "[Name] = '" & Me.TableNameComboBox.Value & "'"
+    m_TableName = Me.TableNameComboBox.Value
+    Me.Filter = TableNameFilter
 ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
 
 
-
-'----------------------------------------------------------------------------------
-'   Type:        Function
-'   Name:        GetRcCodeFilter
-'   Parameters:  Void
-'   Retval:      String
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Function GetRcCodeFilter() As String
-    On Error GoTo ErrorHandler:
-    If DivisionNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
-            GetRcCodeFilter = FiscalYearFilter
-    End If
-    If Not DivisionNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
-            GetRcCodeFilter = DivisionNameFilter _
-                & pAnd & FiscalYearFilter
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
 
 
 '----------------------------------------------------------------------------------
@@ -203,7 +155,6 @@ End Sub
 Private Sub RefreshButton_Click()
     On Error GoTo ErrorHandler:
     ClearComboBoxValues
-    ClearFilterValues
     ClearOptionGroupValues
 ErrorHandler:
     ProcessError
@@ -219,9 +170,9 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub SetComboBoxColors()
     On Error GoTo ErrorHandler:
-    Me!DivisionNameComboBox.ForeColor = RGB(255, 255, 255)
-    Me!DivisionNameComboBox.BackColor = RGB(33, 33, 33)
-    Me!DivisionNameComboBox.BorderColor = RGB(68, 114, 196)
+    Me!TableNameComboBox.ForeColor = RGB(255, 255, 255)
+    Me!TableNameComboBox.BackColor = RGB(33, 33, 33)
+    Me!TableNameComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -237,8 +188,13 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ClearOptionGroupValues()
     On Error GoTo ErrorHandler:
-    Me.FiscalYearOptionGroup.Value = 2
-    FiscalYearFilter = "[BFY] = '2021'"
+    Me.DataModelOptionGroup.Value = 1
+    m_DataModel = "EXECUTION"
+    DataModelFilter = "[Model] = 'EXECUTION'"
+    Me.Filter = DataModelFilter
+    Me.TableNameComboBox.RowSource = "SELECT DISTINCT ApplicationTables.TableName" _
+        & " FROM ApplicationTables" _
+        & " WHERE " & Me.Filter
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -256,10 +212,7 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ClearComboBoxValues()
     On Error GoTo ErrorHandler:
-    Me.DivisionNameComboBox.RowSource = "SELECT DISTINCT Allocations.DivisionName" _
-        & " FROM Allocations" _
-        & " WHERE RcCode NOT IN ('06', '06R');"
-    Me.DivisionNameComboBox.Value = vbNullString
+    Me.TableNameComboBox.Value = vbNullString
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -275,10 +228,10 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ClearFilterValues()
     On Error GoTo ErrorHandler:
-    m_BFY = vbNullString
-    FiscalYearFilter = vbNullString
-    m_RcCode = vbNullString
-    DivisionNameFilter = vbNullString
+    m_DataModel = vbNullString
+    DataModelFilter = vbNullString
+    m_TableName = vbNullString
+    TableNameFilter = vbNullString
     Me.Filter = vbNullString
 ErrorHandler:
     ProcessError
@@ -324,6 +277,7 @@ Private Sub ProcessError()
     End If
     MessageFactory.ShowError (m_Error)
 End Sub
+
 
 
 

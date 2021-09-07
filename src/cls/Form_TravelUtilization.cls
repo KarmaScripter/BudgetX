@@ -22,7 +22,7 @@ Private FundNameFilter As String
 Private ProgramProjectNameFilter As String
 Private BocNameFilter As String
 Private pAnd As String
-Private mError As String
+Private m_Error As String
 Private mNotification As String
 Private SQL As String
 
@@ -94,12 +94,7 @@ Private Sub Form_Open(Cancel As Integer)
     Me.RecordSource = SQL
     DoCmd.Close ObjectType:=acForm, ObjectName:=mDialog.Name, Save:=acSaveNo
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   TravelUtilization" _
-            & vbCrLf & "Member:     Form_Open()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -124,12 +119,7 @@ Private Sub Form_Load()
         & " FROM DivisionExecution" _
         & " WHERE DivisionExecution.BocCode IN ('21', '28')" & pAnd & Me.Filter
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:      TravelUtilization" _
-            & vbCrLf & "Member:     Form_Load()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -148,12 +138,7 @@ Private Sub Form_Close()
     Me.Filter = vbNullString
     DivisionNameFilter = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:      TravelUtilization" _
-            & vbCrLf & "Member:     Form_Close()" _
-            & vbCrLf & "Descript: " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -182,12 +167,7 @@ Private Sub SetButtonVisibility()
     Me.SaveButton.Visible = Not Me.SaveButton.Visible
     Me.DataButton.Visible = Not Me.DataButton.Visible
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:      TravelUtilization" _
-            & vbCrLf & "Member:     SetButtonVisibility()" _
-            & vbCrLf & "Descript: " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -219,12 +199,7 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
             pAnd & Me.Filter
     Me.Requery
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:      TravelUtilization" _
-            & vbCrLf & "Member:     FiscalYearOptionGroup_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -295,12 +270,7 @@ Private Function GetFiscalYearFilter() As String
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   TravelUtilization" _
-            & vbCrLf & "Member:     GetFiscalYearFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Function
 End Function
 
@@ -329,12 +299,7 @@ Private Sub FundNameComboBox_Change()
         & pAnd & Me.Filter
     Me.Requery
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   TravellUtilization" _
-            & vbCrLf & "Member:     FundNameComboBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -397,12 +362,7 @@ Private Function GetFundNameFilter() As String
                 & pAnd & FiscalYearFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   TravelUtilization" _
-            & vbCrLf & "Member:     GetFundNameFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Function
 End Function
 
@@ -424,12 +384,7 @@ Private Sub ProgramProjectNameComboBox_Change()
         & " WHERE DivisionExecution.BocCode IN ('21', '28')" & pAnd & Me.Filter
     Me.Requery
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   TravelUtilization" _
-            & vbCrLf & "Member:     ProgramProjectNameComboBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -496,12 +451,7 @@ Private Function GetProgramProjectNameFilter() As String
                 & pAnd & FiscalYearFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:      TravelUtilization" _
-            & vbCrLf & "Member:     GetProgramProjectNameFilter()" _
-            & vbCrLf & "Descript: " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Function
 End Function
 
@@ -530,12 +480,7 @@ Private Sub RefreshButton_Click()
         & " WHERE DivisionExecution.BocCode IN ('21', '28')" & pAnd & Me.Filter
     Me.Requery
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   TravelUtilization" _
-            & vbCrLf & "Member:     RefreshButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -554,12 +499,7 @@ Private Sub ClearFilterValues()
     FiscalYearFilter = "[BFY] = '2021'"
     Me.Filter = DivisionNameFilter & pAnd & FiscalYearFilter
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   TravelUtilization" _
-            & vbCrLf & "Member:     ClearFilterValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -579,12 +519,7 @@ Private Sub ClearComboBoxValues()
     Me.FundNameComboBox.Value = vbNullString
     Me.ProgramProjectNameComboBox.Value = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   TravelUtilization" _
-            & vbCrLf & "Member:     ClearComboBoxValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -601,12 +536,7 @@ Private Sub MenuButton_Click()
     On Error GoTo ErrorHandler:
     SetButtonVisibility
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:      TravelUtilization" _
-            & vbCrLf & "Member:     MenuButton_Click()" _
-            & vbCrLf & "Descript: " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -624,46 +554,67 @@ Private Sub SetDivisionIcon()
     If Not Args.RcCode = vbNullString Then
         Select Case Args.RcCode
             Case "06A"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\ORA.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ORA.png"
             Case "06B"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\LCARD.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\LCARD.png"
             Case "06C"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\MSD.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\MSD.png"
             Case "06D"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\ORC.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ORC.png"
             Case "06F"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\EJ.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\EJ.png"
             Case "06G"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\WCF.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\WCF.png"
             Case "06H"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\LSASD.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\LSASD.png"
             Case "06J"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\ARD.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ARD.png"
             Case "06K"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\WD.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\WD.png"
             Case "06L"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\SEMD.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\SEMD.png"
             Case "06M"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\ECAD.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ECAD.png"
             Case "06N"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\WSA.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\WSA.png"
             Case "06R"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\MSR.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\MSR.png"
             Case "06X"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\XA.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\XA.png"
         End Select
     Else
         Me.DivisionIcon.Picture = _
-            CurrentProject.path & "\etc\png\AppIcons\interface\ui\Reports.png"
+            CurrentProject.Path & "\etc\png\AppIcons\interface\ui\Reports.png"
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:      TravelUtilization" _
-            & vbCrLf & "Member:     SetDivisionIcon()" _
-            & vbCrLf & "Descript: " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError
     Exit Sub
 End Sub
+
+
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
+End Sub
+
+
+
 
 
