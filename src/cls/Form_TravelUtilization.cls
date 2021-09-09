@@ -15,7 +15,7 @@ Option Explicit
 Public DbData As DAO.Database
 Public DbSet As DAO.Recordset
 Public Args As AccountArgs
-Public mDialog As Form_DivisionSelector
+Public m_Dialog As Form_DivisionSelector
 Private DivisionNameFilter As String
 Private FiscalYearFilter As String
 Private FundNameFilter As String
@@ -23,7 +23,7 @@ Private ProgramProjectNameFilter As String
 Private BocNameFilter As String
 Private pAnd As String
 Private m_Error As String
-Private mNotification As String
+Private m_Notification As String
 Private SQL As String
 
 
@@ -40,14 +40,14 @@ Private SQL As String
 '---------------------------------------------------------------------------------
 Private Sub Form_Open(Cancel As Integer)
     On Error GoTo ErrorHandler:
-    Set mDialog = New Form_DivisionSelector
+    Set m_Dialog = New Form_DivisionSelector
     DoCmd.OpenForm FormName:="DivisionSelector", WindowMode:=acDialog
     pAnd = " AND "
     FiscalYearOptionGroup.Value = 2
     FiscalYearFilter = "[BFY] = '2021'"
     Set Args = New AccountArgs
-    Set mDialog = Forms("DivisionSelector")
-    Set Args = mDialog.Args
+    Set m_Dialog = Forms("DivisionSelector")
+    Set Args = m_Dialog.Args
     Args.BFY = "2021"
     If Not Args.DivisionName & "" = "" And _
         Not Args.FundName & "" = "" And _
@@ -92,7 +92,7 @@ Private Sub Form_Open(Cancel As Integer)
                 pAnd & Me.Filter
     End If
     Me.RecordSource = SQL
-    DoCmd.Close ObjectType:=acForm, ObjectName:=mDialog.Name, Save:=acSaveNo
+    DoCmd.Close ObjectType:=acForm, ObjectName:=m_Dialog.Name, Save:=acSaveNo
 ErrorHandler:
     ProcessError
     Exit Sub

@@ -108,12 +108,7 @@ Private Sub Report_Open(Cancel As Integer)
     Me.RecordSource = SQL
     DoCmd.Close ObjectType:=acForm, ObjectName:="ReportDialog"
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   DivisionTravelAllocations Report" _
-            & vbCrLf & "Member:     Report_Open()" _
-            & vbCrLf & "Descript: " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
