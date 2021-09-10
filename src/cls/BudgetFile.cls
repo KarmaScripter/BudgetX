@@ -11,9 +11,6 @@ Option Compare Database
 Option Explicit
 
 
-
-
-
 Private m_Base As String
 Private m_Path As String
 Private m_Name As String
@@ -67,9 +64,13 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let Base(fp As String)
+    On Error GoTo ErrorHandler:
     If Not fp & "" = "" Then
         m_Base = fp
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -82,9 +83,13 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get Base() As String
+    On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
         Base = m_Base
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -100,7 +105,8 @@ End Property
 Public Property Get ParentFolder() As String
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
         m_ParentFolder = m_FileSys.GetFile(m_Base).ParentFolder
         ParentFolder = m_ParentFolder
         Set m_FileSys = Nothing
@@ -124,6 +130,7 @@ Public Property Get Path() As String
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
         Set m_FileSys = New FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
         m_Path = m_FileSys.GetAbsolutePathName(m_Base)
         Path = m_Path
         Set m_FileSys = Nothing
@@ -144,7 +151,8 @@ End Property
 Public Property Get DateCreated() As Date
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
         m_DateCreated = m_FileSys.GetFile(m_Base).DateCreated
         DateCreated = m_DateCreated
         Set m_FileSys = Nothing
@@ -165,7 +173,8 @@ End Property
 Public Property Get LastAccessed() As Date
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
         m_LastAccessed = m_FileSys.GetFile(m_Base).DateLastAccessed
         LastAccessed = m_LastAccessed
         Set m_FileSys = Nothing
@@ -187,7 +196,8 @@ End Property
 Public Property Get LastModified() As Date
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
         m_LastModified = m_FileSys.GetFile(m_Base).DateLastModified
         LastModified = m_LastModified
         Set m_FileSys = Nothing
@@ -209,7 +219,8 @@ End Property
 Public Property Get Name() As String
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
         m_Name = m_FileSys.GetFile(m_Base).ShortName
         Name = m_Name
         Set m_FileSys = Nothing
@@ -231,7 +242,8 @@ End Property
 Public Property Get FileType() As String
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
         m_Type = m_FileSys.GetFile(m_Base).Type
         FileType = m_Type
         Set m_FileSys = Nothing
@@ -253,7 +265,8 @@ End Property
 Public Property Get Size() As Variant
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
         Size = m_FileSys.GetFile(m_Base).Size
         Set m_FileSys = Nothing
     End If
@@ -275,7 +288,8 @@ End Property
 Public Property Get Extension() As String
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
         m_Extension = m_FileSys.GetExtensionName(m_Base)
         Extension = m_Extension
         Set m_FileSys = Nothing
@@ -317,7 +331,8 @@ End Property
 Public Property Get Drive() As String
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
         m_Drive = m_FileSys.GetFile(m_Base).Drive
         Drive = m_Drive
         Set m_FileSys = Nothing
@@ -329,6 +344,245 @@ End Property
 
 
 
+'---------------------------------------------------------------------------------
+'   Type:            Function
+'   Name:            GetPath
+'   Parameters:      String
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function GetPath(pPath As String) As String
+    On Error GoTo ErrorHandler:
+    If Not Dir(m_Base) & "" = "" And _
+        Not Dir(pPath) & "" = "" Then
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
+            GetPath = m_FileSys.GetAbsolutePathName(m_Base)
+            Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Function
+'   Name:            GetName
+'   Parameters:      String
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function GetName(pPath As String) As String
+    On Error GoTo ErrorHandler:
+    If Not Dir(m_Base) & "" = "" And _
+        Not Dir(pPath) & "" = "" Then
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
+            GetName = m_FileSys.GetFileName(pPath)
+            Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Function
+'   Name:            GetSize
+'   Parameters:      String
+'   Retval:          Integer
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function GetSize(pPath As String) As Integer
+    On Error GoTo ErrorHandler:
+    If Not Dir(pPath) & "" = "" Then
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
+        GetSize = CInt(m_FileSys.GetFile(pPath).Size)
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Function
+'   Name:            GetExtension
+'   Parameters:      String
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function GetExtension(pPath As String) As String
+    On Error GoTo ErrorHandler:
+    If Not Dir(m_Base) & "" = "" And _
+        Not Dir(pPath) & "" = "" Then
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
+        GetExtension = m_FileSys.GetExtensionName(pPath)
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Function
+'   Name:            GetCreationDate
+'   Parameters:      String
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function GetCreationDate(pPath As String) As Date
+    On Error GoTo ErrorHandler:
+    If Not Dir(m_Base) & "" = "" And _
+        Not Dir(pPath) & "" = "" Then
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
+        GetCreationDate = m_FileSys.GetFile(pPath).DateCreated
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Function
+'   Name:            GetCreationDate
+'   Parameters:      String
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function GetParentFolder(pPath As String) As Scripting.folder
+    On Error GoTo ErrorHandler:
+    If Not Dir(m_Base) & "" = "" And _
+        Not Dir(pPath) & "" = "" Then
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
+        Set GetParentFolder = m_FileSys.GetFile(pPath).ParentFolder
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Function
+'   Name:            GetCreationDate
+'   Parameters:      String
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function GetAccessDate(pPath As String) As Date
+    On Error GoTo ErrorHandler:
+    If Not Dir(m_Base) & "" = "" And _
+        Not Dir(pPath) & "" = "" Then
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
+        GetAccessDate = m_FileSys.GetFile(pPath).DateLastAccessed
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Function
+'   Name:            GetCreationDate
+'   Parameters:      String
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function GetModifiedDate(pPath As String) As Date
+    On Error GoTo ErrorHandler:
+    If Not Dir(m_Base) & "" = "" And _
+        Not Dir(pPath) & "" = "" Then
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
+        GetModifiedDate = m_FileSys.GetFile(pPath).DateLastModified
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Function
+'   Name:            GetDrive
+'   Parameters:      String
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function GetDrive(pPath As String) As Scripting.Drive
+    On Error GoTo ErrorHandler:
+    If Not Dir(m_Base) & "" = "" And _
+        Not Dir(pPath) & "" = "" Then
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
+        Set GetDrive = m_FileSys.GetFile(pPath).Drive
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Function
+'   Name:            GetDrive
+'   Parameters:      String
+'   Retval:          String
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function GetType(pPath As String) As String
+    On Error GoTo ErrorHandler:
+    If Not Dir(m_Base) & "" = "" And _
+        Not Dir(pPath) & "" = "" Then
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
+        GetType = m_FileSys.GetFile(pPath).Type
+        Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+
 
 '---------------------------------------------------------------------------------
 '   Type:            Function Procedure
@@ -337,15 +591,15 @@ End Property
 '   Retval:          Boolean
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Static Function Exists(pPath As String) As Boolean
+Public Static Function Verify(pPath As String) As Boolean
     On Error GoTo ErrorHandler:
-    If Not pPath & "" = "" Then
-        Set m_FileSys = New FileSystemObject
-        Set m_FileSys = CreateObject("Scripting.FileSystemObject")
+    If Not Dir(pPath) & "" = "" Then
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
         If m_FileSys.FileExists(pPath) = True Then
-            Exists = True
+            Verify = True
         Else
-            Exists = False
+            Verify = False
         End If
     End If
 ErrorHandler:
@@ -364,8 +618,8 @@ End Function
 Public Function GetStreamReader() As Scripting.TextStream
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
-        Set m_FileSys = CreateObject("Scripting.FileSystemObject")
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
         Set m_File = m_FileSys.GetFile(m_Base)
         Set GetStreamReader = m_File.OpenAsTextStream(IOMode:=ForReading, _
             Format:=TristateUseDefault)
@@ -387,8 +641,8 @@ End Function
 Public Function GetStreamWriter() As Scripting.TextStream
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
-            Set m_FileSys = New FileSystemObject
-            Set m_FileSys = CreateObject("Scripting.FileSystemObject")
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
             Set m_File = m_FileSys.GetFile(m_Base)
             Set GetStreamReader = m_File.OpenAsTextStream(IOMode:=ForWriting, _
                 Format:=TristateUseDefault)
@@ -410,8 +664,8 @@ Public Function CreateText(pFileName As String) As Scripting.TextStream
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" And _
         Not pFileName & "" = "" Then
-            Set m_FileSys = New FileSystemObject
-            Set m_FileSys = CreateObject("Scripting.FileSystemObject")
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
             Set CreateText = m_FileSys.CreateTextFile(filename:=pFileName, _
                 Overwrite:=True)
             Set m_FileSys = Nothing
@@ -425,7 +679,7 @@ End Function
 
 '---------------------------------------------------------------------------------
 '   Type:            Sub-Procedure
-'   Name:
+'   Name:            ReadAll
 '   Parameters:      Void
 '   Retval:          Void
 '   Purpose:
@@ -433,7 +687,8 @@ End Function
 Public Function ReadAll() As String
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
         Set m_File = m_FileSys.GetFile(m_Base)
         Dim m_Out As String
         Dim m_Stream As Scripting.TextStream
@@ -462,7 +717,8 @@ End Function
 Public Function Readline() As String
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
         Set m_File = m_FileSys.GetFile(m_Base)
         If Not Dir(m_File) & "" = "" Then
             Dim p_Out As String
@@ -491,9 +747,12 @@ End Function
 Public Sub Move(des As String)
     If Not m_Path & "" = "" And _
         Not des & "" = "" Then
-            Set m_FileSys = New FileSystemObject
-            Set m_File = m_FileSys.GetFile(m_Base)
-            m_File.Move (des)
+        Set m_FileSys = New Scripting.FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystem")
+        Set m_File = m_FileSys.GetFile(m_Base)
+        m_File.Move (des)
+        Set m_FileSys = Nothing
+        Set m_File = Nothing
     End If
 ErrorHandler:
     ProcessError
@@ -510,12 +769,15 @@ End Sub
 '   Retval:          Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Sub Copy(dest As String)
+Public Sub Copy(pSource As String, pDestination As String)
     On Error GoTo ErrorHandler:
-    If Not m_Base & "" = "" And Not dest & "" = "" Then
-        Set m_FileSys = New FileSystemObject
-        Set m_File = m_FileSys.GetFile(m_Base)
-        m_File.Copy Destination:=dest, OverWriteFiles:=True
+    If Not m_Base & "" = "" And _
+        Not Dir(pSource) & "" = "" And _
+        Not Dir(pDestination) & "" = "" Then
+            Set m_FileSys = New FileSystemObject
+            Set m_FileSys = CreateObject("Scripting.FileSystemObject")
+            Set m_File = m_FileSys.GetFile(pSource)
+            m_File.Copy Destination:=pDestination, OverWriteFiles:=True
     End If
 ErrorHandler:
     ProcessError
@@ -531,15 +793,14 @@ End Sub
 '   Retval:          Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Sub Delete()
+Public Sub Delete(pPath As String)
     On Error GoTo ErrorHandler:
-    Dim m_FileSys As FileSystemObject
     Set m_FileSys = New FileSystemObject
     Set m_FileSys = CreateObject("Scripting.FileSystemObject")
-    If Not m_Base & "" = "" Then
-        m_FileSys.DeleteFile m_Path
-        Kill (m_Path)
+    If Not Dir(pPath) & "" = "" Then
+        m_FileSys.DeleteFile pPath
     End If
+    Set m_FileSys = Nothing
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -727,6 +988,25 @@ End Function
 
 
 
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        KillFiles
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub KillFiles()
+    If Not m_FileSys Is Nothing Then
+        Set m_FileSys = Nothing
+    End If
+    If Not m_File Is Nothing Then
+        Set m_File = Nothing
+    End If
+End Sub
+
+
+
+
 
 
 
@@ -742,9 +1022,9 @@ Private Sub ProcessError()
         m_Error = "Source:      " & Err.Source _
             & vbCrLf & "Number:     " & Err.Number _
             & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
 
 

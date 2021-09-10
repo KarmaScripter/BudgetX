@@ -19,8 +19,8 @@ Private m_Error As String
 '----------------------------------------------------------------------------------
 Public Sub RunCompact()
     On Error GoTo ErrorHandler:
-    m_CompactPath = Replace(CurrentProject.path, "accdb", "sqlce\gui\CompactView.exe")
-    m_CompactArg = " " & Replace(CurrentProject.path, "accdb", "sqlce\gui\Data.sdf")
+    m_CompactPath = Replace(CurrentProject.Path, "accdb\models", "sqlce\gui\CompactView.exe")
+    m_CompactArg = " " & Replace(CurrentProject.Path, "accdb\models", "sqlce\gui\Data.sdf")
     m_ShellArgPath = m_CompactPath & m_CompactArg
     vPID = Shell(mShellArgPath, 3)
 ErrorHandler:

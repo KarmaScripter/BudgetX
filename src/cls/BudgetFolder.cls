@@ -270,13 +270,12 @@ End Property
 '---------------------------------------------------------------------------------
 Public Property Get ParentFolder() As String
     On Error GoTo ErrorHandler:
-    If Not m_Base & "" = "" And _
-        m_ParentFolder & "" = "" Then
-            Set m_FileSys = New FileSystemObject
-            Set m_FileSys = CreateObject("Scripting.FileSystemObject")
-            m_ParentFolder = m_FileSys.GetParentFolderName(m_Base)
-            ParentFolder = m_ParentFolder
-            Set m_FileSys = Nothing
+    If Not m_Base & "" = "" Then
+        Set m_FileSys = New FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystemObject")
+        m_ParentFolder = m_FileSys.GetParentFolderName(m_Base)
+        ParentFolder = m_ParentFolder
+        Set m_FileSys = Nothing
     End If
 ErrorHandler:
     ProcessError
@@ -385,12 +384,12 @@ End Property
 '   Retval:          Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Property Get DirectorySize() As Variant
+Public Property Get Size() As Variant
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
         Set m_FileSys = New FileSystemObject
         Set m_FileSys = CreateObject("Scripting.FileSystemObject")
-        Set DirectorySize = m_FileSys.GetFolder(m_Base).Size
+        Set Size = m_FileSys.GetFolder(m_Base).Size
     End If
     Set m_FileSys = Nothing
 ErrorHandler:
@@ -400,6 +399,29 @@ End Property
 
 
 
+ 
+'---------------------------------------------------------------------------------
+'   Type:            Function Procedure
+'   Name:            Extension
+'   Parameters:      String
+'   Retval:          Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Property Get SubFolders() As Scripting.folders
+    On Error GoTo ErrorHandler:
+    Dim folders As Scripting.folders
+    If Not m_Base & "" = "" Then
+        Set m_FileSys = New FileSystemObject
+        Set m_FileSys = CreateObject("Scripting.FileSystemObject")
+        Set m_SubFolders = m_FileSys.GetFolder(m_Base).SubFolders
+        Set SubFolders = m_SubFolders
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
 '---------------------------------------------------------------------------------
 '   Type:            Function Procedure
 '   Name:            FolderExists
@@ -407,17 +429,111 @@ End Property
 '   Retval:          Boolean
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Static Function VerifyExists(pPath As String) As Boolean
+Public Static Function Verify(pPath As String) As Boolean
     On Error GoTo ErrorHandler:
     If Not pPath & "" = "" And _
         Not m_Base & "" = "" Then
             Set m_FileSys = New FileSystemObject
             Set m_FileSys = CreateObject("Scripting.FileSystemObject")
             If m_FileSys.FolderExists(pPath) = True Then
-                VerifyExists = True
+                Verify = True
             Else
-                VerifyExists = False
+                Verify = False
             End If
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Function
+'   Name:            GetSize
+'   Parameters:      String
+'   Retval:          Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function GetName(pPath As String) As String
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" And _
+        Not Dir(pPath) & "" = "" Then
+            Set m_FileSys = New FileSystemObject
+            Set m_FileSys = CreateObject("Scripting.FileSystemObject")
+            GetName = m_FileSys.CreateFolder(pPath).Name
+            Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Function
+'   Name:            GetSize
+'   Parameters:      String
+'   Retval:          Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function GetSubFiles(pPath As String) As Scripting.Files
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" And _
+        Not Dir(pPath) & "" = "" Then
+            Set m_FileSys = New FileSystemObject
+            Set m_FileSys = CreateObject("Scripting.FileSystemObject")
+            Set GetSubFiles = m_FileSys.CreateFolder(pPath).Files
+            Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Function
+'   Name:            GetSubFolders
+'   Parameters:      String
+'   Retval:          Scripting.Folders
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function GetSubFolders(pPath As String) As Scripting.folders
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" And _
+        Not Dir(pPath) & "" = "" Then
+            Set m_FileSys = New FileSystemObject
+            Set m_FileSys = CreateObject("Scripting.FileSystemObject")
+            Set GetSubFolders = m_FileSys.CreateFolder(pPath).SubFolders
+            Set m_FileSys = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:            Function
+'   Name:            GetSize
+'   Parameters:      String
+'   Retval:          Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function GetSize(pPath As String) As Variant
+    On Error GoTo ErrorHandler:
+    If Not m_Base & "" = "" And _
+        Not Dir(pPath) & "" = "" Then
+            Set m_FileSys = New FileSystemObject
+            Set m_FileSys = CreateObject("Scripting.FileSystemObject")
+            Set GetSize = m_FileSys.GetFolder(pPath).Size
+    Set m_FileSys = Nothing
     End If
 ErrorHandler:
     ProcessError
@@ -457,14 +573,14 @@ End Function
 '   Retval:          Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Static Function CreateDirectory(pLocation As String) As Scripting.folder
+Public Static Function CreateDirectory(pPath As String) As Scripting.folder
     On Error GoTo ErrorHandler:
-    Dim folder As Scripting.folder
-    If Not pLocation & "" = "" Then
+    Dim p_Folder As Scripting.folder
+    If Not pPath & "" = "" Then
         Set m_FileSys = New FileSystemObject
         Set m_FileSys = CreateObject("Scripting.FileSystemObject")
-        Set folder = m_FileSys.CreateFolder(pLocation)
-        Set CreateDirectory = folder
+        Set p_Folder = m_FileSys.CreateFolder(pPath)
+        Set CreateDirectory = p_Folder
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
@@ -481,39 +597,15 @@ End Function
 '   Retval:          String
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Static Sub ChangeDirectory(pLocation As String)
+Public Static Sub ChangeDirectory(pPath As String)
     On Error GoTo ErrorHandler:
-    If Not pLocation & "" = "" Then
+    If Not pPath & "" = "" Then
         ChDir (m_Base)
     End If
 ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
-
-
- 
-'---------------------------------------------------------------------------------
-'   Type:            Function Procedure
-'   Name:            Extension
-'   Parameters:      String
-'   Retval:          Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Public Function GetSubFolders() As Scripting.folders
-    On Error GoTo ErrorHandler:
-    Dim count As Integer
-    Dim folders As Scripting.folders
-    If Not m_Base & "" = "" Then
-        Set m_FileSys = New FileSystemObject
-        Set m_FileSys = CreateObject("Scripting.FileSystemObject")
-        Set m_SubFolders = m_FileSys.GetFolder(m_Base).SubFolders
-        Set GetSubFolders = m_SubFolders
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
 
 
 
@@ -547,7 +639,7 @@ End Sub
 '   Retval:          Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Function GetSubFiles() As Collection
+Public Property Get SubFiles() As Collection
     On Error GoTo ErrorHandler:
     If Not m_Base & "" = "" Then
         Dim p_File As Scripting.File
@@ -558,12 +650,12 @@ Public Function GetSubFiles() As Collection
         For Each p_File In m_FileSys.GetFolder(m_Base).Files
             p_FileCollection.add p_File, p_File.Name
         Next p_File
-        Set GetSubFiles = p_FileCollection
+        Set SubFiles = p_FileCollection
     End If
 ErrorHandler:
     ProcessError
-    Exit Function
-End Function
+    Exit Property
+End Property
 
 
 
