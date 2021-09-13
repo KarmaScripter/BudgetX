@@ -3,16 +3,8 @@ Option Compare Database
 Option Explicit
 
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   FIELDS   ------------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
+Private m_Message As String
 
-Private mMessage As String
-
-
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'------------------------------------------------------------  PROPERTIES   ------------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 '----------------------------------------------------------------------------------
@@ -22,9 +14,9 @@ Private mMessage As String
 '   RetVal      Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let Message(text As String)
-    If Not text & "" = "" Then
-        mMessage = text
+Public Property Let Message(pText As String)
+    If Not pText & "" = "" Then
+        m_Message = pText
     End If
 End Property
 
@@ -37,10 +29,12 @@ End Property
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get Message() As String
-    If Not mMessage & "" = "" Then
-        Message = mMessage
+    If Not m_Message & "" = "" Then
+        Message = m_Message
     End If
 End Property
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -50,10 +44,11 @@ End Property
 '   RetVal      Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Sub ShowError(msg As String)
-    If Not msg & "" = "" Then
-        mMessage = msg
-        DoCmd.OpenForm FormName:="ErrorDialog", OpenArgs:=mMessage, WindowMode:=acDialog
+Public Sub ShowError(pMessage As String)
+    If Not pMessage & "" = "" Then
+        m_Message = pMessage
+        DoCmd.OpenForm FormName:="ErrorDialog", _
+            OpenArgs:=mMessage, WindowMode:=acDialog
     End If
 End Sub
 
@@ -67,10 +62,11 @@ End Sub
 '   RetVal      Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Sub ShowNotfication(msg As String)
-    If Not msg & "" = "" Then
-        mMessage = msg
-        DoCmd.OpenForm FormName:="MessageDialog", OpenArgs:=mMessage
+Public Sub ShowNotfication(pMessage As String)
+    If Not pMessage & "" = "" Then
+        m_Message = pMessage
+        DoCmd.OpenForm FormName:="MessageDialog", _
+            OpenArgs:=mMessage, WindowMode:=acDialog
     End If
 End Sub
 

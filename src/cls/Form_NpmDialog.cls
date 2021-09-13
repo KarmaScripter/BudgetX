@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "Form_RegionDialog"
+Attribute VB_Name = "Form_NpmDialog"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = True
@@ -17,12 +17,13 @@ Option Explicit
 Public Args As AccountArgs
 Private m_BFY As String
 Private m_RpioName As String
+Private m_RpioCode As String
 Private m_FundName As String
 Private m_FundCode As String
 Private pAnd As String
 Private m_Error As String
 Private m_Notification As String
-Private m_RpioCode As String
+Private m_RPIO As String
 
 
 
@@ -41,11 +42,10 @@ Private Sub Form_Load()
     pAnd = " AND "
     Set Args = New AccountArgs
     m_BFY = "[BFY] = '2021'"
-    Me.RpioNameComboBox.RowSource = "SELECT ResourcePlanningOffices.Name" _
-        & " FROM ResourcePlanningOffices" _
-        & " WHERE ResourcePlanningOffices.Code" _
-        & " IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
-        & " ORDER BY ResourcePlanningOffices.Code ASC;"
+    Me.RpioNameComboBox.RowSource = "SELECT DISTINCT ResourcePlanningOffices.Name" _
+        & " FROM ResourcePlanningOffices " _
+        & " WHERE ResourcePlanningOffices.Code NOT IN" _
+        & " ('01', '02', '03', '04' ,'05', '06','07', '08', '09', '10')"
     Me.FundNameComboBox.RowSource = "SELECT DISTINCT Allocations.FundName" _
         & " FROM Allocations;"
     Me.BocNameComboBox.RowSource = "SELECT DISTINCT Allocations.BocName FROM Allocations;"
@@ -137,9 +137,9 @@ Private Sub RpioNameComboBox_Change()
         Set Args = New AccountArgs
     End If
     Me.Filter = vbNullString
-    m_FundName = vbNullString
-    Args.RpioCode = Me.RpioNameComboBox.Value
-    Args.RpioName = DLookup("Name", "ResourcePlanningOffices", "ResourcePlanningOffices.Name = '" _
+    m_RpioName = vbNullString
+    Args.RpioName = Me.RpioNameComboBox.Value
+    Args.RpioCode = DLookup("Code", "ResourcePlanningOffices", "ResourcePlanningOffices.Name = '" _
         & Me.RpioNameComboBox.Value & "'")
     m_RpioName = "[RpioName] = '" & Me.RpioNameComboBox.Value & "'"
 ErrorHandler:
@@ -194,10 +194,10 @@ Private Sub FundNameComboBox_Change()
     If Args Is Nothing Then
         Set Args = New AccountArgs
     End If
-    m_FundCode = DLookup("FundCode", "Allocations", _
-        "Allocations.FundName = '" & Me.FundNameComboBox.Value & "'")
     Me.Filter = vbNullString
     m_FundName = vbNullString
+    m_FundCode = DLookup("FundCode", "Allocations", _
+        "Allocations.FundName = '" & Me.FundNameComboBox.Value & "'")
     m_FundName = "[FundName] = '" & Me.FundNameComboBox.Value & "'"
     Me.Filter = GetFundNameFilter
     Args.FundName = Me.FundNameComboBox.Value
@@ -267,15 +267,7 @@ Private Sub RefreshButton_Click()
     On Error GoTo ErrorHandler:
     ClearComboBoxValues
     ClearFilterValues
-    ResetOptionGroupValues
-    Me.RpioNameComboBox.RowSource = "SELECT ResourcePlanningOffices.Name" _
-        & " FROM ResourcePlanningOffices" _
-        & " WHERE ResourcePlanningOffices.Code" _
-        & " IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
-        & " ORDER BY ResourcePlanningOffices.Code ASC;"
-    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Allocations.FundName" _
-        & " FROM Allocations;"
-    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Allocations.BocName FROM Allocations;"
+    ClearOptionGroupValues
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -304,16 +296,16 @@ End Sub
 
 '----------------------------------------------------------------------------------
 '   Type:        Sub-Procedure
-'   Name:        ResetOptionGroupValues
+'   Name:        ClearOptionGroupValues
 '   Parameters:  Void
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ResetOptionGroupValues()
-    On Error GoTo ErrorHandler:
+Private Sub ClearOptionGroupValues()
     If Not IsNull(Me.FiscalYearOptionGroup) And _
         Not Me.FiscalYearOptionGroup.Value & "" = vbNullString Then
-            Me.FiscalYearOptionGroup.Value = 2
+            Me.FiscalYearOptionGroup.Value = vbNullString
+            m_BFY = vbNullString
     End If
 ErrorHandler:
     ProcessError
@@ -329,7 +321,6 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub ClearComboBoxValues()
-    On Error GoTo ErrorHandler:
     Me.RpioNameComboBox.Value = vbNullString
     Me.FundNameComboBox.Value = vbNullString
 ErrorHandler:
@@ -346,7 +337,6 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub ClearFilterValues()
-    On Error GoTo ErrorHandler:
     m_BFY = vbNullString
     m_RpioName = vbNullString
     m_FundName = vbNullString
@@ -367,10 +357,7 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub ExitButton_Click()
-    On Error GoTo ErrorHandler:
-    If Not Args Is Nothing Then
-        Set Args = Nothing
-    End If
+    Set Args = Nothing
     DoCmd.Close acForm, Me.Name
 ErrorHandler:
     ProcessError

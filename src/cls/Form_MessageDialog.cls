@@ -10,20 +10,32 @@ Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   FIELDS   ------------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
 
-Private mMessage As String
-Private mTitle As String
-Private mNumber As Integer
-Private mDescription As String
-Private mErrorArgs As Variant
+Private m_Message As String
+Private m_Title As String
+Private m_Number As Integer
+Private m_Description As String
+Private m_ErrorArgs As Variant
 Private m_Error As String
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'--------------------------------------------------------------- METHODS  ------------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Constructor
+'   Name:        Class_Initialize
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub Class_Initialize()
+End Sub
+
+Private Sub Class_Terminate()
+End Sub
+
+
+
 
 
 
@@ -37,10 +49,14 @@ Private m_Error As String
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub Form_Load()
+    On Error GoTo ErrorHandler:
     If Not IsNull(Me.OpenArgs) Then
         Me.MessageBox.Value = ""
         Me.MessageBox.Value = CStr(Me.OpenArgs)
     End If
+ErrorHandler:
+    ProcessError
+    Exit Sub
 End Sub
 
 
@@ -54,10 +70,14 @@ End Sub
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Property Let MessageArgs(msg As String)
-    If Not msg & "" = "" Then
-        mMessage = msg
+Public Property Let MessageArgs(pMessage As String)
+    On Error GoTo ErrorHandler:
+    If Not pMessage & "" = "" Then
+        m_Message = pMessage
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -75,13 +95,32 @@ End Property
 '---------------------------------------------------------------------------------
 Public Property Get MessageArgs() As String
     On Error GoTo ErrorHandler:
-    If Not mMessage & "" = "" Then
-        MessageArgs = mMessage
+    If Not m_Message & "" = "" Then
+        MessageArgs = m_Message
     End If
 ErrorHandler:
     ProcessError
     Exit Property
 End Property
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
+'   Parameters:  Void
+'   RetVal:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ExitButton_Click()
+    On Error GoTo ErrorHandler:
+    DoCmd.Close acForm, Me.Name, acSaveNo
+ErrorHandler:
+    ProcessError
+    Exit Sub
+End Sub
 
 
 
@@ -98,7 +137,7 @@ End Property
 '---------------------------------------------------------------------------------
 Private Sub ProcessError()
     If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
+         m_Error = "Source:      " & Err.Source _
             & vbCrLf & "Number:     " & Err.Number _
             & vbCrLf & "Issue:      " & Err.Description
         Err.Clear
