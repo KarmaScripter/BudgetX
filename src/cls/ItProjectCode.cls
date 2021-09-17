@@ -1,4 +1,12 @@
-
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "ItProjectCode"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
@@ -23,7 +31,7 @@ Public Property Let ID(num As Integer)
     End If
 ErrorHandler:
     ProcessError
-    End Property
+    Exit Property
 End Property
 
 
@@ -41,7 +49,7 @@ Public Property Get ID() As Integer
     End If
 ErrorHandler:
     ProcessError
-    End Property
+    Exit Property
 End Property
 
 
@@ -59,7 +67,7 @@ Public Property Let Code(cd As String)
     End If
 ErrorHandler:
     ProcessError
-    End Property
+    Exit Property
 End Property
 
 
@@ -77,7 +85,7 @@ Public Property Get Code() As String
     End If
 ErrorHandler:
     ProcessError
-    End Property
+    Exit Property
 End Property
 
 
@@ -95,7 +103,7 @@ Public Property Let Name(nm As String)
     End If
 ErrorHandler:
     ProcessError
-    End Property
+    Exit Property
 End Property
 
 
@@ -115,7 +123,7 @@ Public Property Get Name() As String
     End If
 ErrorHandler:
     ProcessError
-    End Property
+    Exit Property
 End Property
 
 
@@ -138,6 +146,10 @@ Private Sub ProcessError()
     End If
     MessageFactory.ShowError (m_Error)
 End Sub
+
+
+
+
 
 
 
