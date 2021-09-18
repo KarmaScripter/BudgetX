@@ -20,6 +20,15 @@ Private m_RPIO As String
 Private m_NpmId As Integer
 Private m_Error As String
 
+
+
+'---------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize/Class_Terminate
+'   Parameters  Void
+'   RetVal
+'   Purpose
+'---------------------------------------------------------------------------------
 Public Sub Class_Initialize()
 End Sub
 

@@ -11,14 +11,33 @@ Option Compare Database
 Option Explicit
 
 
-
-
-
 Private m_Code As String
 Private m_Name As String
 Private m_Value As Double
 Private m_ID As Integer
 Private m_Error As String
+
+
+
+'---------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize/Class_Terminate
+'   Parameters  Void
+'   RetVal
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Sub Class_Initialize()
+End Sub
+
+Public Sub Class_Terminate()
+End Sub
+
+
+
+
+
+
+
 
 
 '---------------------------------------------------------------------------------
@@ -60,13 +79,7 @@ Public Property Get ID() As Integer
     If m_ID > 0 Then
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-         m_Error = "Source:   FinanceObjectClass" _
-            & vbCrLf & "Member:     ID" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -87,13 +100,7 @@ Public Property Let Code(cd As String)
         m_Code = cd
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-         m_Error = "Source:   FinanceObjectClass" _
-            & vbCrLf & "Member:     Code" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -114,13 +121,7 @@ Public Property Get Code() As String
         Code = m_Code
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-         m_Error = "Source:   FinanceObjectClass" _
-            & vbCrLf & "Member:     Code" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -141,13 +142,7 @@ Public Property Let Name(nm As String)
         m_Name = nm
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-         m_Error = "Source:   FinanceObjectClass" _
-            & vbCrLf & "Member:     Name" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -168,13 +163,7 @@ Public Property Get Name() As String
         Name = m_Name
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-         m_Error = "Source:   FinanceObjectClass" _
-            & vbCrLf & "Member:     Name" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -194,13 +183,7 @@ Public Property Let Value(vl As Double)
     If Not "" = "" Then
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-         m_Error = "Source:   FinanceObjectClass" _
-            & vbCrLf & "Member:     Value" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -220,13 +203,7 @@ Public Property Get Value() As Double
     If Not "" = "" Then
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-         m_Error = "Source:   FinanceObjectClass" _
-            & vbCrLf & "Member:     Value" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 

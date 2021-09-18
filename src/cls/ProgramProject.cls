@@ -19,11 +19,24 @@ Private m_Narrative As String
 Private m_Error As String
 
 
+'----------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize()/Class_Terminate
+'   Parameters  Void
+'   Retval
+'   Purpose
+'---------------------------------------------------------------------------------
 Public Sub Class_Initialize()
 End Sub
 
 Public Sub Class_Terminate()
 End Sub
+
+
+
+
+
+
 
 
 

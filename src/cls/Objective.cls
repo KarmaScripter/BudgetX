@@ -11,19 +11,30 @@ Option Compare Database
 Option Explicit
 
 
-
-
 Private m_Code As String
 Private m_Name As String
 Private m_ID As Integer
 Private m_Error As String
 
 
+
+'----------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize()/Class_Terminate
+'   Parameters  Void
+'   Retval      AccessData
+'   Purpose
+'---------------------------------------------------------------------------------
 Public Sub Class_Initialize()
 End Sub
 
 Public Sub Class_Terminate()
 End Sub
+
+
+
+
+
 
 
 

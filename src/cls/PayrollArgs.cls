@@ -40,11 +40,25 @@ Private m_FocName As String
 Private m_Error As String
 
 
+'----------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize()/Class_Terminate
+'   Parameters  Void
+'   Retval      AccessData
+'   Purpose
+'---------------------------------------------------------------------------------
 Public Sub Class_Initialize()
 End Sub
 
 Public Sub Class_Terminate()
 End Sub
+
+
+
+
+
+
+
 
 
 
@@ -652,10 +666,10 @@ End Property
 '   Retval      String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let RcCode(rc As String)
+Public Property Let RcCode(RC As String)
     On Error GoTo ErrorHandler:
-    If Not rc & "" = "" Then
-        m_RcCode = rc
+    If Not RC & "" = "" Then
+        m_RcCode = RC
     End If
 ErrorHandler:
     If Err.Number > 0 Then

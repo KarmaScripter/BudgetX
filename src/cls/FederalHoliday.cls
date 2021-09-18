@@ -26,6 +26,26 @@ Private m_Notification As String
 
 
 '---------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize/Class_Terminate
+'   Parameters  Void
+'   RetVal
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Sub Class_Initialize()
+End Sub
+
+Public Sub Class_Terminate()
+End Sub
+
+
+
+
+
+
+
+
+'---------------------------------------------------------------------------------
 '   Type            Property-Let
 '   Name            Base
 '   Parameters      Void
@@ -63,13 +83,7 @@ Public Property Get Base() As String
         Base = m_Base
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   FederalHoliday" _
-            & vbCrLf & "Member:      Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -88,13 +102,7 @@ Public Property Let ID(num As Integer)
         m_ID = num
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   FederalHoliday" _
-            & vbCrLf & "Member:     ID" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -113,13 +121,7 @@ Public Property Get ID() As Integer
         ID = m_ID
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   FederalHoliday" _
-            & vbCrLf & "Member:     ID" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -139,13 +141,7 @@ Public Property Let Name(pName As String)
         m_Name = pName
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   FederalHoliday" _
-            & vbCrLf & "Member:     Name" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -163,13 +159,7 @@ Public Property Get Name() As String
         Name = m_Name
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   FederalHoliday" _
-            & vbCrLf & "Member:     Name" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -192,13 +182,7 @@ Public Property Let Day(pDate As Date)
         m_Date = pDate
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   FederalHoliday" _
-            & vbCrLf & "Member:     Day" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -217,13 +201,7 @@ Public Property Get Day() As Date
         Day = m_Date
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   FederalHoliday" _
-            & vbCrLf & "Member:     Day" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 

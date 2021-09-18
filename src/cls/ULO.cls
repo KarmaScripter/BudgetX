@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "OpenCommitment"
+Attribute VB_Name = "ULO"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -24,12 +24,11 @@ Private m_ID As Integer
 Private m_Error As String
 
 
-
 '----------------------------------------------------------------------------------
 '   Type        Contructor/Finalizer
 '   Name        Class_Initialize()/Class_Terminate
 '   Parameters  Void
-'   Retval      AccessData
+'   Retval
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Sub Class_Initialize()
@@ -37,8 +36,6 @@ End Sub
 
 Public Sub Class_Terminate()
 End Sub
-
-
 
 
 
@@ -396,10 +393,5 @@ Private Sub ProcessError()
     End If
     MessageFactory.ShowError (m_Error)
 End Sub
-
-
-
-
-
 
 

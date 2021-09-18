@@ -10,8 +10,6 @@ Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
-
-
 Private m_CreateDatabase As String
 Private m_CreateTable As String
 Private m_CreateView As String
@@ -35,6 +33,13 @@ Private m_Notification As String
 
 
 
+'----------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize()/Class_Terminate
+'   Parameters  Void
+'   Retval
+'   Purpose
+'---------------------------------------------------------------------------------
 Private Sub Class_Initialize()
     pAnd = " AND "
     m_Commands(0) = "CREATE"
@@ -46,6 +51,7 @@ Private Sub Class_Initialize()
     m_Commands(8) = "ALTER"
     Set m_Criteria = CreateObject("Scripting.Dicitionary")
 End Sub
+
 Private Sub Class_Terminate()
     If Not m_Criteria Is Nothing Then
         Set m_Criteria = Nothing

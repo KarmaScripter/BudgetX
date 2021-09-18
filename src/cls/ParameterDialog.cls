@@ -19,11 +19,23 @@ Private SelectedRcCode As String
 Private m_Error As String
 
 
+'----------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize()/Class_Terminate
+'   Parameters  Void
+'   Retval      AccessData
+'   Purpose
+'---------------------------------------------------------------------------------
 Public Sub Class_Initialize()
 End Sub
 
 Public Sub Class_Terminate()
 End Sub
+
+
+
+
+
 
 
 
@@ -82,9 +94,9 @@ End Property
 '   Retval      String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Get PRC()
+Public Property Get pRC()
     If Not IsNull(SelectedAccount) And SelectedAccount <> "" Then
-        PRC = SelectedAccount
+        pRC = SelectedAccount
     End If
 End Property
 

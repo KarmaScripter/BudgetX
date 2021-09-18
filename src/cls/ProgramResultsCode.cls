@@ -10,20 +10,40 @@ Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
-
-
 Private m_BFY As BudgetFiscalYear
 Private m_Account As Account
 Private m_Fund As Fund
 Private m_RPIO As ResourcePlanningImplementationOffice
 Private m_RC As ResponsibilityCenter
 Private m_AH As AllowanceHolder
-Private m_Org As Organization
+Private m_ORG As Organization
 Private m_Activity As Activity
 Private m_ProgramProject As ProgramProject
 Private m_ProgramArea As ProgramArea
 Private m_Amount As Double
 Private m_Error As String
+
+
+'----------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize()/Class_Terminate
+'   Parameters  Void
+'   Retval
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Sub Class_Initialize()
+End Sub
+
+Public Sub Class_Terminate()
+End Sub
+
+
+
+
+
+
+
+
 
 
 
@@ -271,11 +291,11 @@ End Property
 '   RetVal:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Property Let ORG(pORG As Organization)
+Public Property Let ORG(pOrg As Organization)
     On Error GoTo ErrorHandler:
-    If Not pORG Is Nothing Then
-        Set m_Org = New Organization
-        m_Org = pORG
+    If Not pOrg Is Nothing Then
+        Set m_ORG = New Organization
+        m_ORG = pOrg
     End If
 ErrorHandler:
     ProcessError
@@ -292,8 +312,8 @@ End Property
 '---------------------------------------------------------------------------------
 Public Property Get ORG() As Organization
     On Error GoTo ErrorHandler:
-    If Not m_Org Is Nothing Then
-        ORG = m_Org
+    If Not m_ORG Is Nothing Then
+        ORG = m_ORG
     End If
 ErrorHandler:
     ProcessError

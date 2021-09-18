@@ -16,20 +16,24 @@ Private m_Fund As New Fund
 Private m_RPIO As New ResourcePlanningImplementationOffice
 Private m_RC As New ResponsibilityCenter
 Private m_AH As New AllowanceHolder
-Private m_Org As New Organization
+Private m_ORG As New Organization
 Private m_Amount As Double
 Private m_Error As String
 
 
 
+'----------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize()/Class_Terminate
+'   Parameters  Void
+'   Retval      AccessData
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Sub Class_Initialize()
+End Sub
 
-
-
-
-
-
-
-
+Public Sub Class_Terminate()
+End Sub
 
 
 
