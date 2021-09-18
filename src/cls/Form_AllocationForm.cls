@@ -13,11 +13,11 @@ Option Explicit
 
 Private Args As AccountArgs
 Private FiscalYearFilter As String
-Private BudgetLevelFilter As String
+Private BocNameFilter As String
 Private FundNameFilter As String
 Private ProgramProjectNameFilter As String
 Private pAnd As String
-Private m_DataSet As DAO.Recordset
+Private m_Data As DAO.Recordset
 Private m_OriginalAmount As Double
 Private m_Error As String
 Private m_SqlQuery As String
@@ -34,11 +34,10 @@ Private Sub Form_Open(Cancel As Integer)
     On Error GoTo ErrorHandler:
     Set Args = New AccountArgs
     pAnd = " AND "
-    Me.BudgetLevelOptionGroup.Value = 1
     Me.FiscalYearOptionGroup.Value = 2
-    BudgetLevelFilter = "[BudgetLevel] = '7'"
+    BocNameFilter = "[BudgetLevel] = '7'"
     FiscalYearFilter = "[BFY] = '2021'"
-    Me.Filter = FiscalYearFilter & pAnd & BudgetLevelFilter
+    Me.Filter = FiscalYearFilter
     Me.RecordSource = "SELECT * FROM Allocations WHERE " & Me.Filter
 ErrorHandler:
     ProcessError
@@ -122,6 +121,8 @@ Private Sub Form_Load()
         & " FROM Allocations;"
     Me.ProgramProjectNameComboBox.RowSource = "SELECT DISTINCT Allocations.ProgramProjectName" _
         & " FROM Allocations;"
+    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Allocations.BocName" _
+        & " FROM Allocations;"
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -187,7 +188,7 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ClearFilters()
     On Error GoTo ErrorHandler:
-    BudgetLevelFilter = vbNullString
+    BocNameFilter = vbNullString
     FiscalYearFilter = vbNullString
     FundNameFilter = vbNullString
     ProgramProjectNameFilter = vbNullString
@@ -208,8 +209,8 @@ End Sub
 Private Sub ClearComboBoxes()
     On Error GoTo ErrorHandler:
     Me.FundNameComboBox.Value = vbNullString
-    Me.ProgramProjectNameComboBox = vbNullString
-    ClearFilters
+    Me.ProgramProjectNameComboBox.Value = vbNullString
+    Me.BocNameComboBox.Value = vbNullString
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -225,9 +226,7 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ResetOptionGroupValues()
     On Error GoTo ErrorHandler:
-    Me.BudgetLevelOptionGroup.Value = 1
     Me.FiscalYearOptionGroup.Value = 2
-    BudgetLevelFilter = "[BudgetLevel] = '7'"
     FiscalYearFilter = "[BFY] = '2021'"
 ErrorHandler:
     ProcessError
@@ -237,28 +236,19 @@ End Sub
 
 '----------------------------------------------------------------------------------
 '   Type:        Sub-Procedure
-'   Name:        AfterUpdate
+'   Name:        BocNameComboBox_Change()
 '   Parameters:  Void
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub BudgetLevelOptionGroup_AfterUpdate()
+Private Sub BocNameComboBox_Change()
     On Error GoTo ErrorHandler:
-    BudgetLevelFilter = vbNullString
+    BocNameFilter = vbNullString
     Me.Filter = vbNullString
-    Select Case Me.BudgetLevelOptionGroup.Value
-        Case 1
-            BudgetLevelFilter = "[BudgetLevel] = '7'"
-            Args.BudgetLevel = "7"
-            Me.Filter = GetBudgetLevelFilter
-            m_SqlQuery = "SELECT * FROM Allocations WHERE " & Me.Filter
-        Case 2
-            BudgetLevelFilter = "[BudgetLevel] = '8'"
-            Args.BudgetLevel = "8"
-            Me.Filter = GetBudgetLevelFilter
-            m_SqlQuery = "SELECT * FROM Allocations WHERE " & Me.Filter
-    End Select
-    Me.RecordSource = m_SqlQuery
+    Args.BocName = Me.BocNameComboBox.Value
+    BocNameFilter = "[BocName] = '" & Me.BocNameComboBox.Value & "'"
+    Me.Filter = GetBocNameFilter
+    Me.RecordSource = "SELECT * FROM Allocations WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
     ProcessError
@@ -268,67 +258,67 @@ End Sub
 
 '----------------------------------------------------------------------------------
 '   Type:        Function
-'   Name:        GetBudgetLevelFilter
+'   Name:        GetBocNameFilter
 '   Parameters:  Void
 '   Retval:      String
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Function GetBudgetLevelFilter()
+Private Function GetBocNameFilter()
     On Error GoTo ErrorHandler:
-    If Not BudgetLevelFilter = vbNullString And _
+    If Not BocNameFilter = vbNullString And _
         FiscalYearFilter = vbNullString And _
         FundNameFilter = vbNullString And _
         ProgramProjectNameFilter = vbNullString Then
-            GetBudgetLevelFilter = BudgetLevelFilter
+            GetBocNameFilter = BocNameFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
+    If Not BocNameFilter = vbNullString And _
         Not FiscalYearFilter = vbNullString And _
         FundNameFilter = vbNullString And _
         ProgramProjectNameFilter = vbNullString Then
-            GetBudgetLevelFilter = FiscalYearFilter & pAnd & BudgetLevelFilter
+            GetBocNameFilter = FiscalYearFilter & pAnd & BocNameFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
+    If Not BocNameFilter = vbNullString And _
         Not FiscalYearFilter = vbNullString And _
         Not FundNameFilter = vbNullString And _
         ProgramProjectNameFilter = vbNullString Then
-            GetBudgetLevelFilter = FiscalYearFilter & pAnd & BudgetLevelFilter _
+            GetBocNameFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
+    If Not BocNameFilter = vbNullString And _
         Not FiscalYearFilter = vbNullString And _
         Not FundNameFilter = vbNullString And _
         Not ProgramProjectNameFilter = vbNullString Then
-            GetBudgetLevelFilter = FiscalYearFilter & pAnd & BudgetLevelFilter _
+            GetBocNameFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
+    If Not BocNameFilter = vbNullString And _
         FiscalYearFilter = vbNullString And _
         Not FundNameFilter = vbNullString And _
         Not ProgramProjectNameFilter = vbNullString Then
-            GetBudgetLevelFilter = BudgetLevelFilter _
+            GetBocNameFilter = BocNameFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
+    If Not BocNameFilter = vbNullString And _
         FiscalYearFilter = vbNullString And _
         FundNameFilter = vbNullString And _
         Not ProgramProjectNameFilter = vbNullString Then
-            GetBudgetLevelFilter = BudgetLevelFilter _
+            GetBocNameFilter = BocNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
+    If Not BocNameFilter = vbNullString And _
         FiscalYearFilter = vbNullString And _
         Not FundNameFilter = vbNullString And _
         ProgramProjectNameFilter = vbNullString Then
-            GetBudgetLevelFilter = BudgetLevelFilter _
+            GetBocNameFilter = BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
+    If Not BocNameFilter = vbNullString And _
         Not FiscalYearFilter = vbNullString And _
         FundNameFilter = vbNullString And _
         Not ProgramProjectNameFilter = vbNullString Then
-            GetBudgetLevelFilter = FiscalYearFilter & pAnd & BudgetLevelFilter _
+            GetBocNameFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
 ErrorHandler:
@@ -377,34 +367,34 @@ End Sub
 Private Function GetFiscalYearFilter()
     On Error GoTo ErrorHandler:
     If Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
+        BocNameFilter = vbNullString And _
         FundNameFilter = vbNullString And _
         ProgramProjectNameFilter = vbNullString Then
             GetFiscalYearFilter = FiscalYearFilter
     End If
     If Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
+        Not BocNameFilter = vbNullString And _
         FundNameFilter = vbNullString And _
         ProgramProjectNameFilter = vbNullString Then
-            GetFiscalYearFilter = FiscalYearFilter & pAnd & BudgetLevelFilter
+            GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter
     End If
     If Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
+        Not BocNameFilter = vbNullString And _
         Not FundNameFilter = vbNullString And _
         ProgramProjectNameFilter = vbNullString Then
-            GetFiscalYearFilter = FiscalYearFilter & pAnd & BudgetLevelFilter _
+            GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter
     End If
     If Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
+        Not BocNameFilter = vbNullString And _
         Not FundNameFilter = vbNullString And _
         Not ProgramProjectNameFilter = vbNullString Then
-            GetFiscalYearFilter = FiscalYearFilter & pAnd & BudgetLevelFilter _
+            GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
     If Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
+        BocNameFilter = vbNullString And _
         Not FundNameFilter = vbNullString And _
         Not ProgramProjectNameFilter = vbNullString Then
             GetFiscalYearFilter = FiscalYearFilter _
@@ -412,21 +402,21 @@ Private Function GetFiscalYearFilter()
                 & pAnd & ProgramProjectNameFilter
     End If
     If Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
+        Not BocNameFilter = vbNullString And _
         FundNameFilter = vbNullString And _
         Not ProgramProjectNameFilter = vbNullString Then
-            GetFiscalYearFilter = FiscalYearFilter & pAnd & BudgetLevelFilter _
+            GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
     If Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
+        BocNameFilter = vbNullString And _
         Not FundNameFilter = vbNullString And _
         ProgramProjectNameFilter = vbNullString Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
     If Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
+        BocNameFilter = vbNullString And _
         FundNameFilter = vbNullString And _
         Not ProgramProjectNameFilter = vbNullString Then
             GetFiscalYearFilter = FiscalYearFilter _
@@ -477,58 +467,58 @@ Private Function GetFundNameFilter()
     On Error GoTo ErrorHandler:
     If Not FundNameFilter = vbNullString And _
         FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
+        BocNameFilter = vbNullString And _
         ProgramProjectNameFilter = vbNullString Then
             GetFundNameFilter = FundNameFilter
     End If
     If Not FundNameFilter = vbNullString And _
         Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
+        BocNameFilter = vbNullString And _
         ProgramProjectNameFilter = vbNullString Then
             GetFundNameFilter = FiscalYearFilter _
             & pAnd & FundNameFilter
     End If
     If Not FundNameFilter = vbNullString And _
         Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
+        Not BocNameFilter = vbNullString And _
         ProgramProjectNameFilter = vbNullString Then
             GetFundNameFilter = FiscalYearFilter _
-            & pAnd & BudgetLevelFilter _
+            & pAnd & BocNameFilter _
             & pAnd & FundNameFilter
     End If
     If Not FundNameFilter = vbNullString And _
         Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
+        Not BocNameFilter = vbNullString And _
         Not ProgramProjectNameFilter = vbNullString Then
-            GetFundNameFilter = FiscalYearFilter & pAnd & BudgetLevelFilter _
+            GetFundNameFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
     If Not FundNameFilter = vbNullString And _
         FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
+        Not BocNameFilter = vbNullString And _
         Not ProgramProjectNameFilter = vbNullString Then
-            GetFundNameFilter = BudgetLevelFilter _
+            GetFundNameFilter = BocNameFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
     If Not FundNameFilter = vbNullString And _
         FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
+        BocNameFilter = vbNullString And _
         Not ProgramProjectNameFilter = vbNullString Then
             Me.Filter = FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
     If Not FundNameFilter = vbNullString And _
         FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
+        Not BocNameFilter = vbNullString And _
         ProgramProjectNameFilter = vbNullString Then
-            GetFundNameFilter = BudgetLevelFilter _
+            GetFundNameFilter = BocNameFilter _
                 & pAnd & FundNameFilter
     End If
     If Not FundNameFilter = vbNullString And _
         Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
+        BocNameFilter = vbNullString And _
         Not ProgramProjectNameFilter = vbNullString Then
             GetFundNameFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter _
@@ -574,59 +564,59 @@ Private Function GetProgramProjectNameFilter()
     On Error GoTo ErrorHandler:
     If Not ProgramProjectNameFilter = vbNullString And _
         FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
+        BocNameFilter = vbNullString And _
         FundNameFilter = vbNullString Then
             GetProgramProjectNameFilter = ProgramProjectNameFilter
     End If
     If Not ProgramProjectNameFilter = vbNullString And _
         Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
+        BocNameFilter = vbNullString And _
         FundNameFilter = vbNullString Then
             GetProgramProjectNameFilter = FiscalYearFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
     If Not ProgramProjectNameFilter = vbNullString And _
         Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
+        Not BocNameFilter = vbNullString And _
         FundNameFilter = vbNullString Then
             GetProgramProjectNameFilter = FiscalYearFilter _
-                & pAnd & BudgetLevelFilter _
+                & pAnd & BocNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
     If Not ProgramProjectNameFilter = vbNullString And _
         Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
+        Not BocNameFilter = vbNullString And _
         Not FundNameFilter = vbNullString Then
             GetProgramProjectNameFilter = FiscalYearFilter _
-                & pAnd & BudgetLevelFilter _
+                & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
     If Not ProgramProjectNameFilter = vbNullString And _
         FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
+        Not BocNameFilter = vbNullString And _
         Not FundNameFilter = vbNullString Then
-            GetProgramProjectNameFilter = BudgetLevelFilter _
+            GetProgramProjectNameFilter = BocNameFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
     If Not ProgramProjectNameFilter = vbNullString And _
         FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
+        BocNameFilter = vbNullString And _
         Not FundNameFilter = vbNullString Then
             GetProgramProjectNameFilter = FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
     If Not ProgramProjectNameFilter = vbNullString And _
         FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
+        Not BocNameFilter = vbNullString And _
         FundNameFilter = vbNullString Then
-            GetProgramProjectNameFilter = BudgetLevelFilter _
+            GetProgramProjectNameFilter = BocNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
     If Not ProgramProjectNameFilter = vbNullString And _
         Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
+        BocNameFilter = vbNullString And _
         Not FundNameFilter = vbNullString Then
             GetProgramProjectNameFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter _
@@ -898,8 +888,8 @@ Private Sub RefreshButton_Click()
     ResetOptionGroupValues
     ClearFilters
     FiscalYearFilter = "[BFY] = '2021'"
-    BudgetLevelFilter = "[BudgetLevel] = '7'"
-    Me.Filter = BudgetLevelFilter & pAnd & FiscalYearFilter
+    BocNameFilter = "[BudgetLevel] = '7'"
+    Me.Filter = BocNameFilter & pAnd & FiscalYearFilter
     m_SqlQuery = "SELECT * FROM Allocations" _
         & " WHERE " & Me.Filter
     Me.RecordSource = m_SqlQuery

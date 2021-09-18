@@ -267,10 +267,10 @@ End Property
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Property Let RcCode(rc As String)
+Public Property Let RcCode(RC As String)
     On Error GoTo ErrorHandler:
-    If Not rc & "" = "" Then
-        m_RcCode = rc
+    If Not RC & "" = "" Then
+        m_RcCode = RC
     End If
 ErrorHandler:
     ProcessError

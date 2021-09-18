@@ -11,8 +11,9 @@ Option Compare Database
 Option Explicit
 
 
-Private mBudgetExecution As DAO.Workspace
-Private mDatabase As DAO.Database
+Private m_BudgetExecution As DAO.Workspace
+Private m_Data As DAO.Database
+Private m_DataSet As DAO.Recordset
 Private m_Error As String
 Private m_Notification As String
 
@@ -20,17 +21,26 @@ Private m_Notification As String
 
 
 
+
+
+'----------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize()/Class_Terminate
+'   Parameters  Void
+'   Retval      AccessData
+'   Purpose
+'---------------------------------------------------------------------------------
 Private Sub Class_Initialize()
-    Set mDatabase = CurrentDb
-    Set mBudgetExecution = DBEngine.Workspaces(0)
+    Set m_Data = CurrentDb
+    Set m_BudgetExecution = DBEngine.Workspaces(0)
 End Sub
 
 Private Sub Class_Terminate()
-    If Not IsNull(mDatabase) Then
-        Set mDatabase = Nothing
+    If Not IsNull(m_Data) Then
+        Set m_Data = Nothing
     End If
-    If Not IsNull(mBudgetExecution) Then
-        Set mBudgetExecution = Nothing
+    If Not IsNull(m_BudgetExecution) Then
+        Set m_BudgetExecution = Nothing
     End If
 End Sub
 
@@ -47,20 +57,14 @@ End Sub
 '---------------------------------------------------------------------------------
 Public Property Get IsConnected() As Boolean
     On Error GoTo ErrorHandler:
-    If Not IsObject(mDatabase) Then
+    If Not IsObject(m_Data) Then
         IsConnected = True
     End If
-    If IsObject(mDatabase) Then
+    If IsObject(m_Data) Then
         IsConnected = False
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataAccess" _
-            & vbCrLf & "Member:     IsConnected" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -74,20 +78,14 @@ End Property
 '---------------------------------------------------------------------------------
 Public Property Get IsOpen() As Boolean
     On Error GoTo ErrorHandler:
-    If Not IsObject(mBudgetExecution) Then
+    If Not IsObject(m_BudgetExecution) Then
         IsOpen = True
     End If
-    If IsObject(mBudgetExecution) Then
+    If IsObject(m_BudgetExecution) Then
         IsOpen = False
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataAccess" _
-            & vbCrLf & "Member:     IsOpen()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -103,19 +101,13 @@ End Property
 Public Function GetDataSet(table As String) As DAO.Recordset
     On Error GoTo ErrorHandler:
     Dim rs As DAO.Recordset
-    If Not IsNull(mDatabase) And _
+    If Not IsNull(m_Data) And _
         Not table & "" = "" Then
-           Set rs = mDatabase.OpenRecordset(table, dbOpenDynaset)
+           Set rs = m_Data.OpenRecordset(table, dbOpenDynaset)
     End If
     Set GetDataSet = rs
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataAccess" _
-            & vbCrLf & "Member:     GetDataSet" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -131,25 +123,19 @@ End Function
 Public Function GetDataRecord(table As String, primarykey As String, ID As Integer) As DAO.Recordset
     On Error GoTo ErrorHandler:
     Dim DB As DAO.Database
-    Set DB = mDatabase
+    Set DB = m_Data
     Dim rs As DAO.Recordset
     Dim SQL As String
-    If Not IsNull(mDatabase) And _
+    If Not IsNull(m_Data) And _
         Not table & "" = "" And _
         Not primarykey & "" = "" And _
         ID > 0 Then
             SQL = "SELECT * FROM table WHERE key = 'id'"
-            Set rs = mDatabase.OpenRecordset(SQL, dbOpenDynaset)
+            Set rs = m_Data.OpenRecordset(SQL, dbOpenDynaset)
             Set GetDataRecord = rs
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataAccess" _
-            & vbCrLf & "Member:     GetDataRecord" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -165,17 +151,11 @@ End Function
 '---------------------------------------------------------------------------------
 Public Sub CloseDatabase()
     On Error GoTo ErrorHandler:
-    If Not mDatabase Is Nothing Then
-        Set mDatabase = Nothing
+    If Not m_Data Is Nothing Then
+        Set m_Data = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataAccess" _
-            & vbCrLf & "Member:     CloseDatabase" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -190,17 +170,11 @@ End Sub
 '---------------------------------------------------------------------------------
 Public Sub CloseWorkspace()
     On Error GoTo ErrorHandler:
-    If Not IsNull(mBudgetExecution) Then
-        Set mBudgetExecution = Nothing
+    If Not IsNull(m_BudgetExecution) Then
+        Set m_BudgetExecution = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataAccess" _
-            & vbCrLf & "Member:     CloseWorkspace" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -215,7 +189,7 @@ End Sub
 Public Sub UpdateData(table As String, field As String, Value As Variant)
     On Error GoTo ErrorHandler:
     Dim DB As DAO.Database
-    Set DB = mDatabase
+    Set DB = m_Data
     Dim rs As DAO.Recordset
     If Not table & "" = "" Then
         Set rs = GetDataSet(table)
@@ -227,13 +201,7 @@ Public Sub UpdateData(table As String, field As String, Value As Variant)
             rs.Update
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataAccess" _
-            & vbCrLf & "Member:     UpdateData" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -248,7 +216,7 @@ Public Sub AddRecord(table As String, field As String, Value As Variant)
     On Error GoTo ErrorHandler:
     Dim DB As DAO.Database
     Dim rs As DAO.Recordset
-    Set DB = mDatabase
+    Set DB = m_Data
     Set rs = GetDataSet(table)
     With rs
       .AddNew
@@ -256,13 +224,7 @@ Public Sub AddRecord(table As String, field As String, Value As Variant)
       .Update
     End With
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataAccess" _
-            & vbCrLf & "Member:     AddRecord" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -277,7 +239,7 @@ Public Sub UpdateRecord(table As String, field As String, NewValue As Variant, I
     On Error GoTo ErrorHandler:
     Dim DB As DAO.Database
     Dim rs As DAO.Recordset
-    Set DB = mDatabase
+    Set DB = m_Data
     Set rs = GetDataRecord(table, field, ID)
     If Not IsNull(rs) Then
         With rs
@@ -287,13 +249,7 @@ Public Sub UpdateRecord(table As String, field As String, NewValue As Variant, I
         End With
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataAccess" _
-            & vbCrLf & "Member:     UpdateRecord" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -309,18 +265,12 @@ Public Sub DeleteRecord(table As String, pk As String, ID As Integer)
     On Error GoTo ErrorHandler:
     Dim DB As DAO.Database
     Dim rs As DAO.Recordset
-    Set DB = mDatabase
+    Set DB = m_Data
     Dim SQL As String
     SQL = "DELETE FROM table WHERE pk = id"
     Set rs = DB.OpenRecordset(SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataAccess" _
-            & vbCrLf & "Member:     DeleteRecord" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 

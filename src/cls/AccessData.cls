@@ -17,40 +17,58 @@ Private m_Error As String
 Private m_Notification As String
 Private m_DataModels As Collection
 Private m_Connection As ADODB.Connection
+Private m_ReferenceConnection As ADODB.Connection
+Private m_DataConnection As ADODB.Connection
+Private m_ViewConnection As ADODB.Connection
 Private m_Command As ADODB.Command
 Private m_Data As ADODB.Recordset
 Private m_Record As ADODB.Record
 
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize()/Class_Terminate
+'   Parameters  Void
+'   Retval      AccessData
+'   Purpose
+'---------------------------------------------------------------------------------
 Private Sub Class_Initialize()
     Set m_BudgetPath = New BudgetPath
-    Set m_Data = New ADODB.Recordset
+    Set m_DataConnection = New ADODB.Recordset
 End Sub
 
 Private Sub Class_Terminate()
     KillData
+    KillConnection
 End Sub
  
 
 
 
+
+
+
+
+
 '----------------------------------------------------------------------------------
 '   Type        Property Get
-'   Name        Data
+'   Name        DataConnection
 '   Parameters  Void
 '   Retval      ADODB.Connection
 '   Purpose     Function to create and return the current ADO connection
 '---------------------------------------------------------------------------------
-Public Property Get Data() As ADODB.Connection
+Public Function GetDataConnection() As ADODB.Connection
     On Error GoTo ErrorHandler:
-    Dim cnn As ADODB.Connection
-    Set cnn = New ADODB.Connection
-    cnn.Open m_BudgetPath.Data
-    Set Data = cnn
+    Set m_DataConnection = New ADODB.Connection
+    m_DataConnection.Open m_BudgetPath.Data
+    Set GetDataConnection = m_DataConnection
 ErrorHandler:
     ProcessError
-    Set cnn = Nothing
-    Exit Property
-End Property
+    KillConnection
+    Exit Function
+End Function
 
 
 
@@ -105,12 +123,13 @@ End Property
 Public Function GetReferenceModel(pTableName As String) As ADODB.Recordset
     On Error GoTo ErrorHandler:
     If Not pTableName & "" = "" Then
-        Dim rst As ADODB.Recordset
-        Dim SQL As String
-        SQL = "SELECT * FROM pTableName"
-        Set rst = New ADODB.Recordset
-        rst.Open SQL, References, adOpenStatic, adLockOptimistic
-        Set GetReferenceModel = rst
+        Set m_Data = New ADODB.Recordset
+        Dim p_Sql As String
+        p_Sql = "SELECT * FROM pTableName"
+        m_Data.Open p_Sql, References, adOpenStatic, adLockOptimistic
+        Set GetReferenceModel = m_Data
+        KillData
+        KillConnection
     End If
 ErrorHandler:
     ProcessError
@@ -130,8 +149,7 @@ End Function
 '---------------------------------------------------------------------------------
 Public Function CreateCommand(pSQL As String) As ADODB.Command
     On Error GoTo ErrorHandler:
-    Dim rst As ADODB.Recordset
-    Set rst = New ADODB.Recordset
+    Set m_Data = New ADODB.Recordset
     Dim cmd As ADODB.Command
     Set cmd = New ADODB.Command
     cmd.ActiveConnection = CurrentProject.Connection
@@ -156,11 +174,10 @@ End Function
 '---------------------------------------------------------------------------------
 Public Function GetModel(pTableName As String) As ADODB.Recordset
     On Error GoTo ErrorHandler:
-    Dim rst As ADODB.Recordset
-    Set rst = New ADODB.Recordset
-    rst.Open (pTableName)
-    If rst.RecordCount > 0 Then
-        Set GetModel = rst
+    Set m_Data = New ADODB.Recordset
+    m_Data.Open (pTableName)
+    If m_Data.RecordCount > 0 Then
+        Set GetModel = m_Data
     End If
 ErrorHandler:
     ProcessError
@@ -222,14 +239,33 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub KillData()
     On Error GoTo ErrorHandler:
-    If Not m_Data Is Nothing Then
-        Set m_Data = Nothing
+    If Not m_DataConnection Is Nothing Then
+        Set m_DataConnection = Nothing
     End If
 ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
 
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Sub-Procedure
+'   Name        KillData
+'   Parameters  Void
+'   Retval      Void
+'   Purpose     Frees resources used by the Database
+'---------------------------------------------------------------------------------
+Private Sub KillConnection()
+    On Error GoTo ErrorHandler:
+    If Not m_Connection Is Nothing Then
+        Set m_Connection = Nothing
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Sub
+End Sub
 
 
 

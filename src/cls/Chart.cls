@@ -10,6 +10,45 @@ Attribute VB_Exposed = True
 Option Compare Database
 Option Explicit
 
+
+Private Const m_HtmlFileName As String = "BudgetExecutionChart.html"
+Private WithEvents m_Control As WebbrowserControl
+Attribute m_Control.VB_VarHelpID = -1
+Private m_ChartType As chChartType
+Private m_DataSourceName As String
+Private m_SqlStatement As String
+Private m_DataSet As DAO.Recordset
+Private m_DataSourceLabelFieldName As String
+Private m_DataSourceDataFieldName As Variant
+Private m_ShowTitle As Boolean
+Private m_TitlePostition As chPosition
+Private m_TitleText As String
+Private m_ShowLegend As Boolean
+Private m_LegendPostition As chPosition
+Private m_ShowYAxis As Boolean
+Private m_ShowXAxis As Boolean
+Private m_YAxisLabelText As String
+Private m_XAxisLabelText As String
+Private m_ChartJsSource As chScriptSource
+Private m_ChartJsCDN  As String
+Private m_ChartJsPathFilename As String
+Private m_StackedChart As Boolean
+Private m_ColorSchemaSource As chScriptSource
+Private m_ColorSchemaCDN As String
+Private m_ColorSchemaPathFilename As String
+Private m_ColorSchema As String
+Private m_AreaFilled As Boolean
+Private m_ChartBackgroundColor As String
+Private m_DefaultFontColor As String
+Private m_DefaultFontFamily As String
+Private m_DefaultFontSize As Integer
+Private m_YAxisBeginAtZero As Boolean
+Private m_XAxisBeginAtZero As Boolean
+Private m_DataLabels As Variant
+Private m_DataSetLabel As Variant
+Private m_DataSetData As Variant
+Private m_IsSingleDataset As Boolean
+Private m_IsSingleBarChart As Boolean
 Private m_Error As String
 
 '### Enums
@@ -63,55 +102,6 @@ Public Enum chScriptSource
     LocalFile = 2
 End Enum
 
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------   FIELDS  -------------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-
-Private Const HtmlFileName As String = "BudgetExecutionChart.html"
-Private WithEvents mControl As WebbrowserControl
-Attribute mControl.VB_VarHelpID = -1
-Private mChartType As chChartType
-Private mDataSourceObjectName As String
-Private mDataSourceSQLStatement As String
-Private mDataSourceRecordset As DAO.Recordset
-Private mDataSourceLabelFieldName As String
-Private mDataSourceDataFieldName As Variant
-Private mShowTitle As Boolean
-Private mTitlePostition As chPosition
-Private mTitleText As String
-Private mShowLegend As Boolean
-Private mLegendPostition As chPosition
-Private mShowYAxis As Boolean
-Private mShowXAxis As Boolean
-Private mYAxisLabelText As String
-Private mXAxisLabelText As String
-Private mChartJsSource As chScriptSource
-Private mChartJsCDN As String
-Private mChartJsPathFilename As String
-Private mStackedChart As Boolean
-Private mColorSchemaSource As chScriptSource
-Private mColorSchemaCDN As String
-Private mColorSchemaPathFilename As String
-Private mColorSchema As String
-Private mAreaFilled As Boolean
-Private mChartBackgroundColor As String
-Private mDefaultFontColor As String
-Private mDefaultFontFamily As String
-Private mDefaultFontSize As Integer
-Private mYAxisBeginAtZero As Boolean
-Private mXAxisBeginAtZero As Boolean
-Private mDataLabels As Variant
-Private mDataSetLabel As Variant
-Private mDataSetData As Variant
-Private mIsSingleDataset As Boolean
-Private mIsSingleBarChart As Boolean
-
-
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-'---------------------------------------------------------------       METHODS    ------------------------------------------------------------------
-'---------------------------------------------------------------------------------------------------------------------------------------------------
-
-
 
 
 
@@ -123,7 +113,11 @@ Private mIsSingleBarChart As Boolean
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Set control(ByVal pControl As WebbrowserControl)
-    Set mControl = pControl
+    On Error GoTo ErrorHandler:
+    Set control = pControl
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -139,7 +133,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get control() As WebbrowserControl
-    Set control = mControl
+    On Error GoTo ErrorHandler:
+    Set control = m_Control
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -155,7 +153,8 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let ChartType(ByVal pChartType As chChartType)
-    mChartType = pChartType
+    On Error GoTo ErrorHandler:
+    m_ChartType = pChartType
     Select Case pChartType
         Case chChartType.Bar, chChartType.HorizontalBar, chChartType.Line, chChartType.Bubble, chChartType.Scatter
             ShowYAxis = True
@@ -166,6 +165,9 @@ Public Property Let ChartType(ByVal pChartType As chChartType)
         Case Else
             'Do Nothing
     End Select
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -179,7 +181,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get ChartType() As chChartType
-    ChartType = mChartType
+    On Error GoTo ErrorHandler:
+    ChartType = m_ChartType
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -194,7 +200,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let DataSourceObjectName(ByVal pDataSourceObjectName As String)
-    mDataSourceObjectName = pDataSourceObjectName
+    On Error GoTo ErrorHandler:
+    m_DataSourceName = pDataSourceObjectName
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -209,7 +219,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get DataSourceObjectName() As String
-    DataSourceObjectName = mDataSourceObjectName
+    On Error GoTo ErrorHandler:
+    DataSourceObjectName = m_DataSourceName
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -225,7 +239,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let DataSourceSQLStatement(ByVal pDataSourceSQLStatement As String)
-    mDataSourceSQLStatement = pDataSourceSQLStatement
+    On Error GoTo ErrorHandler:
+    m_SqlStatement = pDataSourceSQLStatement
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -240,7 +258,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get DataSourceSQLStatement() As String
-    DataSourceSQLStatement = mDataSourceSQLStatement
+    On Error GoTo ErrorHandler:
+    DataSourceSQLStatement = m_SqlStatement
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -255,7 +277,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Set DataSourceRecordset(ByVal pDataSourceRecordset As DAO.Recordset)
-    Set mDataSourceRecordset = pDataSourceRecordset
+    On Error GoTo ErrorHandler:
+    Set m_DataSet = pDataSourceRecordset
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -271,7 +297,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get DataSourceRecordset() As DAO.Recordset
-    Set DataSourceRecordset = mDataSourceRecordset
+    On Error GoTo ErrorHandler:
+    Set DataSourceRecordset = m_DataSet
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -287,7 +317,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let DataSourceLabelFieldName(ByVal pDataSourceLabelFieldName As String)
-    mDataSourceLabelFieldName = pDataSourceLabelFieldName
+    On Error GoTo ErrorHandler:
+    m_DataSourceLabelFieldName = pDataSourceLabelFieldName
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -300,7 +334,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get DataSourceLabelFieldName() As String
-    DataSourceLabelFieldName = mDataSourceLabelFieldName
+    On Error GoTo ErrorHandler:
+    DataSourceLabelFieldName = m_DataSourceLabelFieldName
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -313,16 +351,20 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let DataSourceDataFieldName(ByRef pDataSourceDataFieldName As Variant)
+    On Error GoTo ErrorHandler:
     If IsArray(pDataSourceDataFieldName) = True Then
-        mDataSourceDataFieldName = pDataSourceDataFieldName
+        m_DataSourceDataFieldName = pDataSourceDataFieldName
     Else
-        mDataSourceDataFieldName = Array(pDataSourceDataFieldName)
+        m_DataSourceDataFieldName = Array(pDataSourceDataFieldName)
     End If
-    If LBound(mDataSourceDataFieldName) = UBound(mDataSourceDataFieldName) Then
-        mIsSingleDataset = True
+    If LBound(m_DataSourceDataFieldName) = UBound(m_DataSourceDataFieldName) Then
+        m_IsSingleDataset = True
     Else
-        mIsSingleDataset = False
+        m_IsSingleDataset = False
     End If
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -335,7 +377,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get DataSourceDataFieldName() As Variant
-    DataSourceDataFieldName = mDataSourceDataFieldName
+    On Error GoTo ErrorHandler:
+    DataSourceDataFieldName = m_DataSourceDataFieldName
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -349,7 +395,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let ShowTitle(ByVal pShowTitle As Boolean)
-    mShowTitle = pShowTitle
+    On Error GoTo ErrorHandler:
+    m_ShowTitle = pShowTitle
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -362,7 +412,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get ShowTitle() As Boolean
-    ShowTitle = mShowTitle
+    On Error GoTo ErrorHandler:
+    ShowTitle = m_ShowTitle
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -375,7 +429,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let TitlePostition(ByVal pTitlePostition As chPosition)
-    mTitlePostition = pTitlePostition
+    On Error GoTo ErrorHandler:
+    m_TitlePostition = pTitlePostition
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -388,7 +446,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get TitlePostition() As chPosition
-    TitlePostition = mTitlePostition
+    On Error GoTo ErrorHandler:
+    TitlePostition = m_TitlePostition
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -403,7 +465,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let TitleText(ByVal pTitleText As String)
-    mTitleText = pTitleText
+    On Error GoTo ErrorHandler:
+    m_TitleText = pTitleText
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -416,7 +482,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get TitleText() As String
-    TitleText = mTitleText
+    On Error GoTo ErrorHandler:
+    TitleText = m_TitleText
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -430,7 +500,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let ShowLegend(ByVal pShowLegend As Boolean)
-    mShowLegend = pShowLegend
+    On Error GoTo ErrorHandler:
+    m_ShowLegend = pShowLegend
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -444,7 +518,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get ShowLegend() As Boolean
-    ShowLegend = mShowLegend
+    On Error GoTo ErrorHandler:
+    ShowLegend = m_ShowLegend
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -458,7 +536,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let LegendPostition(ByVal pLegendPostition As chPosition)
-    mLegendPostition = pLegendPostition
+    On Error GoTo ErrorHandler:
+    m_LegendPostition = pLegendPostition
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -472,7 +554,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get LegendPostition() As chPosition
-    LegendPostition = mLegendPostition
+    On Error GoTo ErrorHandler:
+    LegendPostition = m_LegendPostition
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -486,7 +572,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let ShowYAxis(ByVal pShowYAxis As Boolean)
-    mShowYAxis = pShowYAxis
+    On Error GoTo ErrorHandler:
+    m_ShowYAxis = pShowYAxis
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -500,7 +590,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get ShowYAxis() As Boolean
-    ShowYAxis = mShowYAxis
+    On Error GoTo ErrorHandler:
+    ShowYAxis = m_ShowYAxis
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -514,7 +608,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let ShowXAxis(ByVal pShowXAxis As Boolean)
-    mShowXAxis = pShowXAxis
+    On Error GoTo ErrorHandler:
+    m_ShowXAxis = pShowXAxis
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -528,7 +626,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get ShowXAxis() As Boolean
-    ShowXAxis = mShowXAxis
+    On Error GoTo ErrorHandler:
+    ShowXAxis = m_ShowXAxis
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -542,7 +644,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let YAxisLabelText(ByVal pYAxisLabelText As String)
-    mYAxisLabelText = pYAxisLabelText
+    On Error GoTo ErrorHandler:
+    m_YAxisLabelText = pYAxisLabelText
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -556,7 +662,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get YAxisLabelText() As String
-    YAxisLabelText = mYAxisLabelText
+    On Error GoTo ErrorHandler:
+    YAxisLabelText = m_YAxisLabelText
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -570,7 +680,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let XAxisLabelText(ByVal pXAxisLabelText As String)
-    mXAxisLabelText = pXAxisLabelText
+    On Error GoTo ErrorHandler:
+    m_XAxisLabelText = pXAxisLabelText
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -584,7 +698,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get XAxisLabelText() As String
-    XAxisLabelText = mXAxisLabelText
+    On Error GoTo ErrorHandler:
+    XAxisLabelText = m_XAxisLabelText
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -598,7 +716,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let ChartJsSource(ByVal pChartJsSource As chScriptSource)
-    mChartJsSource = pChartJsSource
+    On Error GoTo ErrorHandler:
+    m_ChartJsSource = pChartJsSource
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -612,7 +734,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get ChartJsSource() As chScriptSource
-    ChartJsSource = mChartJsSource
+    On Error GoTo ErrorHandler:
+    ChartJsSource = m_ChartJsSource
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -626,7 +752,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let ChartJsCDN(ByVal pChartJsCDN As String)
-    mChartJsCDN = pChartJsCDN
+    On Error GoTo ErrorHandler:
+    m_ChartJsCDN = pChartJsCDN
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -640,7 +770,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get ChartJsCDN() As String
-    ChartJsCDN = mChartJsCDN
+    On Error GoTo ErrorHandler:
+    ChartJsCDN = m_ChartJsCDN
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -654,7 +788,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let ChartJsPathFilename(ByVal pChartJsPathFilename As String)
-    mChartJsPathFilename = pChartJsPathFilename
+    On Error GoTo ErrorHandler:
+    m_ChartJsPathFilename = pChartJsPathFilename
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -668,7 +806,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get ChartJsPathFilename() As String
-    ChartJsPathFilename = mChartJsPathFilename
+    On Error GoTo ErrorHandler:
+    ChartJsPathFilename = m_ChartJsPathFilename
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -682,7 +824,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let StackedChart(ByVal pStackedChart As Boolean)
-    mStackedChart = pStackedChart
+    On Error GoTo ErrorHandler:
+    m_StackedChart = pStackedChart
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -696,7 +842,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get StackedChart() As Boolean
-    StackedChart = mStackedChart
+    On Error GoTo ErrorHandler:
+    StackedChart = m_StackedChart
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -710,7 +860,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let ColorSchemaSource(ByVal pColorSchemaSource As chScriptSource)
-    mColorSchemaSource = pColorSchemaSource
+    On Error GoTo ErrorHandler:
+    m_ColorSchemaSource = pColorSchemaSource
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -724,7 +878,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get ColorSchemaSource() As chScriptSource
-    ColorSchemaSource = mColorSchemaSource
+    On Error GoTo ErrorHandler:
+    ColorSchemaSource = m_ColorSchemaSource
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -738,7 +896,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let ColorSchemaCDN(ByVal pColorSchemaCDN As String)
-    mColorSchemaCDN = pColorSchemaCDN
+    On Error GoTo ErrorHandler:
+    m_ColorSchemaCDN = pColorSchemaCDN
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -752,7 +914,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get ColorSchemaCDN() As String
-    ColorSchemaCDN = mColorSchemaCDN
+    On Error GoTo ErrorHandler:
+    ColorSchemaCDN = m_ColorSchemaCDN
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -766,7 +932,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let ColorSchemaPathFilename(ByVal pColorSchemaPathFilename As String)
-    mColorSchemaPathFilename = pColorSchemaPathFilename
+    On Error GoTo ErrorHandler:
+    m_ColorSchemaPathFilename = pColorSchemaPathFilename
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -780,7 +950,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get ColorSchemaPathFilename() As String
-    ColorSchemaPathFilename = mColorSchemaPathFilename
+    On Error GoTo ErrorHandler:
+    ColorSchemaPathFilename = m_ColorSchemaPathFilename
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -794,7 +968,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let ColorSchema(ByVal pColorSchema As String)
-    mColorSchema = pColorSchema
+    On Error GoTo ErrorHandler:
+    m_ColorSchema = pColorSchema
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -808,7 +986,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get ColorSchema() As String
-    ColorSchema = mColorSchema
+    On Error GoTo ErrorHandler:
+    ColorSchema = m_ColorSchema
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -822,7 +1004,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let AreaFilled(ByVal pAreaFilled As Boolean)
-    mAreaFilled = pAreaFilled
+    On Error GoTo ErrorHandler:
+    m_AreaFilled = pAreaFilled
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -836,7 +1022,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get AreaFilled() As Boolean
-    AreaFilled = mAreaFilled
+    On Error GoTo ErrorHandler:
+    AreaFilled = m_AreaFilled
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -850,7 +1040,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let ChartBackgroundColor(ByVal pChartBackgroundColor As String)
-    mChartBackgroundColor = pChartBackgroundColor
+    On Error GoTo ErrorHandler:
+    m_ChartBackgroundColor = pChartBackgroundColor
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -864,7 +1058,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get ChartBackgroundColor() As String
-    ChartBackgroundColor = mChartBackgroundColor
+    On Error GoTo ErrorHandler:
+    ChartBackgroundColor = m_ChartBackgroundColor
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -878,7 +1076,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let DefaultFontColor(ByVal pDefaultFontColor As String)
-    mDefaultFontColor = pDefaultFontColor
+    On Error GoTo ErrorHandler:
+    m_DefaultFontColor = pDefaultFontColor
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -892,7 +1094,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get DefaultFontColor() As String
-    DefaultFontColor = mDefaultFontColor
+    On Error GoTo ErrorHandler:
+    DefaultFontColor = m_DefaultFontColor
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -906,7 +1112,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let DefaultFontFamily(ByVal pDefaultFontFamily As String)
-    mDefaultFontFamily = pDefaultFontFamily
+    On Error GoTo ErrorHandler:
+    m_DefaultFontFamily = pDefaultFontFamily
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -920,7 +1130,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get DefaultFontFamily() As String
-    DefaultFontFamily = mDefaultFontFamily
+    On Error GoTo ErrorHandler:
+    DefaultFontFamily = m_DefaultFontFamily
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -934,7 +1148,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let DefaultFontSize(ByVal pDefaultFontSize As Integer)
-    mDefaultFontSize = pDefaultFontSize
+    On Error GoTo ErrorHandler:
+    m_DefaultFontSize = pDefaultFontSize
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -948,7 +1166,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get DefaultFontSize() As Integer
-    DefaultFontSize = mDefaultFontSize
+    On Error GoTo ErrorHandler:
+    DefaultFontSize = m_DefaultFontSize
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -962,7 +1184,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let YAxisBeginAtZero(ByVal pYAxisBeginAtZero As Boolean)
-    mYAxisBeginAtZero = pYAxisBeginAtZero
+    On Error GoTo ErrorHandler:
+    m_YAxisBeginAtZero = pYAxisBeginAtZero
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -976,7 +1202,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get YAxisBeginAtZero() As Boolean
-    YAxisBeginAtZero = mYAxisBeginAtZero
+    On Error GoTo ErrorHandler:
+    YAxisBeginAtZero = m_YAxisBeginAtZero
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -990,7 +1220,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Let XAxisBeginAtZero(ByVal pXAxisBeginAtZero As Boolean)
-    mXAxisBeginAtZero = pXAxisBeginAtZero
+    On Error GoTo ErrorHandler:
+    m_XAxisBeginAtZero = pXAxisBeginAtZero
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -1003,7 +1237,11 @@ End Property
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get XAxisBeginAtZero() As Boolean
-    XAxisBeginAtZero = mXAxisBeginAtZero
+    On Error GoTo ErrorHandler:
+    XAxisBeginAtZero = m_XAxisBeginAtZero
+ErrorHandler:
+    ProcessError
+    Exit Property
 End Property
 
 
@@ -1021,7 +1259,7 @@ Private Sub Class_Initialize()
     ChartType = chChartType.Bar
     StackedChart = False
     DefaultFontColor = "Black"
-    ChartBackgroundColor = "#EAEAEA"
+    m_ChartBackgroundColor = "#EAEAEA"
     ShowTitle = False
     TitlePostition = posTop
     TitleText = "Budget Execution"
@@ -1031,10 +1269,10 @@ Private Sub Class_Initialize()
     ShowXAxis = True
     ChartJsSource = chScriptSource.CDN
     ChartJsCDN = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
-    ChartJsPathFilename = CurrentProject.path & "\Chart.min.js"
+    ChartJsPathFilename = CurrentProject.Path & "\Chart.min.js"
     ColorSchemaSource = chScriptSource.CDN
     ColorSchemaCDN = "https://cdn.jsdelivr.net/npm/chartjs-plugin-colorschemes"
-    ColorSchemaPathFilename = CurrentProject.path & "chartjs-plugin-colorschemes.min.js"
+    ColorSchemaPathFilename = CurrentProject.Path & "chartjs-plugin-colorschemes.min.js"
     ColorSchema = "tableau.Traffic9"
 End Sub
 
@@ -1064,10 +1302,14 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Sub DrawChart()
+    On Error GoTo ErrorHandler:
     Dim filename As String
     CreateChartFile
-    filename = CurrentProject.path & "\" & HtmlFileName
+    filename = CurrentProject.Path & "\" & m_HtmlFileName
     control.Object.Navigate filename
+ErrorHandler:
+    ProcessError
+    Exit Sub
 End Sub
 
 
@@ -1083,12 +1325,13 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub CreateChartFile()
+    On Error GoTo ErrorHandler:
     Dim f As Integer
     Dim strPath As String
     Dim strFilename As String
     Dim strContent As String
-    strPath = CurrentProject.path
-    strFilename = "\" & HtmlFileName
+    strPath = CurrentProject.Path
+    strFilename = "\" & m_HtmlFileName
     strContent = strContent & getHeader
     strContent = strContent & getChartType
     strContent = strContent & getChartData
@@ -1098,6 +1341,9 @@ Private Sub CreateChartFile()
     Open strPath & strFilename For Output As f
     Print #f, strContent;
     Close f
+ErrorHandler:
+    ProcessError
+    Exit Sub
 End Sub
 
 
@@ -1111,6 +1357,7 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Function getHeader() As String
+    On Error GoTo ErrorHandler:
     Dim strText As String
     strText = strText & "<!DOCTYPE html>" & vbCrLf
     strText = strText & "<!-- saved from url=(0014)about:internet -->" & vbCrLf
@@ -1126,8 +1373,8 @@ Private Function getHeader() As String
     strText = strText & "</head>" & vbCrLf
     strText = strText & "<body>" & vbCrLf
     strText = strText & "<div id=""container"" style=""width: 100%;"">" & vbCrLf
-    If Len(ChartBackgroundColor) > 0 Then
-        strText = strText & "    <canvas id=""myChart"" style=""background-color: " & ChartBackgroundColor & """ ></canvas>" & vbCrLf
+    If Len(m_ChartBackgroundColor) > 0 Then
+        strText = strText & "    <canvas id=""myChart"" style=""background-color: " & m_ChartBackgroundColor & """ ></canvas>" & vbCrLf
     Else
         strText = strText & "    <canvas id=""myChart""></canvas>" & vbCrLf
     End If
@@ -1145,6 +1392,9 @@ Private Function getHeader() As String
     strText = strText & "    var ctx = document.getElementById('myChart').getContext('2d');" & vbCrLf
     strText = strText & "    var myChart = new Chart(ctx, {" & vbCrLf
     getHeader = strText
+ErrorHandler:
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -1158,6 +1408,7 @@ End Function
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Function getChartType() As String
+    On Error GoTo ErrorHandler:
     Dim strText As String
     Dim strType As String
     Select Case ChartType
@@ -1183,6 +1434,9 @@ Private Function getChartType() As String
     End Select
     strText = strText & "        type: '" & strType & "'," & vbCrLf
     getChartType = strText
+ErrorHandler:
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -1194,32 +1448,33 @@ End Function
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Function getChartData() As String
+    On Error GoTo ErrorHandler:
     Dim strText As String
     Dim i As Integer
     Call GetData
     strText = strText & "        data: {" & vbCrLf
     If ChartType <> chChartType.Bubble Then
         If ChartType <> chChartType.Scatter Then
-            strText = strText & "            labels: [" & mDataLabels & "]," & vbCrLf
+            strText = strText & "            labels: [" & m_DataLabels & "]," & vbCrLf
         End If
     End If
     strText = strText & "            datasets: [" & vbCrLf
-    For i = LBound(mDataSetData) To UBound(mDataSetData)
+    For i = LBound(m_DataSetData) To UBound(m_DataSetData)
         Select Case ChartType
             Case chChartType.Bubble, chChartType.Scatter
-                strText = strText & "               {label: '" & mDataLabels(i) & "' ," & vbCrLf
+                strText = strText & "               {label: '" & m_DataLabels(i) & "' ," & vbCrLf
             Case Else
-                strText = strText & "               {label: '" & mDataSetLabel(i) & "' ," & vbCrLf
+                strText = strText & "               {label: '" & m_DataSetLabel(i) & "' ," & vbCrLf
         End Select
         Select Case ChartType
             Case chChartType.Line, chChartType.Radar
-                If AreaFilled = False Then
+                If m_AreaFilled = False Then
                     strText = strText & "                fill: false ," & vbCrLf
                 End If
             Case Else
         End Select
-        strText = strText & "                data: [" & mDataSetData(i) & "]," & vbCrLf
-        If mIsSingleBarChart = True Then
+        strText = strText & "                data: [" & m_DataSetData(i) & "]," & vbCrLf
+        If m_IsSingleBarChart = True Then
             strText = strText & "                backgroundColor: Chart['colorschemes']." & ColorSchema & "," & vbCrLf
         End If
         strText = strText & "                borderWidth: 1}," & vbCrLf
@@ -1228,7 +1483,9 @@ Private Function getChartData() As String
     strText = strText & "             ]" & vbCrLf
     strText = strText & "        }," & vbCrLf
     getChartData = strText
-
+ErrorHandler:
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -1240,6 +1497,7 @@ End Function
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Function getChartOptions() As String
+    On Error GoTo ErrorHandler:
     Dim strText As String
     strText = strText & "        options: {" & vbCrLf
     strText = strText & GetTitle
@@ -1248,9 +1506,10 @@ Private Function getChartOptions() As String
     strText = strText & GetColorSchema
     strText = CutTrailingComma(strText)
     strText = strText & "        }" & vbCrLf
-    
     getChartOptions = strText
-
+ErrorHandler:
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -1262,12 +1521,16 @@ End Function
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Function getFooter() As String
+    On Error GoTo ErrorHandler:
     Dim strText As String
     strText = strText & "    });" & vbCrLf
     strText = strText & "</script>" & vbCrLf
     strText = strText & "</body>" & vbCrLf
     strText = strText & "</html>"
     getFooter = strText
+ErrorHandler:
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -1280,6 +1543,7 @@ End Function
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Function getChartJsLocation() As String
+    On Error GoTo ErrorHandler:
     Dim strText As String
     Select Case ChartJsSource
         Case chScriptSource.CDN
@@ -1289,6 +1553,9 @@ Private Function getChartJsLocation() As String
         Case Else
     End Select
     getChartJsLocation = strText
+ErrorHandler:
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -1301,6 +1568,7 @@ End Function
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Function GetColorSchemaLocation() As String
+    On Error GoTo ErrorHandler:
     Dim strText As String
     Select Case ColorSchemaSource
         Case chScriptSource.CDN
@@ -1310,6 +1578,9 @@ Private Function GetColorSchemaLocation() As String
         Case Else
     End Select
     GetColorSchemaLocation = strText
+ErrorHandler:
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -1322,7 +1593,7 @@ End Function
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub GetData()
-On Error GoTo Handle_Error
+    On Error GoTo Handle_Error:
     Dim DB As DAO.Database
     Dim rst As DAO.Recordset
     Dim strLabels() As String
@@ -1358,8 +1629,8 @@ On Error GoTo Handle_Error
                 strLabels(0) = "Demo"
                 strData(0) = "{x:2,y:3,r:17}"
             End If
-                mDataLabels = strLabels()
-                mDataSetData = strData()
+                m_DataLabels = strLabels()
+                m_DataSetData = strData()
         Case chChartType.Scatter
             If Not rst Is Nothing Then
                 ReDim strLabels(rst.RecordCount - 1)
@@ -1377,8 +1648,8 @@ On Error GoTo Handle_Error
                 strLabels(0) = "Demo"
                 strData(0) = "{x:2,y:3,r:17}"
             End If
-                mDataLabels = strLabels()
-                mDataSetData = strData()
+                m_DataLabels = strLabels()
+                m_DataSetData = strData()
         Case Else
             ReDim strLabels(1)
             ReDim strData(UBound(DataSourceDataFieldName))
@@ -1398,14 +1669,14 @@ On Error GoTo Handle_Error
             End If
             DetermineSingleBarChart
             ReDim mDataSet1Colors(UBound(DataSourceDataFieldName))
-            mDataLabels = CutTrailingComma(strLabels(0))
-            mDataSetLabel = DataSourceDataFieldName()
+            m_DataLabels = CutTrailingComma(strLabels(0))
+            m_DataSetLabel = DataSourceDataFieldName()
             i = 0
             For Each field In DataSourceDataFieldName()
                 strData(i) = CutTrailingComma(strData(i))
                 i = i + 1
             Next field
-            mDataSetData = strData()
+            m_DataSetData = strData()
     End Select
 Exit_Here:
     On Error Resume Next
@@ -1432,16 +1703,20 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub DetermineSingleBarChart()
-    Select Case mChartType
+    On Error GoTo ErrorHandler:
+    Select Case m_ChartType
         Case chChartType.Bar, chChartType.HorizontalBar
-            If mIsSingleDataset = True Then
-                mIsSingleBarChart = True
+            If m_IsSingleDataset = True Then
+                m_IsSingleBarChart = True
             Else
-                mIsSingleBarChart = False
+                m_IsSingleBarChart = False
             End If
         Case Else
-            mIsSingleBarChart = False
+            m_IsSingleBarChart = False
     End Select
+ErrorHandler:
+    ProcessError
+    Exit Sub
 End Sub
 
 
@@ -1455,6 +1730,7 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Function GetTitle() As String
+    On Error GoTo ErrorHandler:
     Dim strText As String
     If ShowTitle = False Then
         strText = strText & "            title: {" & vbCrLf
@@ -1463,13 +1739,15 @@ Private Function GetTitle() As String
         GetTitle = strText
         Exit Function
     End If
-   
     strText = strText & "            title: {" & vbCrLf
     strText = strText & "                display: true," & vbCrLf
     strText = strText & "                position: " & getPositionString(TitlePostition) & "," & vbCrLf
     strText = strText & "                text: '" & TitleText & "'" & vbCrLf
     strText = strText & "            }," & vbCrLf
     GetTitle = strText
+ErrorHandler:
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -1482,6 +1760,7 @@ End Function
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Function GetLegend() As String
+    On Error GoTo ErrorHandler:
     Dim strText As String
     If ShowLegend = False Then
         strText = strText & "            legend: {" & vbCrLf
@@ -1495,6 +1774,9 @@ Private Function GetLegend() As String
     strText = strText & "                position: " & getPositionString(LegendPostition) & vbCrLf
     strText = strText & "            }," & vbCrLf
     GetLegend = strText
+ErrorHandler:
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -1507,6 +1789,7 @@ End Function
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Function GetScales() As String
+    On Error GoTo ErrorHandler:
     Dim strText As String
     strText = strText & "            scales: {" & vbCrLf
     strText = strText & "                yAxes: [{" & vbCrLf
@@ -1565,6 +1848,9 @@ Private Function GetScales() As String
     strText = strText & "                    }]," & vbCrLf
     strText = strText & "            }," & vbCrLf
     GetScales = strText
+ErrorHandler:
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -1577,6 +1863,7 @@ End Function
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Function GetColorSchema() As String
+    On Error GoTo ErrorHandler:
     Dim strText As String
     strText = strText & "            plugins: {" & vbCrLf
     strText = strText & "                colorschemes: {" & vbCrLf
@@ -1584,6 +1871,9 @@ Private Function GetColorSchema() As String
     strText = strText & "                    }" & vbCrLf
     strText = strText & "                }," & vbCrLf
     GetColorSchema = strText
+ErrorHandler:
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -1596,6 +1886,7 @@ End Function
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Function getPositionString(ByVal ThisPosition As chPosition) As String
+    On Error GoTo ErrorHandler:
     Select Case ThisPosition
         Case chPosition.posTop
             getPositionString = "'top'"
@@ -1608,6 +1899,9 @@ Private Function getPositionString(ByVal ThisPosition As chPosition) As String
         Case Else
             getPositionString = "'top'"
     End Select
+ErrorHandler:
+    ProcessError
+    Exit Function
 End Function
 
 
@@ -1619,6 +1913,7 @@ End Function
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Function CutTrailingComma(ByVal strText As String) As String
+    On Error GoTo ErrorHandler:
     If Right$(strText, 1) = "," Then
         CutTrailingComma = Left$(strText, Len(strText) - 1)
     ElseIf Right$(strText, 3) = "," & vbCrLf Then
@@ -1626,6 +1921,9 @@ Private Function CutTrailingComma(ByVal strText As String) As String
     Else
         CutTrailingComma = strText
     End If
+ErrorHandler:
+    ProcessError
+    Exit Function
 End Function
 
 

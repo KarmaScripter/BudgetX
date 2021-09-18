@@ -32,25 +32,18 @@ Private m_Notification As String
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:            Constructor
-'   Name:
-'   Parameters:      Void
-'   Retval:          BudgetFile
-'   Purpose:
+
+
+'----------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize()/Class_Terminate
+'   Parameters  Void
+'   Retval      AccessData
+'   Purpose
 '---------------------------------------------------------------------------------
 Private Sub Class_Initialize()
 End Sub
 
-
-
-'---------------------------------------------------------------------------------
-'   Type:            Destructor
-'   Name:
-'   Parameters:      Void
-'   Retval:          BudgetFile
-'   Purpose:
-'---------------------------------------------------------------------------------
 Private Sub Class_Terminate()
 End Sub
 

@@ -20,6 +20,17 @@ Private m_Error As String
 Private m_Notification As String
 
 
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize()/Class_Terminate
+'   Parameters  Void
+'   Retval      AccessData
+'   Purpose
+'---------------------------------------------------------------------------------
 Private Sub Class_Initialize()
     pAnd = " AND "
     pWhere = " WHERE "
@@ -30,6 +41,12 @@ Private Sub Class_Terminate()
         Set m_Criteria = Nothing
     End If
 End Sub
+
+
+
+
+
+
 
 
 
