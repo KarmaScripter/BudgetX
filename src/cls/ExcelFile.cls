@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "ExcelReport"
+Attribute VB_Name = "ExcelFile"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -11,7 +11,7 @@ Option Compare Database
 Option Explicit
 
 
-
+Private m_Dialog As FileDialog
 Private m_BudgetPath As BudgetPath
 Private m_SavePath As String
 Private m_Name As String
@@ -22,9 +22,15 @@ Private m_Excel As Excel.Application
 Private m_Workbook As Excel.Workbook
 Private m_Worksheet As Excel.Worksheet
 Private m_Chart As Excel.Chart
+Private m_Range As Excel.Range
 Private m_PivotTable As Excel.PivotTable
 Private m_PivotFields As Excel.PivotFields
 Private m_PivotItems As Excel.PivotItems
+Private m_PivotCache As Excel.PivotCache
+Private m_Slicer As Excel.Slicer
+Private m_SlicerCache As Excel.SlicerCache
+Private m_SlicerItem As Excel.SlicerItem
+Private m_SlicerItems As Excel.SlicerItems
 Private m_Error As String
 Private m_Notification As String
 Private m_Data As DAO.Database
@@ -44,10 +50,10 @@ Private m_DataSet As DAO.Recordset
 '---------------------------------------------------------------------------------
 Private Sub Class_Initialize()
     Set m_Data = CurrentDb
+    Set m_BudgetPath = New BudgetPath
     Set m_Excel = New Excel.Application
     Set m_Workbook = New Excel.Workbook
     Set m_Worksheet = New Excel.Worksheet
-    Set m_BudgetPath = New BudgetPath
 End Sub
 
 Private Sub Class_Terminate()
@@ -79,14 +85,7 @@ Public Sub CreateWorkbook(pFilePath As String)
             m_Workbook.Close SaveChanges:=False
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        KillExcel
-        m_Error = "Source:       ExceReport" _
-            & vbCrLf & "Member:     CreateWorkbook(String)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -101,20 +100,13 @@ End Sub
 '---------------------------------------------------------------------------------
 Public Function GetTemplate() As Excel.Workbook
     On Error GoTo ErrorHandler:
-    Dim m_Template As String
-    m_Template = m_BudgetPath.ReportTemplate
+    Dim p_Template As String
+    p_Template = m_BudgetPath.ReportTemplate
     Set m_Excel = CreateObject("Excel.Application")
-    Set m_Workbook = m_Excel.Workbooks.Open(m_Template)
+    Set m_Workbook = m_Excel.Workbooks.Open(p_Template)
     Set GetTemplate = m_Workbook
 ErrorHandler:
-    If Err.Number > 0 Then
-        KillExcel
-        m_Error = "Source:       ExceReport" _
-            & vbCrLf & "Member:     GetTemplate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -127,28 +119,22 @@ End Function
 '   Retval:          Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Function GetRange(pColumn As Integer, pRow As Integer) As Excel.Range
+Public Function GetRange(pColumn As Integer, pRow As Integer, Optional pName As String) As Excel.Range
     On Error GoTo ErrorHandler:
     If pColumn > 0 And pRow > 0 Then
         Set m_Excel = CreateObject("Excel.Application")
         Set m_Workbook = m_Excel.Workbooks.add
         Set m_Worksheet = m_Workbook.Worksheets.add
         Dim m_Range As Excel.Range
-        Dim m_Template As String
+        Dim p_Template As String
         Set m_BudgetPath = New BudgetPath
-        m_Template = m_BudgetPath.ReportTemplate
-        Set m_Workbook = m_Excel.Workbooks.Open(m_Template)
-        Set m_Range = m_Workbook.Worksheets(1).Cells(pColumn, pRow)
+        p_Template = m_BudgetPath.ReportTemplate
+        Set m_Workbook = m_Excel.Workbooks.Open(p_Template)
+        Set m_Range = m_Worksheet.Cells(pColumn, pRow)
         Set GetRange = m_Range
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       ExceReport" _
-            & vbCrLf & "Member:     GetTemplate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -163,24 +149,17 @@ End Function
 '---------------------------------------------------------------------------------
 Public Sub PopulateData(pData As DAO.Recordset)
     On Error GoTo ErrorHandler:
-    Dim m_Template As String
+    Dim p_Template As String
     Dim m_Range As Excel.Range
     Set m_Excel = CreateObject("Excel.Application")
-    Set m_Workbook = m_Excel.Workbooks.add
-    Set m_Workbook = m_Excel.Workbooks.Open(m_Template)
+    Set m_Workbook = m_Excel.Workbooks.Open(p_Template)
     Set m_Range = m_Workbook.Worksheets(1).Cells(1, 2)
-    m_Template = m_BudgetPath.ReportTemplate
+    p_Template = m_BudgetPath.ReportTemplate
     m_Workbook.Worksheets(2).Visible = False
     m_Range.CopyFromRecordset Data:=pData, MaxRows:=10, MaxColumns:=8
     m_Excel.Visible = True
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       ExceReport" _
-            & vbCrLf & "Member:     PopulateData(DAO.Recordset)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -195,26 +174,16 @@ End Sub
 '---------------------------------------------------------------------------------
 Public Sub OpenFileDialog()
     On Error GoTo ErrorHandler:
-    Dim p_Dialog As FileDialog
+    Set m_Dialog = m_Excel.FileDialog(msoFileDialogFilePicker)
     Dim p_Result As Integer
-    Set p_Dialog = Application.FileDialog(msoFileDialogFilePicker)
-    p_Dialog.AllowMultiSelect = False
-    p_Dialog.Title = "Select an Excel file"
-    p_Dialog.InitialFileName = "C:\"
-    p_Dialog.Filters.Clear
-    p_Dialog.Filters.add "Excel files", "*.xlsx"
-    p_Dialog.Filters.add "All files", "*.*"
-    If p_Dialog.Show = -1 Then
-       Debug.Print p_Dialog.SelectedItems(1)
-    End If
+    m_Dialog.AllowMultiSelect = False
+    m_Dialog.Title = "Select an Excel file"
+    m_Dialog.InitialFileName = "C:\"
+    m_Dialog.Filters.Clear
+    m_Dialog.Filters.add "Excel files", "*.xlsx"
+    m_Dialog.Filters.add "All files", "*.*"
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       ExceReport" _
-            & vbCrLf & "Member:     OpenFileDialog()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -240,13 +209,7 @@ Public Sub OpenFolderDialog()
        Debug.Print p_Dialog.SelectedItems(1)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       ExceReport" _
-            & vbCrLf & "Member:     OpenFolderDialog()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -273,13 +236,7 @@ Public Sub OpenSaveDialog()
        Debug.Print p_Dialog.SelectedItems(1)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       ExceReport" _
-            & vbCrLf & "Member:     OpenFileDialog()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -298,14 +255,7 @@ Public Sub OpenExcelFile(pFileName As String, pFilePath As String)
     Set m_Workbook = m_Excel.Workbooks.Open(pFilePath)
     m_Excel.Visible = True
 ErrorHandler:
-    If Err.Number > 0 Then
-        KillExcel
-        m_Error = "Source:       ExceReport" _
-            & vbCrLf & "Member:     OpenExcelFile(String, String)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -331,14 +281,7 @@ Public Sub CreateCsvFile(pFileName As String, pFilePath As String)
                 FileFormat:=xlCSV, CreateBackup:=False
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        KillExcel
-        m_Error = "Source:       ExceReport" _
-            & vbCrLf & "Member:     CreateCsvFile(String, String)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -382,15 +325,7 @@ Function ExportQuery(ByVal pQuery As String)
         End If
     End With
 ErrorHandler:
-    If Err.Number > 0 Then
-        KillExcel
-        KillData
-        m_Error = "Source:   ExceReport" _
-            & vbCrLf & "Member:     ExcelExport(String)" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -436,15 +371,7 @@ Public Function ExportData(pData As DAO.Recordset)
         End With
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        KillExcel
-        KillData
-        m_Error = "Source:   ExceReport" _
-            & vbCrLf & "Member:     ExcelExport(String)" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Function
 End Function
 
@@ -466,13 +393,7 @@ Public Sub SetLeftHeader(pText As String)
     p_LeftHeader = pText
     ActiveSheet.PageSetup.LeftHeader = p_LeftHeader
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ExceReport" _
-            & vbCrLf & "Member:     SetLeftHeader(String)" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -492,13 +413,7 @@ Public Sub SetCenterHeader(pText As String)
     p_CenterHeader = pText
     ActiveSheet.PageSetup.CenterHeader = p_CenterHeader
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ExceReport" _
-            & vbCrLf & "Member:     SetCenterHeader(String)" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -518,13 +433,7 @@ Public Sub SetRightHeader(pText As String)
     p_RightHeader = pText
     ActiveSheet.PageSetup.RightFooter = p_RightHeader
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ExceReport" _
-            & vbCrLf & "Member:     SetRightHeader(String)" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -546,13 +455,7 @@ Public Sub SetLeftFooter(pText As String)
         ActiveSheet.PageSetup.LeftFooter = p_LeftFooter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ExceReport" _
-            & vbCrLf & "Member:     SetLeftFooter(String)" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -572,13 +475,7 @@ Public Sub SetCenterFooter(pText As String)
     p_CenterFooter = pText
     ActiveSheet.PageSetup.CenterFooter = p_CenterFooter
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ExceReport" _
-            & vbCrLf & "Member:     SetCenterFooterString)" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -606,13 +503,7 @@ Private Sub KillExcel()
         Set m_Worksheet = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ExceReport" _
-            & vbCrLf & "Member:     KillExcel()" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -636,13 +527,7 @@ Private Sub KillData()
         Set m_DataSet = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ExceReport" _
-            & vbCrLf & "Member:     KillData()" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 
@@ -665,13 +550,7 @@ Private Sub KillFiles()
         Set m_BudgetPath = Nothing
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ExceReport" _
-            & vbCrLf & "Member:     KillFiles()" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Sub
 End Sub
 

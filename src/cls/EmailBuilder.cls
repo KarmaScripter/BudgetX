@@ -11,12 +11,30 @@ Option Compare Database
 Option Explicit
 
 Private m_Error As String
-Private m_Sender As String
-Private m_Reciever As String
+Private m_From As String
+Private m_To As String
 Private m_Subject As String
+Private m_Copy() As String
 Private m_Body As String
 
 
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Contructor/Finalizer
+'   Name        Class_Initialize()/Class_Terminate
+'   Parameters  Void
+'   Retval      AccessData
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Sub Class_Initialize()
+
+End Sub
+
+Public Sub Class_Terminate()
+
+End Sub
 
 
 
@@ -31,7 +49,7 @@ Private m_Body As String
 Public Property Let Sender(pAddress As String)
     On Error GoTo ErrorHandler:
     If Not pAddress & "" = "" Then
-        m_Sender = pAddress
+        m_From = pAddress
     End If
 ErrorHandler:
     ProcessError
@@ -49,8 +67,8 @@ End Property
 '---------------------------------------------------------------------------------
 Public Property Get Sender() As String
     On Error GoTo ErrorHandler:
-    If Not m_Sender & "" = "" Then
-        Sender = m_Sender
+    If Not m_From & "" = "" Then
+        Sender = m_From
     End If
 ErrorHandler:
     ProcessError
@@ -65,7 +83,7 @@ End Property
 
 '---------------------------------------------------------------------------------
 '   Type:        Property
-'   Name:
+'   Name:        Reciever
 '   Parameters:  String
 '   RetVal:      Void
 '   Purpose:
@@ -73,7 +91,7 @@ End Property
 Public Property Let Reciever(pAddress As String)
     On Error GoTo ErrorHandler:
     If Not pAddress & "" = "" Then
-        m_Reciever = pAddress
+        m_To = pAddress
     End If
 ErrorHandler:
     ProcessError
@@ -84,15 +102,15 @@ End Property
 
 '---------------------------------------------------------------------------------
 '   Type:        Property
-'   Name:
+'   Name:        Reciever
 '   Parameters:  Void
 '   RetVal:      String
 '   Purpose:
 '---------------------------------------------------------------------------------
 Public Property Get Reciever() As String
     On Error GoTo ErrorHandler:
-    If Not m_Reciever & "" = "" Then
-        Reciever = m_Reciever
+    If Not m_To & "" = "" Then
+        Reciever = m_To
     End If
 ErrorHandler:
     ProcessError
@@ -105,7 +123,7 @@ End Property
 
 '---------------------------------------------------------------------------------
 '   Type:        Property
-'   Name:
+'   Name:        Subject
 '   Parameters:  String
 '   RetVal:      Void
 '   Purpose:
@@ -123,7 +141,7 @@ End Property
 
 '---------------------------------------------------------------------------------
 '   Type:        Property
-'   Name:
+'   Name:        Subject
 '   Parameters:  Void
 '   RetVal:      String
 '   Purpose:
