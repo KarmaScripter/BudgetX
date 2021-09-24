@@ -57,10 +57,10 @@ End Sub
 '   Return          Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let Base(yr As String)
+Public Property Let Base(p_Year As String)
     On Error GoTo ErrorHandler:
-    If Not yr & "" = "" Then
-        m_Base = yr
+    If Not p_Year & "" = "" Then
+        m_Base = p_Year
     End If
 ErrorHandler:
     ProcessError
@@ -395,15 +395,19 @@ End Function
 
 '---------------------------------------------------------------------------------
 '   Type            Sub-Procedure
-'   Name            SetSweepDate
+'   Name            CalculateRemainingCalendarDays
 '   Parameters      Date
 '   Return          Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Function CalculateCalendarDaysUntil(sd As Date) As Integer
+Public Function CalculateRemainingCalendarDays() As Integer
     On Error GoTo ErrorHandler:
-    If IsDate(sd) Then
-        CalculateCalendarDaysUntil = DateDiff("d", Now, sd)
+    If Not m_CalendarYear & "" = "" Then
+        Dim p_Year As String
+        p_Year = "10/01/" & m_CalendarYear
+        Dim p_Date As Date
+        p_Date = CDate(p_Year)
+        CalculateRemainingCalendarDays = DateDiff("d", Now, p_Date)
     End If
 ErrorHandler:
     ProcessError
@@ -416,19 +420,43 @@ End Function
 
 '---------------------------------------------------------------------------------
 '   Type            Sub-Procedure
-'   Name            SetSweepDate
+'   Name            CalculateWorkDays
 '   Parameters      Date
 '   Return          Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Function CalculateRemainingFullTimeDays() As Integer
+Public Function CalculateWorkDays(pDate As Date) As Integer
+    On Error GoTo ErrorHandler:
+    If IsDate(pDate) Then
+        CalculateWorkDays = DateDiff("d", Now, pDate)
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type            Sub-Procedure
+'   Name            CalculateRemainingWorkDays
+'   Parameters      Date
+'   Return          Void
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Function CalculateRemainingWorkDays() As Integer
     On Error GoTo ErrorHandler:
     If Not m_CalendarYear & "" = "" Then
-        Dim yr As String
-        yr = "10/01/" & m_CalendarYear
-        Dim dt As Date
-        dt = CDate(yr)
-        CalculateRemainingFullTimeDays = DateDiff("d", Now, dt)
+        Dim p_Year As String
+        p_Year = "10/01/" & m_CalendarYear
+        Dim p_Date As Date
+        p_Date = CDate(p_Year)
+        CalculateRemainingWorkDays = DateDiff("d", Now, p_Date)
     End If
 ErrorHandler:
     ProcessError

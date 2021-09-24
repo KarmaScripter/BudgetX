@@ -12,7 +12,6 @@ CREATE TABLE "Transfers" (
 	"ControlNumber"	TEXT DEFAULT 'NS',
 	"ProcessedDate"	TEXT DEFAULT 'NS',
 	"Quarter"	TEXT DEFAULT 'NS',
-	"Line" 	    TEXT DEFAULT 'NS',
 	"Subline"	TEXT DEFAULT 'NS',
 	"AhCode"	TEXT DEFAULT 'NS',
 	"AhName"	TEXT DEFAULT 'NOT SPECIFIED',
