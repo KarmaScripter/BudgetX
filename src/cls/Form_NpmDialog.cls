@@ -42,13 +42,13 @@ Private Sub Form_Load()
     pAnd = " AND "
     Set Args = New AccountArgs
     m_BFY = "[BFY] = '2021'"
-    Me.RpioNameComboBox.RowSource = "SELECT DISTINCT ResourcePlanningOffices.Name" _
-        & " FROM ResourcePlanningOffices " _
-        & " WHERE ResourcePlanningOffices.Code NOT IN" _
+    Me.RpioNameComboBox.RowSource = "SELECT DISTINCT StatusOfFunds.RpioName" _
+        & " FROM StatusOfFunds " _
+        & " WHERE StatusOfFunds.RpioCode NOT IN" _
         & " ('01', '02', '03', '04' ,'05', '06','07', '08', '09', '10')"
-    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Allocations.FundName" _
-        & " FROM Allocations;"
-    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Allocations.BocName FROM Allocations;"
+    Me.FundNameComboBox.RowSource = "SELECT DISTINCT StatusOfFunds.FundName" _
+        & " FROM StatusOfFunds;"
+    Me.BocNameComboBox.RowSource = "SELECT DISTINCT StatusOfFunds.BocName FROM StatusOfFunds;"
     Me.FiscalYearOptionGroup.DefaultValue = 2
     Me.FiscalYearOptionGroup.Value = 2
 ErrorHandler:
@@ -139,7 +139,7 @@ Private Sub RpioNameComboBox_Change()
     Me.Filter = vbNullString
     m_RpioName = vbNullString
     Args.RpioName = Me.RpioNameComboBox.Value
-    Args.RpioCode = DLookup("Code", "ResourcePlanningOffices", "ResourcePlanningOffices.Name = '" _
+    Args.RpioCode = DLookup("RpioCode", "StatusOfFunds", "StatusOfFunds.RpioName = '" _
         & Me.RpioNameComboBox.Value & "'")
     m_RpioName = "[RpioName] = '" & Me.RpioNameComboBox.Value & "'"
 ErrorHandler:
@@ -150,30 +150,30 @@ End Sub
 
 '----------------------------------------------------------------------------------
 '   Type:        Function
-'   Name:        GetDivisionNameFilter
+'   Name:        GetRpioNameFilter
 '   Parameters:  Void
 '   Retval:      String
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Function GetDivisionNameFilter() As String
+Private Function GetRpioNameFilter() As String
     On Error GoTo ErrorHandler:
     If Not m_RpioName = "" And _
         Not m_FundName = "" And _
         Not m_BFY = "" Then
-            GetDivisionNameFilter = m_RpioName _
+            GetRpioNameFilter = m_RpioName _
                 & pAnd & m_FundName _
                 & pAnd & m_BFY
     End If
     If Not m_RpioName = "" And _
         m_FundName = "" And _
         Not m_BFY = "" Then
-            GetDivisionNameFilter = m_RpioName _
+            GetRpioNameFilter = m_RpioName _
                 & pAnd & m_BFY
     End If
     If Not m_RpioName = "" And _
         Not m_FundName = "" And _
         m_BFY = "" Then
-            GetDivisionNameFilter = m_RpioName _
+            GetRpioNameFilter = m_RpioName _
                 & pAnd & m_FundName
     End If
 ErrorHandler:
@@ -196,8 +196,8 @@ Private Sub FundNameComboBox_Change()
     End If
     Me.Filter = vbNullString
     m_FundName = vbNullString
-    m_FundCode = DLookup("FundCode", "Allocations", _
-        "Allocations.FundName = '" & Me.FundNameComboBox.Value & "'")
+    m_FundCode = DLookup("FundCode", "StatusOfFunds", _
+        "StatusOfFunds.FundName = '" & Me.FundNameComboBox.Value & "'")
     m_FundName = "[FundName] = '" & Me.FundNameComboBox.Value & "'"
     Me.Filter = GetFundNameFilter
     Args.FundName = Me.FundNameComboBox.Value
@@ -302,11 +302,9 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub ClearOptionGroupValues()
-    If Not IsNull(Me.FiscalYearOptionGroup) And _
-        Not Me.FiscalYearOptionGroup.Value & "" = vbNullString Then
-            Me.FiscalYearOptionGroup.Value = vbNullString
-            m_BFY = vbNullString
-    End If
+    On Error GoTo ErrorHandler:
+    Me.FiscalYearOptionGroup.Value = vbNullString
+    m_BFY = vbNullString
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -321,6 +319,7 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub ClearComboBoxValues()
+    On Error GoTo ErrorHandler:
     Me.RpioNameComboBox.Value = vbNullString
     Me.FundNameComboBox.Value = vbNullString
 ErrorHandler:
@@ -337,6 +336,7 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub ClearFilterValues()
+    On Error GoTo ErrorHandler:
     m_BFY = vbNullString
     m_RpioName = vbNullString
     m_FundName = vbNullString
@@ -357,7 +357,10 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub ExitButton_Click()
-    Set Args = Nothing
+    On Error GoTo ErrorHandler:
+    If Not Args Is Nothing Then
+        Set Args = Nothing
+    End If
     DoCmd.Close acForm, Me.Name
 ErrorHandler:
     ProcessError
