@@ -13,8 +13,9 @@ Option Explicit
 
 
 
-Private pRC As AccountArgs
+Private Args As AccountArgs
 Private m_Dialog As Form_AccountEditor
+Private RpioNameFilter As String
 Private FiscalYearFilter As String
 Private BudgetLevelFilter As String
 Private FundNameFilter As String
@@ -38,7 +39,7 @@ Private m_Error As String
 Private Sub Form_Open(Cancel As Integer)
     On Error GoTo ErrorHandler:
     Set m_Dialog = New Form_AccountEditor
-    Set pRC = New AccountArgs
+    Set Args = New AccountArgs
     Me.RecordSource = "SELECT * FROM Allocations" _
         & " WHERE Allocations.BocCode = '17'" _
         & " AND Allocations.BudgetLevel = '7'"
@@ -67,7 +68,7 @@ Private Sub Form_Load()
     Set m_DataSet = Me.Recordset
     HideButtons
     BudgetLevelFilter = "[BudgetLevel] = '7'"
-    FiscalYearFilter = "[BFY] = '2021'"
+    FiscalYearFilter = "[BFY] = '2022'"
     Me.Filter = BudgetLevelFilter & " AND " & FiscalYearFilter
     Me.FundNameComboBox.RowSource = "SELECT DISTINCT Allocations.FundName" _
         & " FROM Allocations" _
@@ -216,10 +217,10 @@ Private Sub ResetOptionGroupValues()
     On Error GoTo ErrorHandler:
     Me.FiscalYearOptionGroup.Value = 2
     FiscalYearFilter = "[BFY] = '2021'"
-    pRC.BFY = "2021"
+    Args.BFY = "2021"
     Me.BudgetLevelOptionGroup.Value = 1
     BudgetLevelFilter = "[BudgetLevel] = '7'"
-    pRC.BudgetLevel = "7"
+    Args.BudgetLevel = "7"
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -234,16 +235,16 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub FiscalYearOptionGroup_AfterUpdate()
     On Error GoTo ErrorHandler:
-    pRC.BFY = vbNullString
+    Args.BFY = vbNullString
     FiscalYearFilter = vbNullString
     Me.Filter = vbNullString
     Select Case Me.FiscalYearOptionGroup.Value
         Case 1
-            pRC.BFY = "2020"
-            FiscalYearFilter = "[BFY] = '2020'"
-        Case 2
-            pRC.BFY = "2021"
+            Args.BFY = "2021"
             FiscalYearFilter = "[BFY] = '2021'"
+        Case 2
+            Args.BFY = "2022"
+            FiscalYearFilter = "[BFY] = '2022'"
     End Select
     Me.Filter = GetFiscalYearFilter
     Me.RecordSource = "SELECT * FROM Allocations" _
@@ -265,15 +266,15 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub BudgetLevelOptionGroup_AfterUpdate()
     On Error GoTo ErrorHandler:
-    pRC.BudgetLevel = vbNullString
+    Args.BudgetLevel = vbNullString
     BudgetLevelFilter = vbNullString
     Me.Filter = vbNullString
     Select Case Me.BudgetLevelOptionGroup.Value
         Case 1
-            pRC.BudgetLevel = "7"
+            Args.BudgetLevel = "7"
             BudgetLevelFilter = "[BudgetLevel] = '7'"
         Case 2
-            pRC.BudgetLevel = "8"
+            Args.BudgetLevel = "8"
             BudgetLevelFilter = "[BudgetLevel] = '8'"
     End Select
     Me.Filter = GetBudgetLevelFilter
@@ -365,9 +366,9 @@ End Function
 Private Sub FundNameComboBox_Change()
     On Error GoTo ErrorHandler:
     FundNameFilter = vbNullString
-    pRC.FundName = vbNullString
+    Args.FundName = vbNullString
     Me.Filter = vbNullString
-    pRC.FundName = Me.FundNameComboBox.Value
+    Args.FundName = Me.FundNameComboBox.Value
     FundNameFilter = "[FundName] = '" & Me.FundNameComboBox.Value & "'"
     Me.Filter = GetFundNameFilter
     Me.RecordSource = "SELECT * FROM Allocations WHERE Allocations.BocCode = '17' AND " & Me.Filter
@@ -459,10 +460,10 @@ End Function
 '---------------------------------------------------------------------------------
 Private Sub ProgramProjectNameComboBox_Change()
     On Error GoTo ErrorHandler:
-    pRC.ProgramProjectName = vbNullString
+    Args.ProgramProjectName = vbNullString
     ProgramProjectNameFilter = vbNullString
     Me.Filter = vbNullString
-    pRC.ProgramProjectName = Me.ProgramProjectNameComboBox.Value
+    Args.ProgramProjectName = Me.ProgramProjectNameComboBox.Value
     ProgramProjectNameFilter = "[ProgramProjectName] = '" & Me.ProgramProjectNameComboBox.Value & "'"
     Me.Filter = GetProgramProjectNameFilter
     Me.RecordSource = "SELECT * FROM Allocations WHERE Allocations.BocCode = '17' AND " & Me.Filter
@@ -780,7 +781,9 @@ Private Sub RefreshButton_Click()
     BudgetLevelFilter = "[BudgetLevel] = '7'"
     FiscalYearFilter = "[BFY] = '2021'"
     Me.Filter = BudgetLevelFilter & " AND " & FiscalYearFilter
-    Me.RecordSource = "SELECT * FROM Allocations WHERE Allocations.BocCode = '17' AND " & Me.Filter
+    Me.RecordSource = "SELECT *" _
+        & " FROM Allocations" _
+        & " WHERE Allocations.BocCode = '17' AND " & Me.Filter
     Me.FundNameComboBox.RowSource = "SELECT DISTINCT Allocations.FundName" _
         & " FROM Allocations" _
         & " WHERE Allocations.BocCode = '17'" _
@@ -806,13 +809,13 @@ End Sub
 Private Sub UpdateBudgetLevel()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    pRC.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.text)
     Me.BudgetLevelTextBox.SetFocus
-    pRC.BudgetLevel = Me.BudgetLevelTextBox.text
+    Args.BudgetLevel = Me.BudgetLevelTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.BudgetLevel = '" _
-        & pRC.BudgetLevel & "'" & _
-        " WHERE Allocations.PrcId = " & pRC.ID
+        & Args.BudgetLevel & "'" & _
+        " WHERE Allocations.PrcId = " & Args.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
@@ -830,13 +833,13 @@ End Sub
 Private Sub UpdateBfy()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    pRC.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.text)
     Me.BfyTextBox.SetFocus
-    pRC.BFY = Me.BfyTextBox.text
+    Args.BFY = Me.BfyTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.BFY = '" _
-        & pRC.BFY & "'" & _
-        " WHERE Allocations.PrcId = " & pRC.ID
+        & Args.BFY & "'" & _
+        " WHERE Allocations.PrcId = " & Args.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
@@ -855,13 +858,13 @@ End Sub
 Private Sub UpdateRpioCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    pRC.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.text)
     Me.RpioCodeTextBox.SetFocus
-    pRC.RpioCode = Me.RpioCodeTextBox.text
+    Args.RpioCode = Me.RpioCodeTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.RPIO = '" _
-        & pRC.RpioCode & "'" & _
-        " WHERE Allocations.PrcId = " & pRC.ID
+        & Args.RpioCode & "'" & _
+        " WHERE Allocations.PrcId = " & Args.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
@@ -879,13 +882,13 @@ End Sub
 Private Sub UpdateAhCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    pRC.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.text)
     Me.AhCodeTextBox.SetFocus
-    pRC.AhCode = Me.AhCodeTextBox.text
+    Args.AhCode = Me.AhCodeTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.AhCode = '" _
-        & pRC.AhCode & "'" & _
-        " WHERE Allocations.PrcId = " & pRC.ID
+        & Args.AhCode & "'" & _
+        " WHERE Allocations.PrcId = " & Args.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
@@ -903,13 +906,13 @@ End Sub
 Private Sub UpdateOrgCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    pRC.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.text)
     Me.OrgCodeTextBox.SetFocus
-    pRC.OrgCode = Me.OrgCodeTextBox.text
+    Args.OrgCode = Me.OrgCodeTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.OrgCode = '" _
-        & pRC.OrgCode & "'" & _
-        " WHERE Allocations.PrcId = " & pRC.ID
+        & Args.OrgCode & "'" & _
+        " WHERE Allocations.PrcId = " & Args.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
@@ -927,13 +930,13 @@ End Sub
 Private Sub UpdateAccountCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    pRC.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.text)
     Me.AccountCodeTextBox.SetFocus
-    pRC.AccountCode = Me.AccountCodeTextBox.text
+    Args.AccountCode = Me.AccountCodeTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.AccountCode = '" _
-        & pRC.AccountCode & "'" & _
-        " WHERE Allocations.PrcId = " & pRC.ID
+        & Args.AccountCode & "'" & _
+        " WHERE Allocations.PrcId = " & Args.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
@@ -951,13 +954,13 @@ End Sub
 Private Sub UpdateBocCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    pRC.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.text)
     Me.BocCodeTextBox.SetFocus
-    pRC.BocCode = Me.BocCodeTextBox.text
+    Args.BocCode = Me.BocCodeTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.BocCode = '" _
-        & pRC.BocCode & "'" & _
-        " WHERE Allocations.PrcId = " & pRC.ID
+        & Args.BocCode & "'" & _
+        " WHERE Allocations.PrcId = " & Args.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
@@ -975,13 +978,13 @@ End Sub
 Private Sub UpdateRcCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    pRC.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.text)
     Me.RcCodeTextBox.SetFocus
-    pRC.RcCode = Me.RcCodeTextBox.text
+    Args.RcCode = Me.RcCodeTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.RcCode = '" _
-        & pRC.RcCode & "'" & _
-        " WHERE Allocations.PrcId = " & pRC.ID
+        & Args.RcCode & "'" & _
+        " WHERE Allocations.PrcId = " & Args.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
@@ -1000,14 +1003,14 @@ End Sub
 Private Sub UpdateAmount()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    pRC.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.text)
     Me.AmountTextBox.SetFocus
     Dim Change As Double
     Change = CDbl(Me.AmountTextBox.text)
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.Amount = " _
         & Change & _
-        " WHERE Allocations.PrcId = " & pRC.ID
+        " WHERE Allocations.PrcId = " & Args.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
@@ -1182,6 +1185,101 @@ ErrorHandler:
 End Sub
 
 
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        SetNpmIcon
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub SetRpioIcon(pRpioName As String)
+    On Error GoTo ErrorHandler:
+    Dim p_RpioCode As String
+    If Not pRpioName & "" = "" Then
+        p_RpioCode = DLookup("RpioCode", "StatusOfFunds", _
+            "[RpioName] = '" & pRpioName & "'")
+        Me.Caption = pRpioName
+        Select Case CStr(p_RpioCode)
+            Case "01"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R1.png"
+            Case "02"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R2.png"
+            Case "03"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R3.png"
+            Case "04"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R4.png"
+            Case "05"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R5.png"
+            Case "06"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R6.png"
+            Case "07"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R7.png"
+            Case "08"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R8.png"
+            Case "09"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R9.png"
+            Case "10"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R10.png"
+            Case "11"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OA.png"
+            Case "13"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OITA.png"
+            Case "16"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OMS.png"
+            Case "17"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OCFO.png"
+            Case "20"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OCSPP.png"
+            Case "26"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\ORD.png"
+            Case "27"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OAR.png"
+            Case "30"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OW.png"
+            Case "35"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OIG.png"
+            Case "39"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OGC.png"
+            Case "75"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OLEM.png"
+            Case "77"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OECA.png"
+            Case Else
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\ui\capital.png"
+        End Select
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Sub
+End Sub
 
 
 

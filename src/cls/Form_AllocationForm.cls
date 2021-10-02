@@ -36,7 +36,7 @@ Private Sub Form_Open(Cancel As Integer)
     pAnd = " AND "
     Me.FiscalYearOptionGroup.Value = 2
     BocNameFilter = "[BudgetLevel] = '7'"
-    FiscalYearFilter = "[BFY] = '2021'"
+    FiscalYearFilter = "[BFY] = '2022'"
     Me.Filter = FiscalYearFilter
     Me.RecordSource = "SELECT * FROM Allocations WHERE " & Me.Filter
 ErrorHandler:
@@ -227,7 +227,7 @@ End Sub
 Private Sub ResetOptionGroupValues()
     On Error GoTo ErrorHandler:
     Me.FiscalYearOptionGroup.Value = 2
-    FiscalYearFilter = "[BFY] = '2021'"
+    FiscalYearFilter = "[BFY] = '2023'"
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -340,13 +340,13 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     Me.Filter = vbNullString
     Select Case Me.FiscalYearOptionGroup.Value
         Case 1
-            Args.BFY = "2020"
-            FiscalYearFilter = "[BFY] IN ('2019', '2020')"
+            Args.BFY = "2021"
+            FiscalYearFilter = "[BFY] IN ('2021', '2022')"
             Me.Filter = GetFiscalYearFilter
             m_SqlQuery = "SELECT * FROM Allocations WHERE " & Me.Filter
         Case 2
-            Args.BFY = "2021"
-            FiscalYearFilter = "[BFY] IN ('2021', '2022')"
+            Args.BFY = "2022"
+            FiscalYearFilter = "[BFY] IN ('2022', '2023')"
             Me.Filter = GetFiscalYearFilter
             m_SqlQuery = "SELECT * FROM Allocations WHERE " & Me.Filter
     End Select

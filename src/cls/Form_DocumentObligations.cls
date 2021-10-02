@@ -13,13 +13,13 @@ Option Explicit
 
 
 Public Args As AccountArgs
-Private m_Dialog As Form_DivisionSelector
+Private m_Dialog As Form_StatusOfFundsDialog
 Private FundNameFilter As String
-Private DivisionName As String
+Private RpioNameFilter As String
 Private DocumentNumberFilter As String
 Private FiscalYearFilter As String
 Private BocNameFilter As String
-Private pFormFilter As String
+Private m_FormFilter As String
 Private pAnd As String
 Private m_Error As String
 Private m_Notification As String
@@ -34,17 +34,17 @@ Private m_Notification As String
 '---------------------------------------------------------------------------------
 Private Sub Form_Open(Cancel As Integer)
     On Error GoTo ErrorHandler:
-    Set m_Dialog = New Form_DivisionSelector
+    Set m_Dialog = New Form_StatusOfFundsDialog
     Set Args = New AccountArgs
-    DoCmd.OpenForm FormName:="DivisionSelector", WindowMode:=acDialog
-    Set m_Dialog = Forms("DivisionSelector")
+    DoCmd.OpenForm FormName:="StatusOfFundsDialog", WindowMode:=acDialog
+    Set m_Dialog = Forms("StatusOfFundsDialog")
     Set Args = m_Dialog.Args
-    DivisionName = "[DivisionName] = '" & Args.DivisionName & "'"
-    Me.RecordSource = "SELECT * FROM Purchases WHERE NOT" _
-        & " IsNull(Purchases.DocumentControlNumbers)" _
-        & " AND Purchases.BocCode NOT IN ('10', '17')" _
-        & " AND Purchases.RcCode = '" & Args.RcCode & "';"
-    SetDivisionIcon
+    RpioNameFilter = "[RpioName] = '" & Args.RpioName & "'"
+    Me.RecordSource = "SELECT * FROM Obligations WHERE NOT" _
+        & " IsNull(Obligations.DocumentControlNumber)" _
+        & " AND Obligations.BocCode NOT IN ('10', '17')" _
+        & " AND Obligations.RpioName = '" & Args.RpioName & "';"
+    SetRpioIcon (Args.RpioName)
     DoCmd.Close ObjectType:=acForm, ObjectName:=m_Dialog.Name, Save:=acSaveNo
 ErrorHandler:
     ProcessError
@@ -73,18 +73,18 @@ Private Sub Form_Load()
     SetComboBoxColors
     SetButtonVisibility
     pAnd = " AND "
-    Me.Filter = DivisionName & pAnd & FiscalYearFilter
-    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Purchases.FundName FROM Purchases" _
-        & " WHERE NOT IsNull(Purchases.DocumentControlNumbers)" _
-        & pAnd & "Purchases.BocCode NOT IN ('10', '17')" _
+    Me.Filter = RpioNameFilter & pAnd & FiscalYearFilter
+    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Obligations.FundName FROM Obligations" _
+        & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
+        & pAnd & "Obligations.BocCode NOT IN ('10', '17')" _
         & pAnd & Me.Filter & ";"
-    Me.DocumentNumberComboBox.RowSource = "SELECT DISTINCT Purchases.DocumentControlNumbers FROM Purchases" _
-        & " WHERE NOT IsNull(Purchases.DocumentControlNumbers)" _
-        & pAnd & "Purchases.BocCode NOT IN ('10', '17')" _
+    Me.DocumentNumberComboBox.RowSource = "SELECT DISTINCT Obligations.DocumentControlNumber FROM Obligations" _
+        & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
+        & pAnd & "Obligations.BocCode NOT IN ('10', '17')" _
         & pAnd & Me.Filter & ";"
-    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Purchases.BocName FROM Purchases" _
-        & " WHERE NOT IsNull(Purchases.DocumentControlNumbers)" _
-        & pAnd & "Purchases.BocCode NOT IN ('10', '17')" _
+    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Obligations.BocName FROM Obligations" _
+        & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
+        & pAnd & "Obligations.BocCode NOT IN ('10', '17')" _
         & pAnd & Me.Filter & ";"
 ErrorHandler:
     ProcessError
@@ -120,57 +120,6 @@ ErrorHandler:
     Exit Sub
 End Sub
 
-
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Event Sub-Procedure
-'   Name:        SetDivisionIcon
-'   Parameters:  Void
-'   Retval:      Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub SetDivisionIcon()
-    On Error GoTo ErrorHandler:
-    If Not Args.RcCode = vbNullString Then
-        Select Case Args.RcCode
-            Case "06A"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\ORA.png"
-            Case "06B"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\LCARD.png"
-            Case "06C"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\MSD.png"
-            Case "06D"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\ORC.png"
-            Case "06F"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\EJ.png"
-            Case "06G"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\WCF.png"
-            Case "06H"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\LSASD.png"
-            Case "06J"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\ARD.png"
-            Case "06K"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\WD.png"
-            Case "06L"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\SEMD.png"
-            Case "06M"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\ECAD.png"
-            Case "06N"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\WSA.png"
-            Case "06R"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\MSR.png"
-            Case "06X"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\XA.png"
-        End Select
-    Else
-        Me.DivisionIcon.Picture = _
-            CurrentProject.path & "\etc\png\AppIcons\interface\ui\Reports.png"
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Sub
-End Sub
 
 
 
@@ -286,19 +235,19 @@ Private Sub RefreshButton_Click()
     ClearComboBoxValues
     ClearFilterValues
     ClearOptionGroupValues
-    Me.Filter = DivisionName & pAnd & GetFiscalYearFilter
-    Me.RecordSource = "SELECT * FROM Purchases" _
-        & " WHERE Purchases.BocCode IN ('36', '37', '38', '41')" _
+    Me.Filter = RpioNameFilter & pAnd & GetFiscalYearFilter
+    Me.RecordSource = "SELECT * FROM Obligations" _
+        & " WHERE Obligations.BocCode IN ('36', '37', '38', '41')" _
         & pAnd & Me.Filter
-    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Purchases.FundName" _
-        & " FROM Purchases" _
-        & " WHERE Purchases.BocCode IN ('36', '37', '38', '41')" & pAnd & Me.Filter
-    Me.DocumentNumberComboBox.RowSource = "SELECT DISTINCT Purchases.DocumentControlNumbers" _
-        & " FROM Purchases" _
-        & " WHERE Purchases.BocCode IN ('36', '37', '38', '41')" & pAnd & Me.Filter
-    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Purchases.BocName" _
-        & " FROM Purchases" _
-        & " WHERE Purchases.BocCode IN ('36', '37', '38', '41')" & pAnd & Me.Filter
+    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Obligations.FundName" _
+        & " FROM Obligations" _
+        & " WHERE Obligations.BocCode IN ('36', '37', '38', '41')" & pAnd & Me.Filter
+    Me.DocumentNumberComboBox.RowSource = "SELECT DISTINCT Obligations.DocumentControlNumber" _
+        & " FROM Obligations" _
+        & " WHERE Obligations.BocCode IN ('36', '37', '38', '41')" & pAnd & Me.Filter
+    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Obligations.BocName" _
+        & " FROM Obligations" _
+        & " WHERE Obligations.BocCode IN ('36', '37', '38', '41')" & pAnd & Me.Filter
     Me.Requery
 ErrorHandler:
     ProcessError
@@ -320,27 +269,28 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     FiscalYearFilter = vbNullString
     Select Case Me.FiscalYearOptionGroup.Value
         Case 1
-            Args.BFY = "2020"
-            FiscalYearFilter = "[BFY] = '2020'"
-        Case 2
             Args.BFY = "2021"
             FiscalYearFilter = "[BFY] = '2021'"
+        Case 2
+            Args.BFY = "2022"
+            FiscalYearFilter = "[BFY] = '2022'"
     End Select
-    Me.Filter = DivisionName & pAnd & GetFiscalYearFilter
-    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Purchases.FundName FROM Purchases" _
-        & " WHERE NOT IsNull(Purchases.DocumentControlNumbers)" _
-        & pAnd & "Purchases.BocCode NOT IN ('10', '17')" _
+    Me.Filter = RpioNameFilter & pAnd & GetFiscalYearFilter
+    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Obligations.FundName FROM Obligations" _
+        & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
+        & pAnd & "Obligations.BocCode NOT IN ('10', '17')" _
         & pAnd & Me.Filter & ";"
-    Me.DocumentNumberComboBox.RowSource = "SELECT DISTINCT Purchases.DocumentControlNumbers FROM Purchases" _
-        & " WHERE NOT IsNull(Purchases.DocumentControlNumbers)" _
-        & pAnd & "Purchases.BocCode NOT IN ('10', '17')" _
+    Me.DocumentNumberComboBox.RowSource = "SELECT DISTINCT Obligations.DocumentControlNumber" _
+        & " FROM Obligations" _
+        & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
+        & pAnd & "Obligations.BocCode NOT IN ('10', '17')" _
         & pAnd & Me.Filter & ";"
-    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Purchases.BocName FROM Purchases" _
-        & " WHERE NOT IsNull(Purchases.DocumentControlNumbers)" _
-        & pAnd & "Purchases.BocCode NOT IN ('10', '17')" _
+    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Obligations.BocName FROM Obligations" _
+        & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
+        & pAnd & "Obligations.BocCode NOT IN ('10', '17')" _
         & pAnd & Me.Filter & ";"
-    Me.RecordSource = "SELECT * FROM Purchases WHERE" _
-        & " NOT IsNull(DocumentControlNumbers)" & pAnd & Me.Filter
+    Me.RecordSource = "SELECT * FROM Obligations WHERE" _
+        & " NOT IsNull(DocumentControlNumber)" & pAnd & Me.Filter
     Me.Requery
 ErrorHandler:
     ProcessError
@@ -357,28 +307,28 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetFiscalYearFilter() As String
     On Error GoTo ErrorHandler:
-    If Not FiscalYearFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        Not DocumentNumberFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        Not DocumentNumberFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & DocumentNumberFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        DocumentNumberFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        DocumentNumberFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        Not DocumentNumberFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        Not DocumentNumberFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & DocumentNumberFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        DocumentNumberFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        DocumentNumberFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter
     End If
 ErrorHandler:
@@ -401,19 +351,19 @@ Private Sub FundNameComboBox_Change()
     DocumentNumberFilter = vbNullString
     Args.FundCode = Me.FundNameComboBox.Value
     FundNameFilter = "[FundName] = '" & Me.FundNameComboBox.Value & "'"
-    Me.Filter = DivisionName & pAnd & GetFundNameFilter
-    Me.DocumentNumberComboBox.RowSource = "SELECT DISTINCT Purchases.DocumentControlNumbers" _
-        & " FROM Purchases WHERE" _
-        & " NOT IsNull(DocumentControlNumbers)" _
+    Me.Filter = RpioNameFilter & pAnd & GetFundNameFilter
+    Me.DocumentNumberComboBox.RowSource = "SELECT DISTINCT Obligations.DocumentControlNumber" _
+        & " FROM Obligations WHERE" _
+        & " NOT IsNull(DocumentControlNumber)" _
         & pAnd & "[BocCode] NOT IN ('10', '17')" _
         & pAnd & Me.Filter
-    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Purchases.BocName" _
-        & " FROM Purchases WHERE" _
-        & " NOT IsNull(DocumentControlNumbers)" _
+    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Obligations.BocName" _
+        & " FROM Obligations WHERE" _
+        & " NOT IsNull(DocumentControlNumber)" _
         & pAnd & "[BocCode] NOT IN ('10', '17')" _
         & pAnd & Me.Filter
-    Me.RecordSource = "SELECT * FROM Purchases" _
-        & " WHERE NOT IsNull(DocumentControlNumbers)" _
+    Me.RecordSource = "SELECT * FROM Obligations" _
+        & " WHERE NOT IsNull(DocumentControlNumber)" _
         & pAnd & "[BocCode] NOT IN ('10', '17')" _
         & pAnd & Me.Filter
 ErrorHandler:
@@ -431,27 +381,27 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetFundNameFilter() As String
     On Error GoTo ErrorHandler:
-    If Not FundNameFilter = vbNullString And _
-        Not DocumentNumberFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not DocumentNumberFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" Then
             GetFundNameFilter = DocumentNumberFilter & pAnd _
                 & FundNameFilter & pAnd _
                 & FiscalYearFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not DocumentNumberFilter = vbNullString And _
-        FiscalYearFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not DocumentNumberFilter & "" = "" And _
+        FiscalYearFilter & "" = "" Then
             GetFundNameFilter = DocumentNumberFilter & pAnd _
                 & FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        DocumentNumberFilter = vbNullString And _
-        FiscalYearFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        DocumentNumberFilter & "" = "" And _
+        FiscalYearFilter & "" = "" Then
             GetFundNameFilter = FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        DocumentNumberFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        DocumentNumberFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" Then
             GetFundNameFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
@@ -471,15 +421,15 @@ Private Sub DocumentNumberComboBox_Change()
     Me.Filter = vbNullString
     DocumentNumberFilter = vbNullString
     BocNameFilter = vbNullString
-    DocumentNumberFilter = "[DocumentControlNumbers] = '" & Me.DocumentNumberComboBox.Value & "'"
-    Me.Filter = DivisionName & pAnd & GetDocumentNumberFilter
-    Me.RecordSource = "SELECT * FROM Purchases" _
-        & " WHERE NOT IsNull(DocumentControlNumbers)" _
+    DocumentNumberFilter = "[DocumentControlNumber] = '" & Me.DocumentNumberComboBox.Value & "'"
+    Me.Filter = RpioNameFilter & pAnd & GetDocumentNumberFilter
+    Me.RecordSource = "SELECT * FROM Obligations" _
+        & " WHERE NOT IsNull(DocumentControlNumber)" _
         & pAnd & "[BocCode] NOT IN ('10', '17')" _
         & pAnd & Me.Filter
-    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Purchases.BocName" _
-        & " FROM Purchases WHERE" _
-        & " NOT IsNull(DocumentControlNumbers)" _
+    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Obligations.BocName" _
+        & " FROM Obligations WHERE" _
+        & " NOT IsNull(DocumentControlNumber)" _
         & pAnd & "[BocCode] NOT IN ('10', '17')" _
         & pAnd & Me.Filter
 ErrorHandler:
@@ -498,28 +448,28 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetDocumentNumberFilter() As String
     On Error GoTo ErrorHandler:
-    If Not DocumentNumberFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
+    If Not DocumentNumberFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" Then
             GetDocumentNumberFilter = DocumentNumberFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If Not DocumentNumberFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString Then
+    If Not DocumentNumberFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" Then
             GetDocumentNumberFilter = DocumentNumberFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not DocumentNumberFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
+    If Not DocumentNumberFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" Then
             GetDocumentNumberFilter = DocumentNumberFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If Not DocumentNumberFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-         FiscalYearFilter = vbNullString Then
+    If Not DocumentNumberFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+         FiscalYearFilter & "" = "" Then
             GetDocumentNumberFilter = DocumentNumberFilter
     End If
 ErrorHandler:
@@ -541,9 +491,9 @@ Private Sub BocNameComboBox_Change()
     Me.Filter = vbNullString
     BocNameFilter = vbNullString
     BocNameFilter = "[BocName] = '" & Me.BocNameComboBox.Value & "'"
-    Me.Filter = DivisionName & pAnd & GetBocNameFilter
-    Me.RecordSource = "SELECT * FROM Purchases" _
-        & " WHERE NOT IsNull(DocumentControlNumbers)" _
+    Me.Filter = RpioNameFilter & pAnd & GetBocNameFilter
+    Me.RecordSource = "SELECT * FROM Obligations" _
+        & " WHERE NOT IsNull(DocumentControlNumber)" _
         & pAnd & "[BocCode] NOT IN ('10', '17')" _
         & pAnd & Me.Filter
 ErrorHandler:
@@ -561,64 +511,64 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetBocNameFilter() As String
     On Error GoTo ErrorHandler:
-    If Not BocNameFilter = vbNullString And _
-        Not DocumentNumberFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not DocumentNumberFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & DocumentNumberFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        Not DocumentNumberFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not DocumentNumberFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & DocumentNumberFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        DocumentNumberFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        DocumentNumberFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If BocNameFilter = vbNullString And _
-        Not DocumentNumberFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
+    If BocNameFilter & "" = "" And _
+        Not DocumentNumberFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" Then
             GetBocNameFilter = DocumentNumberFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        DocumentNumberFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        DocumentNumberFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        DocumentNumberFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        DocumentNumberFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        Not DocumentNumberFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not DocumentNumberFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & DocumentNumberFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        DocumentNumberFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-         FiscalYearFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        DocumentNumberFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+         FiscalYearFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter
     End If
 ErrorHandler:
@@ -635,7 +585,7 @@ End Function
 '---------------------------------------------------------------------------------
 Private Sub Form_Close()
     On Error GoTo ErrorHandler:
-    DivisionName = vbNullString
+    RpioNameFilter = vbNullString
     Me.Filter = vbNullString
 ErrorHandler:
     ProcessError
@@ -871,6 +821,101 @@ End Sub
 
 
 
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        SetNpmIcon
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub SetRpioIcon(pRpioName As String)
+    On Error GoTo ErrorHandler:
+    Dim p_RpioCode As String
+    If Not pRpioName & "" = "" Then
+        p_RpioCode = DLookup("RpioCode", "StatusOfFunds", _
+            "[RpioName] = '" & pRpioName & "'")
+        Me.Caption = pRpioName
+        Select Case CStr(p_RpioCode)
+            Case "01"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R1.png"
+            Case "02"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R2.png"
+            Case "03"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R3.png"
+            Case "04"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R4.png"
+            Case "05"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R5.png"
+            Case "06"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R6.png"
+            Case "07"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R7.png"
+            Case "08"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R8.png"
+            Case "09"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R9.png"
+            Case "10"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R10.png"
+            Case "11"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OA.png"
+            Case "13"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OITA.png"
+            Case "16"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OMS.png"
+            Case "17"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OCFO.png"
+            Case "20"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OCSPP.png"
+            Case "26"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\ORD.png"
+            Case "27"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OAR.png"
+            Case "30"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OW.png"
+            Case "35"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OIG.png"
+            Case "39"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OGC.png"
+            Case "75"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OLEM.png"
+            Case "77"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OECA.png"
+            Case Else
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\ui\capital.png"
+        End Select
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Sub
+End Sub
 
 
 

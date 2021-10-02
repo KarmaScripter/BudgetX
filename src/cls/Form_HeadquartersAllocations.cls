@@ -87,7 +87,7 @@ Private Sub Form_Load()
     ResetOptionGroupValues
     ClearComboBoxValues
     HideButtons
-    SetNpmIcon
+    SetRpioIcon (Args.RcCode)
     Me.Caption = "HQ Allocations"
 ErrorHandler:
     ProcessError
@@ -281,7 +281,7 @@ End Sub
 Private Sub ResetOptionGroupValues()
     On Error GoTo ErrorHandler:
     Me.FiscalYearOptionGroup.Value = 2
-    FiscalYearFilter = "[BFY] = '2021'"
+    FiscalYearFilter = "[BFY] = '2022'"
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -300,21 +300,24 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     FiscalYearFilter = vbNullString
     Select Case Me.FiscalYearOptionGroup.Value
         Case 1
-            Args.BFY = "2020"
-            FiscalYearFilter = "[BFY] = '2020'"
-        Case 2
             Args.BFY = "2021"
             FiscalYearFilter = "[BFY] = '2021'"
+        Case 2
+            Args.BFY = "2022"
+            FiscalYearFilter = "[BFY] = '2022'"
     End Select
     If Not Args.RpioName & "" = "" Then
         Me.Filter = RpioNameFilter & pAnd & GetFiscalYearFilter
         Me.RecordSource = "SELECT * FROM Allocations" _
-            & " WHERE " & Me.Filter
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Me.Requery
     Else
         Me.Filter = GetFiscalYearFilter
         Me.RecordSource = "SELECT * FROM Allocations" _
             & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
             & pAnd & Me.Filter
         Me.Requery
     End If
@@ -407,31 +410,43 @@ Private Sub RpioNameComboBox_Change()
     Args.RpioName = Me.RpioNameComboBox.Value
     Args.RpioCode = DLookup("RpioCode", "StatusOfFunds", "StatusOfFunds.Name = '" _
         & Me.RpioNameComboBox.Value & "'")
-    SetNpmIcon
+    SetRpioIcon (Args.RpioCode)
     RpioNameFilter = "[RpioName] = '" & Me.RpioNameComboBox.Value & "'"
     If Not Args.RpioName & "" = "" Then
         Me.Filter = FiscalYearFilter & pAnd & GetRpioNameFilter
         Me.RecordSource = "SELECT *" _
             & " FROM Allocations" _
-            & " WHERE " & Me.Filter
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Me.FundNameComboBox.RowSource = "SELECT DISTINCT Allocations.FundName" _
             & " FROM Allocations" _
-            & " WHERE " & Me.Filter
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Me.BocNameComboBox.RowSource = "SELECT DISTINCT Allocations.BocName" _
             & " FROM Allocations" _
-            & " WHERE " & Me.Filter
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Me.Requery
     Else
         Me.Filter = GetRpioNameFilter
         Me.RecordSource = "SELECT *" _
             & " FROM Allocations" _
-            & " WHERE " & Me.Filter
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Me.FundNameComboBox.RowSource = "SELECT DISTINCT Allocations.FundName" _
             & " FROM Allocations" _
-            & " WHERE " & Me.Filter
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Me.BocNameComboBox.RowSource = "SELECT DISTINCT Allocations.BocName" _
             & " FROM Allocations" _
-            & " WHERE " & Me.Filter
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Me.Requery
     End If
 ErrorHandler:
@@ -527,18 +542,27 @@ Private Sub FundNameComboBox_Change()
     FundNameFilter = "[FundName] = '" & Me.FundNameComboBox.Value & "'"
     If Not Args.RpioName & "" = "" Then
         Me.Filter = RpioNameFilter & pAnd & GetFundNameFilter
-        Me.RecordSource = "SELECT * FROM Allocations WHERE " & Me.Filter
+        Me.RecordSource = "SELECT * FROM Allocations" _
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Me.BocNameComboBox.RowSource = "SELECT DISTINCT BocName" _
             & " FROM Allocations" _
-            & " WHERE " & Me.Filter
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Me.Requery
     Else
         Me.Filter = GetFundNameFilter
         Me.RecordSource = "SELECT * FROM Allocations" _
-            & " WHERE Allocations.BudgetLevel = '7' AND " & Me.Filter
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Me.BocNameComboBox.RowSource = "SELECT DISTINCT BocName" _
             & " FROM Allocations" _
-            & " WHERE Allocations.BudgetLevel = '7' AND " & Me.Filter
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Me.Requery
     End If
 ErrorHandler:
@@ -638,13 +662,17 @@ Private Sub BocNameComboBox_Change()
         Me.Filter = RpioNameFilter & pAnd & GetBocNameFilter
         Me.RecordSource = "SELECT *" _
             & " FROM Allocations" _
-            & " WHERE " & Me.Filter
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Me.Requery
     Else
         Me.Filter = GetBocNameFilter
         Me.RecordSource = "SELECT *" _
             & " FROM Allocations" _
-            & " WHERE Allocations.BudgetLevel = '7' AND " & Me.Filter
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Me.Requery
     End If
 ErrorHandler:
@@ -752,13 +780,17 @@ Private Sub RefreshButton_Click()
         Me.Filter = RpioNameFilter & pAnd & FiscalYearFilter
         Me.RecordSource = "SELECT *" _
             & " FROM Allocations" _
-            & " WHERE " & Me.Filter
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Set m_DataSet = Me.Recordset
         Me.Requery
     Else
         Me.RecordSource = "SELECT *" _
             & " FROM Allocations" _
-            & " WHERE Allocations.BudgetLevel = '7';"
+            & " WHERE Allocations.BudgetLevel = '7'" _
+            & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
+            & pAnd & Me.Filter
         Set m_DataSet = Me.Recordset
         Me.Requery
     End If
@@ -851,54 +883,99 @@ End Sub
 
 
 
+
+
 '----------------------------------------------------------------------------------
 '   Type:        Event Sub-Procedure
-'   Name:        SetNpmIcon
+'   Name:        SetRpioIcon
 '   Parameters:  Void
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub SetNpmIcon()
+Private Sub SetRpioIcon(pRpioName As String)
     On Error GoTo ErrorHandler:
-    If Not Args.RpioCode & "" = "" Then
-        Me.NpmTitle.Caption = Args.RpioName
-        Select Case CStr(Args.RpioCode)
+    Dim p_RpioCode As String
+    If Not pRpioName & "" = "" Then
+        p_RpioCode = DLookup("RpioCode", "StatusOfFunds", _
+            "[RpioName] = '" & pRpioName & "'")
+        Me.Caption = pRpioName
+        Select Case CStr(p_RpioCode)
+            Case "01"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R1.png"
+            Case "02"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R2.png"
+            Case "03"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R3.png"
+            Case "04"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R4.png"
+            Case "05"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R5.png"
+            Case "06"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R6.png"
+            Case "07"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R7.png"
+            Case "08"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R8.png"
+            Case "09"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R9.png"
+            Case "10"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R10.png"
             Case "11"
-                Me.NpmIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\NPM\OA.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OA.png"
             Case "13"
-                Me.NpmIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\NPM\OITA.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OITA.png"
             Case "16"
-                Me.NpmIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\NPM\OMS.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OMS.png"
             Case "17"
-                Me.NpmIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\NPM\OCFO.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OCFO.png"
             Case "20"
-                Me.NpmIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\NPM\OCSPP.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OCSPP.png"
             Case "26"
-                Me.NpmIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\NPM\ORD.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\ORD.png"
             Case "27"
-                Me.NpmIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\NPM\OAR.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OAR.png"
             Case "30"
-                Me.NpmIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\NPM\OW.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OW.png"
             Case "35"
-                Me.NpmIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\NPM\OIG.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OIG.png"
             Case "39"
-                Me.NpmIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\NPM\OGC.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OGC.png"
             Case "75"
-                Me.NpmIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\NPM\OLEM.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OLEM.png"
             Case "77"
-                Me.NpmIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\NPM\OECA.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OECA.png"
             Case Else
-                Me.NpmIcon.Picture = _
-                    CurrentProject.Path & "\etc\png\AppIcons\interface\ui\capital.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\ui\capital.png"
         End Select
-    Else
-        Me.NpmIcon.Picture = _
-                    CurrentProject.Path & "\etc\png\AppIcons\interface\ui\capital.png"
     End If
 ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
+
 
 
 
