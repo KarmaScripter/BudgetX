@@ -960,58 +960,80 @@ Private Sub SetRpioIcon(pRpioName As String)
         Me.Caption = pRpioName
         Select Case CStr(p_RpioCode)
             Case "01"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\R1.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R1.png"
             Case "02"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\R2.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R2.png"
             Case "03"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\R3.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R3.png"
             Case "04"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\R4.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R4.png"
             Case "05"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\R5.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R5.png"
             Case "06"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\R6.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R6.png"
             Case "07"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\R7.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R7.png"
             Case "08"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\R8.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R8.png"
             Case "09"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\R9.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R9.png"
             Case "10"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\R10.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R10.png"
             Case "11"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\OA.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OA.png"
             Case "13"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\OITA.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OITA.png"
             Case "16"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\OMS.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OMS.png"
             Case "17"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\OCFO.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OCFO.png"
             Case "20"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\OCSPP.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OCSPP.png"
             Case "26"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\ORD.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\ORD.png"
             Case "27"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\OAR.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OAR.png"
             Case "30"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\OW.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OW.png"
             Case "35"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\OIG.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OIG.png"
             Case "39"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\OGC.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OGC.png"
             Case "75"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\OLEM.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OLEM.png"
             Case "77"
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\RPIO\OECA.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OECA.png"
             Case Else
-                Me.RpioIcon.Picture = CurrentProject.Path & "\etc\png\AppIcons\interface\ui\capital.png"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\ui\capital.png"
         End Select
     End If
 ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
-
 
 
 

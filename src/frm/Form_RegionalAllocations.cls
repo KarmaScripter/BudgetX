@@ -277,59 +277,59 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetFiscalYearFilter()
     On Error GoTo ErrorHandler:
-    If Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & RpioNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & RpioNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
@@ -374,31 +374,31 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetRpioNameFilter()
     On Error GoTo ErrorHandler:
-    If Not RpioNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not RpioNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetRpioNameFilter = RpioNameFilter & pAnd & FiscalYearFilter
     End If
-    If Not RpioNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not RpioNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetRpioNameFilter = RpioNameFilter & pAnd & FiscalYearFilter _
                 & pAnd & BocNameFilter
     End If
-    If Not RpioNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not RpioNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetRpioNameFilter = RpioNameFilter & pAnd & FiscalYearFilter _
                 & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not RpioNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not RpioNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetRpioNameFilter = RpioNameFilter _
                 & pAnd & FiscalYearFilter _
                 & pAnd & FundNameFilter
@@ -441,34 +441,34 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetProgramProjectNameFilter()
     On Error GoTo ErrorHandler:
-    If Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" Then
             GetProgramProjectNameFilter = FundNameFilter _
             & pAnd & FiscalYearFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" Then
             GetProgramProjectNameFilter = FiscalYearFilter _
                 & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" Then
             GetProgramProjectNameFilter = FiscalYearFilter _
                 & pAnd & BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" Then
             GetProgramProjectNameFilter = FiscalYearFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
@@ -512,70 +512,70 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetBocNameFilter() As String
     On Error GoTo ErrorHandler:
-    If Not BocNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = FiscalYearFilter _
                 & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FiscalYearFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & RpioNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FiscalYearFilter
@@ -1129,6 +1129,102 @@ ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        SetRpioIcon
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub SetRpioIcon(pRpioName As String)
+    On Error GoTo ErrorHandler:
+    Dim p_RpioCode As String
+    If Not pRpioName & "" = "" Then
+        p_RpioCode = DLookup("RpioCode", "StatusOfFunds", _
+            "[RpioName] = '" & pRpioName & "'")
+        Me.Caption = pRpioName
+        Select Case CStr(p_RpioCode)
+            Case "01"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R1.png"
+            Case "02"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R2.png"
+            Case "03"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R3.png"
+            Case "04"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R4.png"
+            Case "05"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R5.png"
+            Case "06"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R6.png"
+            Case "07"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R7.png"
+            Case "08"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R8.png"
+            Case "09"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R9.png"
+            Case "10"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R10.png"
+            Case "11"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OA.png"
+            Case "13"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OITA.png"
+            Case "16"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OMS.png"
+            Case "17"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OCFO.png"
+            Case "20"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OCSPP.png"
+            Case "26"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\ORD.png"
+            Case "27"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OAR.png"
+            Case "30"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OW.png"
+            Case "35"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OIG.png"
+            Case "39"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OGC.png"
+            Case "75"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OLEM.png"
+            Case "77"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OECA.png"
+            Case Else
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\ui\capital.png"
+        End Select
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Sub
+End Sub
+
+
 
 
 
