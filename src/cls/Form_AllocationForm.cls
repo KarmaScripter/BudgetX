@@ -227,7 +227,7 @@ End Sub
 Private Sub ResetOptionGroupValues()
     On Error GoTo ErrorHandler:
     Me.FiscalYearOptionGroup.Value = 2
-    FiscalYearFilter = "[BFY] = '2023'"
+    FiscalYearFilter = "[BFY] = '2022'"
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -341,12 +341,12 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     Select Case Me.FiscalYearOptionGroup.Value
         Case 1
             Args.BFY = "2021"
-            FiscalYearFilter = "[BFY] IN ('2021', '2022')"
+            FiscalYearFilter = "[BFY] IN ('2019', '2021')"
             Me.Filter = GetFiscalYearFilter
             m_SqlQuery = "SELECT * FROM Allocations WHERE " & Me.Filter
         Case 2
             Args.BFY = "2022"
-            FiscalYearFilter = "[BFY] IN ('2022', '2023')"
+            FiscalYearFilter = "[BFY] IN ('2022', '2022')"
             Me.Filter = GetFiscalYearFilter
             m_SqlQuery = "SELECT * FROM Allocations WHERE " & Me.Filter
     End Select
@@ -887,7 +887,7 @@ Private Sub RefreshButton_Click()
     ClearComboBoxes
     ResetOptionGroupValues
     ClearFilters
-    FiscalYearFilter = "[BFY] = '2021'"
+    FiscalYearFilter = "[BFY] = '2022'"
     BocNameFilter = "[BudgetLevel] = '7'"
     Me.Filter = BocNameFilter & pAnd & FiscalYearFilter
     m_SqlQuery = "SELECT * FROM Allocations" _

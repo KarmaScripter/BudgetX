@@ -34,17 +34,19 @@ Private m_Notification As String
 '---------------------------------------------------------------------------------
 Private Sub Form_Open(Cancel As Integer)
     On Error GoTo ErrorHandler:
-    Set m_Dialog = New Form_StatusOfFundsDialog
+    pAnd = " AND "
     Set Args = New AccountArgs
+    Set m_Dialog = New Form_StatusOfFundsDialog
     DoCmd.OpenForm FormName:="StatusOfFundsDialog", WindowMode:=acDialog
     Set m_Dialog = Forms("StatusOfFundsDialog")
     Set Args = m_Dialog.Args
-    RpioNameFilter = "[RpioName] = '" & Args.RpioName & "'"
-    Me.RecordSource = "SELECT * FROM Obligations WHERE NOT" _
-        & " IsNull(Obligations.DocumentControlNumber)" _
-        & " AND Obligations.BocCode NOT IN ('10', '17')" _
-        & " AND Obligations.RpioName = '" & Args.RpioName & "';"
-    SetRpioIcon (Args.RpioName)
+    Me.RecordSource = "SELECT * FROM Obligations" _
+        & " WHERE NOT IsNull(Obligations.DocumentNumber)" _
+        & " AND Obligations.BFY = '" & Args.BFY & "'" _
+        & " AND Obligations.RpioName = '" & Args.RpioName & "'" _
+        & " AND Obligations.FundName = '" & Args.FundName & "';"
+    Me.Requery
+    SetRpioIcon (Args.RpioCode)
     DoCmd.Close ObjectType:=acForm, ObjectName:=m_Dialog.Name, Save:=acSaveNo
 ErrorHandler:
     ProcessError
@@ -61,6 +63,7 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub Form_Load()
     On Error GoTo ErrorHandler:
+    pAnd = " AND "
     Me.Section(acHeader).AutoHeight = False
     Me.Section(acHeader).Height = 2
     Me.Section(acDetail).AutoHeight = False
@@ -68,28 +71,45 @@ Private Sub Form_Load()
     Me.Section(acFooter).AutoHeight = False
     Me.Section(acFooter).Height = 0.5
     Me.FiscalYearOptionGroup.Value = 2
-    FiscalYearFilter = "[BFY] = '2021'"
-    ClearComboBoxValues
     SetComboBoxColors
     SetButtonVisibility
-    pAnd = " AND "
-    Me.Filter = RpioNameFilter & pAnd & FiscalYearFilter
-    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Obligations.FundName FROM Obligations" _
-        & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
-        & pAnd & "Obligations.BocCode NOT IN ('10', '17')" _
-        & pAnd & Me.Filter & ";"
-    Me.DocumentNumberComboBox.RowSource = "SELECT DISTINCT Obligations.DocumentControlNumber FROM Obligations" _
-        & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
-        & pAnd & "Obligations.BocCode NOT IN ('10', '17')" _
-        & pAnd & Me.Filter & ";"
-    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Obligations.BocName FROM Obligations" _
-        & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
-        & pAnd & "Obligations.BocCode NOT IN ('10', '17')" _
-        & pAnd & Me.Filter & ";"
+    ClearComboBoxValues
+    If Args.BFY = "2021" Then
+        Me.FiscalYearOptionGroup.Value = 1
+    Else
+        Me.FiscalYearOptionGroup.Value = 2
+    End If
+    FiscalYearFilter = "[BFY] = '" & Args.BFY & "'"
+    RpioNameFilter = "[RpioName] = '" & Args.RpioName & "'"
+    FundNameFilter = "[FundName] = '" & Args.FundName & "'"
+    Me.Filter = FiscalYearFilter _
+        & pAnd & RpioNameFilter _
+        & pAnd & FundNameFilter
+    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Obligations.FundName" _
+        & " FROM Obligations" _
+        & " WHERE NOT IsNull(Obligations.DocumentNumber)" _
+        & pAnd & RpioNameFilter _
+        & pAnd & FiscalYearFilter
+    Me.DocumentNumberComboBox.RowSource = "SELECT DISTINCT Obligations.DocumentControlNumber" _
+        & " FROM Obligations" _
+        & " WHERE NOT IsNull(Obligations.DocumentNumber)" _
+        & pAnd & Me.Filter
+    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Obligations.BocName" _
+        & " FROM Obligations" _
+        & " WHERE NOT IsNull(Obligations.DocumentNumber)" _
+        & pAnd & Me.Filter
+    Me.Requery
+    If Not Args.FundName & "" = "" Then
+        Me.FundNameComboBox.Value = CStr(Args.FundName)
+    End If
+    Me.Caption = Args.RpioName
 ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
+
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -160,12 +180,15 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub SetComboBoxColors()
     On Error GoTo ErrorHandler:
-    Me.DocumentNumberComboBox.ForeColor = RGB(255, 255, 255)
+    Me.DocumentNumberComboBox.ForeColor = RGB(193, 193, 193)
     Me.DocumentNumberComboBox.BackColor = RGB(33, 33, 33)
     Me.DocumentNumberComboBox.BorderColor = RGB(68, 114, 196)
-    Me.FundNameComboBox.ForeColor = RGB(255, 255, 255)
+    Me.FundNameComboBox.ForeColor = RGB(193, 193, 193)
     Me.FundNameComboBox.BackColor = RGB(33, 33, 33)
     Me.FundNameComboBox.BorderColor = RGB(68, 114, 196)
+    Me.BocNameComboBox.ForeColor = RGB(193, 193, 193)
+    Me.BocNameComboBox.BackColor = RGB(33, 33, 33)
+    Me.BocNameComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -195,10 +218,9 @@ End Sub
 '   Parameters:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ClearOptionGroupValues()
+Private Sub ResetOptionGroupValues()
     On Error GoTo ErrorHandler:
     FiscalYearOptionGroup.Value = 2
-    FiscalYearFilter = "[BFY] = '2021'"
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -234,20 +256,21 @@ Private Sub RefreshButton_Click()
     On Error GoTo ErrorHandler:
     ClearComboBoxValues
     ClearFilterValues
-    ClearOptionGroupValues
-    Me.Filter = RpioNameFilter & pAnd & GetFiscalYearFilter
+    ResetOptionGroupValues
+    FiscalYearFilter = "[BFY] = '2022'"
+    Me.Filter = FiscalYearFilter
+    Me.Caption = "Budget Execution"
     Me.RecordSource = "SELECT * FROM Obligations" _
-        & " WHERE Obligations.BocCode IN ('36', '37', '38', '41')" _
-        & pAnd & Me.Filter
+        & " WHERE " & Me.Filter
     Me.FundNameComboBox.RowSource = "SELECT DISTINCT Obligations.FundName" _
         & " FROM Obligations" _
-        & " WHERE Obligations.BocCode IN ('36', '37', '38', '41')" & pAnd & Me.Filter
+        & " WHERE " & Me.Filter
     Me.DocumentNumberComboBox.RowSource = "SELECT DISTINCT Obligations.DocumentControlNumber" _
         & " FROM Obligations" _
-        & " WHERE Obligations.BocCode IN ('36', '37', '38', '41')" & pAnd & Me.Filter
+        & " WHERE " & Me.Filter
     Me.BocNameComboBox.RowSource = "SELECT DISTINCT Obligations.BocName" _
         & " FROM Obligations" _
-        & " WHERE Obligations.BocCode IN ('36', '37', '38', '41')" & pAnd & Me.Filter
+        & " WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
     ProcessError
@@ -275,22 +298,15 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
             Args.BFY = "2022"
             FiscalYearFilter = "[BFY] = '2022'"
     End Select
-    Me.Filter = RpioNameFilter & pAnd & GetFiscalYearFilter
+    Me.Filter = RpioNameFilter & pAnd & FiscalYearFilter
     Me.FundNameComboBox.RowSource = "SELECT DISTINCT Obligations.FundName FROM Obligations" _
-        & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
-        & pAnd & "Obligations.BocCode NOT IN ('10', '17')" _
-        & pAnd & Me.Filter & ";"
+        & " WHERE " & Me.Filter
     Me.DocumentNumberComboBox.RowSource = "SELECT DISTINCT Obligations.DocumentControlNumber" _
         & " FROM Obligations" _
-        & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
-        & pAnd & "Obligations.BocCode NOT IN ('10', '17')" _
-        & pAnd & Me.Filter & ";"
+        & " WHERE " & Me.Filter
     Me.BocNameComboBox.RowSource = "SELECT DISTINCT Obligations.BocName FROM Obligations" _
-        & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
-        & pAnd & "Obligations.BocCode NOT IN ('10', '17')" _
-        & pAnd & Me.Filter & ";"
-    Me.RecordSource = "SELECT * FROM Obligations WHERE" _
-        & " NOT IsNull(DocumentControlNumber)" & pAnd & Me.Filter
+        & " WHERE " & Me.Filter
+    Me.RecordSource = "SELECT * FROM Obligations WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
     ProcessError
@@ -638,6 +654,19 @@ ErrorHandler:
     Exit Sub
 End Sub
 
+'----------------------------------------------------------------------------------
+'   Type:            Sub-Procedure
+'   Name:
+'   Parameters:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub LastActvityDateTextBox_Enter()
+    On Error GoTo ErrorHandler:
+    DoCmd.OpenForm "BudgetCalendar", , , , , , Me.OriginalActionDateTextBox
+ErrorHandler:
+    ProcessError
+    Exit Sub
+End Sub
 
 '----------------------------------------------------------------------------------
 '   Type:            Sub-Procedure
@@ -833,14 +862,10 @@ End Sub
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub SetRpioIcon(pRpioName As String)
+Private Sub SetRpioIcon(pRpioCode As String)
     On Error GoTo ErrorHandler:
-    Dim p_RpioCode As String
-    If Not pRpioName & "" = "" Then
-        p_RpioCode = DLookup("RpioCode", "StatusOfFunds", _
-            "[RpioName] = '" & pRpioName & "'")
-        Me.Caption = pRpioName
-        Select Case CStr(p_RpioCode)
+    If Not pRpioCode & "" = "" Then
+        Select Case CStr(pRpioCode)
             Case "01"
                 Me.RpioIcon.Picture = CurrentProject.Path _
                     & "\etc\png\AppIcons\interface\RPIO\R1.png"
@@ -909,7 +934,7 @@ Private Sub SetRpioIcon(pRpioName As String)
                     & "\etc\png\AppIcons\interface\RPIO\OECA.png"
             Case Else
                 Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\ui\capital.png"
+                    & "\etc\png\AppIcons\interface\RPIO\OCFO.png"
         End Select
     End If
 ErrorHandler:
