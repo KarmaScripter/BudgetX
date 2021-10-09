@@ -16,8 +16,10 @@ Option Explicit
 Private m_PrcId As Integer
 Private m_BFY As String
 Private m_RpioCode As String
+Private m_RpioName As String
 Private m_BudgetLevel As String
 Private m_AhCode As String
+Private m_AhName As String
 Private m_FundCode As String
 Private m_FundName As String
 Private m_OrgCode As String
@@ -28,6 +30,8 @@ Private m_RcCode As String
 Private m_DivisionName As String
 Private m_ActivityCode As String
 Private m_ProgramProjectName As String
+Private m_StartDate As String
+Private m_EndDate As String
 Private m_Error As String
 
 
@@ -55,13 +59,7 @@ Public Property Let ID(pid As Integer)
         m_PrcId = pid
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      ID" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -80,13 +78,7 @@ Public Property Get ID() As Integer
         ID = m_PrcId
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      ID" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -104,13 +96,7 @@ Public Property Let BFY(yr As String)
         m_BFY = yr
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      BFY" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -129,13 +115,7 @@ Public Property Get BFY() As String
         BFY = m_BFY
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      BFY" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -153,13 +133,7 @@ Public Property Let BudgetLevel(bl As String)
         m_BudgetLevel = bl
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      BudgetLevel" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -178,13 +152,46 @@ Public Property Get BudgetLevel() As String
         BudgetLevel = m_BudgetLevel
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      BudgetLevel" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
+    ProcessError
+    Exit Property
+End Property
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name            RpioCode
+'   Parameters      Void
+'   Retval          Void
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Let RpioName(rn As String)
+    On Error GoTo ErrorHandler:
+    If Not rn & "" = "" Then
+        m_RpioName = rn
     End If
-    MessageFactory.ShowError (m_Error)
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
+'   Name            RpioCode
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Get RpioName() As String
+    On Error GoTo ErrorHandler:
+    If Not m_RpioName & "" = "" Then
+        RpioName = m_RpioName
+    End If
+ErrorHandler:
+    ProcessError
     Exit Property
 End Property
 
@@ -202,13 +209,7 @@ Public Property Let RpioCode(rp As String)
         m_RpioCode = rp
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      RpioCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -227,13 +228,7 @@ Public Property Get RpioCode() As String
         RpioCode = m_RpioCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      RpioCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -251,13 +246,7 @@ Public Property Let AhCode(ac As String)
         m_AhCode = ac
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      AhCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -276,13 +265,7 @@ Public Property Get AhCode() As String
         AhCode = m_AhCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      AhCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -300,13 +283,7 @@ Public Property Let OrgCode(oc As String)
         m_OrgCode = oc
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      OrgCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -325,13 +302,7 @@ Public Property Get OrgCode() As String
         OrgCode = m_OrgCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      OrgCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -350,13 +321,7 @@ Public Property Let FundCode(fc As String)
         m_FundCode = fc
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      FundCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -375,13 +340,7 @@ Public Property Get FundCode() As String
         FundCode = m_FundCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      FundCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -399,13 +358,7 @@ Public Property Let FundName(fn As String)
         m_FundName = fn
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      FundName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -424,13 +377,7 @@ Public Property Get FundName() As String
         FundName = m_FundName
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      FundName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -448,13 +395,7 @@ Public Property Let AccountCode(ac As String)
         pAccountCode = ac
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      AccountCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -473,13 +414,7 @@ Public Property Get AccountCode() As String
         AccountCode = pAccountCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      AccountCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -497,13 +432,7 @@ Public Property Let ActivityCode(act As String)
         m_ActivityCode = act
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      ActivityCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -522,13 +451,7 @@ Public Property Get ActivityCode() As String
         ActivityCode = m_ActivityCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      ActivityCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -547,13 +470,7 @@ Public Property Let BocCode(bc As String)
         m_BocCode = bc
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      BocCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -572,13 +489,7 @@ Public Property Get BocCode() As String
         BocCode = m_BocCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      BocCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -596,13 +507,7 @@ Public Property Let BocName(bn As String)
         m_BocName = bn
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      BocName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -621,13 +526,7 @@ Public Property Get BocName() As String
         BocName = m_BocName
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      BocName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -639,19 +538,13 @@ End Property
 '   Retval          Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let RcCode(rc As String)
+Public Property Let RcCode(RC As String)
     On Error GoTo ErrorHandler:
-    If Not rc & "" = "" Then
-        m_RcCode = rc
+    If Not RC & "" = "" Then
+        m_RcCode = RC
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      RcCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -670,13 +563,7 @@ Public Property Get RcCode() As String
         RcCode = m_RcCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      RcCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -694,13 +581,7 @@ Public Property Let DivisionName(dn As String)
         m_DivisionName = dn
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      DivisionName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -719,13 +600,7 @@ Public Property Get DivisionName() As String
         DivisionName = m_DivisionName
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      DivisionName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -744,13 +619,7 @@ Public Property Let ProgramProjectName(pn As String)
         m_ProgramProjectName = pn
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      ProgramProjectName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -768,18 +637,88 @@ Public Property Get ProgramProjectName() As String
         ProgramProjectName = m_ProgramProjectName
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   AccountArgs" _
-            & vbCrLf & "Member:      ProgramProjectName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
 
 
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Let StartDate(pStart As String)
+    On Error GoTo ErrorHandler:
+    If Not pStart & "" = "" Then
+        m_StartDate = pStart
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
+'   Name
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Get StartDate() As String
+    On Error GoTo ErrorHandler:
+    If Not m_StartDate & "" = "" Then
+        StartDate = m_StartDate
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Let EndDate(pEnd As String)
+    On Error GoTo ErrorHandler:
+    If Not pEnd & "" = "" Then
+        m_EndDate = pEnd
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
+'   Name
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Get EndDate() As String
+    On Error GoTo ErrorHandler:
+    If Not m_EndDate & "" = "" Then
+        EndDate = m_EndDate
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Property
+End Property
 
 
 

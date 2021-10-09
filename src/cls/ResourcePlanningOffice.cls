@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "ResourcePlanningImplementationOffice"
+Attribute VB_Name = "ResourcePlanningOffice"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -22,6 +22,14 @@ Private m_Error As String
 
 
 
+
+'----------------------------------------------------------------------------------
+'   Type        Constructor/Finalizer
+'   Name
+'   Parameters  Void
+'   RetVal
+'   Purpose
+'---------------------------------------------------------------------------------
 Public Sub Class_Initialize()
 End Sub
 
@@ -33,8 +41,8 @@ End Sub
 
 
 '----------------------------------------------------------------------------------
-'   Type        Property
-'   Name
+'   Type        Property Let
+'   Name        ID
 '   Parameters  Void
 '   RetVal
 '   Purpose
@@ -45,22 +53,16 @@ Public Property Let ID(num As Integer)
         m_ID = num
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ResourcePlanningImplementationOffice" _
-            & vbCrLf & "Member:      ID" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
 
 '----------------------------------------------------------------------------------
-'   Type        Property
-'   Name
+'   Type        Property Get
+'   Name        ID
 '   Parameters  Void
-'   RetVal
+'   RetVal      Integer
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get ID() As Integer
@@ -69,20 +71,14 @@ Public Property Get ID() As Integer
         ID = m_ID
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ResourcePlanningImplementationOffice" _
-            & vbCrLf & "Member:      ID" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
 
 '----------------------------------------------------------------------------------
-'   Type        Property
-'   Name
+'   Type        Property Let
+'   Name        Code
 '   Parameters  Void
 '   RetVal
 '   Purpose
@@ -93,13 +89,7 @@ Public Property Let Code(cd As String)
         m_Code = cd
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ResourcePlanningImplementationOffice" _
-            & vbCrLf & "Member:      Code" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -117,13 +107,7 @@ Public Property Get Code() As String
         Code = m_Code
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ResourcePlanningImplementationOffice" _
-            & vbCrLf & "Member:      Code" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -141,13 +125,7 @@ Public Property Let Name(nm As String)
         m_Name = nm
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ResourcePlanningImplementationOffice" _
-            & vbCrLf & "Member:      Name" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 
@@ -165,13 +143,7 @@ Public Property Get Name() As String
         Name = m_Name
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ResourcePlanningImplementationOffice" _
-            & vbCrLf & "Member:      Name" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError
     Exit Property
 End Property
 

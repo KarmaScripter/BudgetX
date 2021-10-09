@@ -12,6 +12,9 @@ Option Explicit
 
 
 
+
+
+
 Private m_BFY As String
 Private m_EFY As String
 Private m_ID As Integer
@@ -34,6 +37,12 @@ Private m_Notification As String
 Private m_Base As String
 
 
+
+
+
+
+
+
 '---------------------------------------------------------------------------------
 '   Type            Constructor
 '   Name
@@ -50,6 +59,10 @@ End Sub
 
 
 
+
+
+
+
 '---------------------------------------------------------------------------------
 '   Type            Property-Let
 '   Name
@@ -59,13 +72,16 @@ End Sub
 '---------------------------------------------------------------------------------
 Public Property Let Base(p_Year As String)
     On Error GoTo ErrorHandler:
-    If Not p_Year & "" = "" Then
-        m_Base = p_Year
+    If Not p_Year & "" = "" And _
+        Len(p_Year) = 4 Then
+            m_Base = p_Year
     End If
 ErrorHandler:
     ProcessError
     Exit Property
 End Property
+
+
 
 
 
@@ -85,6 +101,8 @@ ErrorHandler:
     ProcessError
     Exit Property
 End Property
+
+
 
 
 '---------------------------------------------------------------------------------
@@ -133,12 +151,12 @@ End Property
 '   Return          Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let SweepDate(sd As Date)
+Public Property Let SweepDate(pDate As Date)
     On Error GoTo ErrorHandler:
-    If IsDate(sd) And _
+    If IsDate(pDate) And _
         IsExpiring() And _
         Not IsDate(m_SweepDate) Then
-            m_SweepDate = sd
+            m_SweepDate = pDate
     End If
 ErrorHandler:
     ProcessError
@@ -176,12 +194,13 @@ End Property
 '   Return          Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let BFY(by As String)
+Public Property Let BFY(pBFY As String)
     On Error GoTo ErrorHandler:
-    If Not by & "" = "" Then
-        m_BFY = by
+    If Not pBFY & "" = "" And _
+        Len(pBFY) = 4 Then
+            m_BFY = pBFY
     Else
-        m_BFY = str(year(Now()))
+        m_BFY = year(Now())
     End If
 ErrorHandler:
     ProcessError

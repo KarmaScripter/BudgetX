@@ -101,10 +101,10 @@ End Property
 '   Retval:          String
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Property Get Divisions() As String
+Public Property Get Views() As String
     On Error GoTo ErrorHandler:
-    If Not m_DivisionModels & "" = "" Then
-        Divisions = m_DivisionModels
+    If Not m_ViewModels & "" = "" Then
+        Views = m_ViewModels
     End If
 ErrorHandler:
     ProcessError
@@ -213,8 +213,6 @@ ErrorHandler:
     ProcessError
     Exit Property
 End Property
-
-
 
 
 
