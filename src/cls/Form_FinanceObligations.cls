@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "Form_ProgrammaticObligations"
+Attribute VB_Name = "Form_FinanceObligations"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = True
@@ -11,17 +11,16 @@ Option Compare Database
 Option Explicit
 
 
+
 Public Args As AccountArgs
-Public m_Dialog As Form_StatusOfFundsDialog
-Private pFilter As String
-Private FiscalYearFilter As String
+Private m_Dialog As Form_StatusOfFundsDialog
 Private FundNameFilter As String
+Private AccountCodeFilter As String
 Private BocNameFilter As String
+Private FocNameFilter As String
+Private FiscalYearFilter As String
 Private RpioNameFilter As String
-Private RpioCodeFilter As String
-Private ProgramProjectNameFilter As String
 Private pAnd As String
-Private m_SQL As String
 Private m_Error As String
 Private m_Notification As String
 
@@ -32,95 +31,114 @@ Private m_Notification As String
 '   Type:            Sub-Procedure
 '   Name:
 '   Parameters:      Void
+'   Retval:          Void
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub Form_Open(Cancel As Integer)
-    On Error GoTo ErrorHandler:
+    On Error GoTo ErrorHandler::
     Set m_Dialog = New Form_StatusOfFundsDialog
-    If Args Is Nothing Then
-        Set Args = New AccountArgs
-    End If
+    Set Args = New AccountArgs
     DoCmd.OpenForm FormName:="StatusOfFundsDialog", WindowMode:=acDialog
     Set m_Dialog = Forms("StatusOfFundsDialog")
     Set Args = m_Dialog.Args
-    Args.RpioCode = m_Dialog.Args.RpioCode
-    Args.RpioName = m_Dialog.Args.RpioName
-    Args.BFY = m_Dialog.Args.BFY
-    Args.FundName = m_Dialog.Args.FundName
-    Args.FundCode = m_Dialog.Args.FundCode
-    FiscalYearFilter = "[BFY] = '" & Args.BFY & "'"
-    If Not Args.BFY & "" = "" And _
-        Not Args.RpioName & "" = "" And _
-        Not Args.FundName & "" = "" Then
-            m_SQL = "SELECT * FROM Obligations " _
-                & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
-                & " AND Obligations.BFY = '" & Args.BFY & "'" _
-                & " AND Obligations.RpioName = '" & Args.RpioName & "'" _
-                & " AND Obligations.FundName = '" & Args.FundName & "';"
-    End If
-    If Not Args.BFY & "" = "" And _
-        Not Args.RpioName & "" = "" And _
-        Args.FundName & "" = "" Then
-            m_SQL = "SELECT * FROM Obligations " _
-                & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
-                & " AND Obligations.BFY = '" & Args.BFY & "'" _
-                & " AND Obligations.RpioName = '" & Args.RpioName & "';"
-    End If
-    If Not Args.BFY & "" = "" And _
-        Args.RpioName & "" = "" And _
-        Not Args.FundName & "" = "" Then
-            m_SQL = "SELECT * FROM Obligations " _
-                & " WHERE NOT IsNull(Obligations.DocumentControlNumber)" _
-                & " AND Obligations.BFY = '" & Args.BFY & "'" _
-                & " AND Obligations.FundName = '" & Args.FundName & "';"
-    End If
-    Me.RecordSource = m_SQL
+    RpioNameFilter = "[RpioName] = '" & Args.RpioName & "'"
+    Me.RecordSource = "SELECT * FROM Obligations" _
+        & " WHERE Obligations.BocCode NOT IN ('10', '17')" _
+        & " AND Obligations.RpioName = '" & Args.RpioName & "';"
+    SetRpioIcon (Args.RpioCode)
     DoCmd.Close ObjectType:=acForm, ObjectName:=m_Dialog.Name, Save:=acSaveNo
 ErrorHandler:
-    ProcessError
+    ProcessError Name:=Me.Name, _
+        Member:="Form_Open()"
     Exit Sub
 End Sub
 
 
 
-
 '----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        Form_Load
-'   Retval:      Void
-'   Parameters:  Void
-'   Purpose:
+'   Type        Event Sub-Procedure
+'   Name        Form_Load
+'   Parameters  Void
+'   Retval      Void
+'   Purpose
 '---------------------------------------------------------------------------------
 Private Sub Form_Load()
     On Error GoTo ErrorHandler:
-    ClearComboBoxValues
     Me.Section(acHeader).AutoHeight = False
     Me.Section(acHeader).Height = 2
     Me.Section(acDetail).AutoHeight = False
     Me.Section(acDetail).Height = 4
     Me.Section(acFooter).AutoHeight = False
     Me.Section(acFooter).Height = 0.5
+    SetFiscalYearOptionValue (Args.BFY)
+    ClearComboBoxValues
     SetComboBoxColors
-    SetButtonVisibility
     pAnd = " AND "
-    RpioNameFilter = "[RpioName] = '" & Args.RpioName & "'"
-    RpioCodeFilter = "[RpioCode] = '" & Args.RpioCode & "'"
-    Me.Filter = FiscalYearFilter & pAnd & RpioNameFilter
+    SetButtonVisibility
+    Me.Filter = RpioNameFilter
+    Me.AccountCodeComboBox.RowSource = "SELECT DISTINCT Obligations.AccountCode" _
+        & " FROM Obligations" _
+        & " WHERE " & Me.Filter
+    Me.FocNameComboBox.RowSource = "SELECT DISTINCT Obligations.FocName" _
+        & " FROM Obligations" _
+        & " WHERE " & Me.Filter
     Me.FundNameComboBox.RowSource = "SELECT DISTINCT Obligations.FundName" _
         & " FROM Obligations" _
-        & " WHERE" & Me.Filter
-    Me.ProgramProjectNameComboBox.RowSource = "SELECT DISTINCT Obligations.ProgramProjectName" _
-        & " FROM Obligations" _
-        & " WHERE" & Me.Filter
-    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Obligations.BocName" _
-        & " FROM Obligations" _
-        & " WHERE" & Me.Filter
-    SetRpioIcon (Args.RpioCode)
+        & " WHERE " & Me.Filter
+    Me.FilterOn = True
 ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
 
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Event Sub-Procedure
+'   Name        Form_Close
+'   Parameters  Void
+'   Retval      Void
+'   Purpose
+'---------------------------------------------------------------------------------
+Private Sub Form_Close()
+    On Error GoTo ErrorHandler:
+    Me.Filter = vbNullString
+    RpioNameFilter = vbNullString
+ErrorHandler:
+    ProcessError
+    Exit Sub
+End Sub
+
+
+'----------------------------------------------------------------------------------
+'   Type        Sub-Procedure
+'   Name        SetButtonVisibility
+'   Parameters  Void
+'   Retval      Void
+'   Purpose
+'---------------------------------------------------------------------------------
+Private Sub SetButtonVisibility()
+    On Error GoTo ErrorHandler:
+    Me.AddButton.Visible = Not Me.AddButton.Visible
+    Me.FirstButton.Visible = Not Me.FirstButton.Visible
+    Me.PreviousButton.Visible = Not Me.PreviousButton.Visible
+    Me.NextButton.Visible = Not Me.NextButton.Visible
+    Me.LastButton.Visible = Not Me.LastButton.Visible
+    Me.EditButton.Visible = Not Me.EditButton.Visible
+    Me.RefreshButton.Visible = Not Me.RefreshButton.Visible
+    Me.DeleteButton.Visible = Not Me.DeleteButton.Visible
+    Me.CalculatorButton.Visible = Not Me.CalculatorButton.Visible
+    Me.ExcelButton.Visible = Not Me.ExcelButton.Visible
+    Me.UndoButton.Visible = Not Me.UndoButton.Visible
+    Me.SaveButton.Visible = Not Me.SaveButton.Visible
+    Me.DataButton.Visible = Not Me.DataButton.Visible
+    Me.CompassSpendingQueryButton.Visible = Not Me.CompassSpendingQueryButton.Visible
+ErrorHandler:
+    ProcessError
+    Exit Sub
+End Sub
 
 
 
@@ -163,8 +181,8 @@ Private Sub HideButtons()
     Me.CalculatorButton.Visible = False
     Me.ExcelButton.Visible = False
     Me.UndoButton.Visible = False
-    Me.CompassSpendingQueryButton.Visible = False
     Me.SaveButton.Visible = False
+    Me.CompassSpendingQueryButton.Visible = False
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -172,96 +190,218 @@ End Sub
 
 
 
+
 '----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        SetComboBoxColors
-'   Retval:      Void
-'   Parameters:  Void
-'   Purpose:
+'   Type        Event Sub-Procedure
+'   Name        SetComboBoxColors
+'   Parameters  Void
+'   Retval      Void
+'   Purpose
 '---------------------------------------------------------------------------------
 Private Sub SetComboBoxColors()
     On Error GoTo ErrorHandler:
     Me.FundNameComboBox.ForeColor = RGB(255, 255, 255)
     Me.FundNameComboBox.BackColor = RGB(33, 33, 33)
     Me.FundNameComboBox.BorderColor = RGB(68, 114, 196)
-    Me.ProgramProjectNameComboBox.ForeColor = RGB(255, 255, 255)
-    Me.ProgramProjectNameComboBox.BackColor = RGB(33, 33, 33)
-    Me.ProgramProjectNameComboBox.BorderColor = RGB(68, 114, 196)
-    Me.BocNameComboBox.ForeColor = RGB(255, 255, 255)
-    Me.BocNameComboBox.BackColor = RGB(33, 33, 33)
-    Me.BocNameComboBox.BorderColor = RGB(68, 114, 196)
+    Me.FocNameComboBox.ForeColor = RGB(255, 255, 255)
+    Me.FocNameComboBox.BackColor = RGB(33, 33, 33)
+    Me.FocNameComboBox.BorderColor = RGB(68, 114, 196)
+    Me.AccountCodeComboBox.ForeColor = RGB(255, 255, 255)
+    Me.AccountCodeComboBox.BackColor = RGB(33, 33, 33)
+    Me.AccountCodeComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
+
 
 
 '----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        SetButtonVisibility
-'   Retval:      Void
-'   Parameters:  Void
-'   Purpose:
+'   Type        Event Sub-Procedure
+'   Name        ClearComboBoxValues
+'   Parameters  Void
+'   Retval      Void
+'   Purpose
 '---------------------------------------------------------------------------------
-Private Sub SetButtonVisibility()
+Private Sub ClearComboBoxValues()
     On Error GoTo ErrorHandler:
-    Me.AddButton.Visible = Not Me.AddButton.Visible
-    Me.FirstButton.Visible = Not Me.FirstButton.Visible
-    Me.PreviousButton.Visible = Not Me.PreviousButton.Visible
-    Me.NextButton.Visible = Not Me.NextButton.Visible
-    Me.LastButton.Visible = Not Me.LastButton.Visible
-    Me.EditButton.Visible = Not Me.EditButton.Visible
-    Me.RefreshButton.Visible = Not Me.RefreshButton.Visible
-    Me.DeleteButton.Visible = Not Me.DeleteButton.Visible
-    Me.CalculatorButton.Visible = Not Me.CalculatorButton.Visible
-    Me.ExcelButton.Visible = Not Me.ExcelButton.Visible
-    Me.UndoButton.Visible = Not Me.UndoButton.Visible
-    Me.SaveButton.Visible = Not Me.SaveButton.Visible
-    Me.DataButton.Visible = Not Me.DataButton.Visible
-    Me.CompassSpendingQueryButton.Visible = Not Me.CompassSpendingQueryButton.Visible
+    Me.FundNameComboBox.Value = vbNullString
+    Me.FocNameComboBox.Value = vbNullString
+    Me.AccountCodeComboBox.Value = vbNullString
 ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
 
-
-'------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        Form_Close
-'   Retval:      Void
-'   Parameters:  Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub Form_Close()
-    On Error GoTo ErrorHandler:
-    Me.Filter = vbNullString
-ErrorHandler:
-    ProcessError
-    Exit Sub
-End Sub
 
 
 '----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        FiscalYearOptionGroup_AfterUpdate
-'   Retval:      Void
-'   Parameters:  Void
-'   Purpose:
+'   Type        Event Sub-Procedure
+'   Name        ClearFilterValues
+'   Parameters  Void
+'   Retval      Void
+'   Purpose
 '---------------------------------------------------------------------------------
-Private Sub FiscalYearOptionGroup_AfterUpdate()
+Private Sub ClearFilterValues()
     On Error GoTo ErrorHandler:
-    Args.BFY = vbNullString
+    FundNameFilter = vbNullString
+    FocNameFilter = vbNullString
+    AccountCodeFilter = vbNullString
     FiscalYearFilter = vbNullString
+ErrorHandler:
+    ProcessError
+    Exit Sub
+End Sub
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        SetFiscalYearOptionValue
+'   Parameters:  Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub SetFiscalYearOptionValue(pBFY As String)
+    On Error GoTo ErrorHandler:
+    If Not pBFY & "" = "" Then
+        Select Case pBFY
+            Case "2021"
+                FiscalYearFilter = "[BFY] = '2021'"
+                Me.FiscalYearOptionGroup.Value = 1
+                Args.BFY = "2021"
+            Case "2022"
+                FiscalYearFilter = "[BFY] = '2022'"
+                Me.FiscalYearOptionGroup.Value = 2
+                Args.BFY = "2022"
+            Case Else
+                FiscalYearFilter = "[BFY] = '2021'"
+                Me.FiscalYearOptionGroup.Value = 1
+                Args.BFY = "2021"
+        End Select
+    End If
+ErrorHandler:
+    ProcessError Name:=Me.Name, _
+        Member:="SetFiscalYearOptionValue(String)"
+    Exit Sub
+End Sub
+
+
+'----------------------------------------------------------------------------------
+'   Type        Event Sub-Procedure
+'   Name        FocNameComboBox_Change
+'   Parameters  Void
+'   Retval      Void
+'   Purpose
+'---------------------------------------------------------------------------------
+Private Sub FocNameComboBox_Change()
+    On Error GoTo ErrorHandler:
+    FocNameFilter = vbNullString
     Me.Filter = vbNullString
-    Select Case Me.FiscalYearOptionGroup.Value
-        Case 1
-            Args.BFY = "2021"
-            FiscalYearFilter = "[BFY] = '2021'"
-        Case 2
-            Args.BFY = "2022"
-            FiscalYearFilter = "[BFY] = '2022'"
-    End Select
-    Me.Filter = GetFiscalYearFilter
+    Me.AccountCodeComboBox.Value = vbNullString
+    FocNameFilter = "[FocName] = '" & Me.FocNameComboBox.Value & "'"
+    Me.Filter = RpioNameFilter & pAnd & GetFocNameFilter
+    Me.RecordSource = "SELECT * FROM Obligations WHERE " & Me.Filter
+    Me.Requery
+    Me.AccountCodeComboBox.RowSource = "SELECT DISTINCT Obligations.AccountCode" _
+        & " FROM Obligations" _
+        & " WHERE " & Me.Filter
+ErrorHandler:
+    ProcessError
+    Exit Sub
+End Sub
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Function
+'   Name        GetFocNameFilter
+'   Parameters  Void
+'   Retval      String
+'   Purpose
+'---------------------------------------------------------------------------------
+Private Function GetFocNameFilter() As String
+    On Error GoTo ErrorHandler:
+    If Not FocNameFilter & "" = "" And _
+        AccountCodeFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
+            GetFocNameFilter = FocNameFilter
+    End If
+    If Not FocNameFilter & "" = "" And _
+        Not AccountCodeFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
+            GetFocNameFilter = FocNameFilter _
+            & pAnd & AccountCodeFilter
+    End If
+    If Not FocNameFilter & "" = "" And _
+        Not AccountCodeFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
+            GetFocNameFilter = FocNameFilter _
+                & pAnd & AccountCodeFilter _
+                & pAnd & FiscalYearFilter
+    End If
+    If Not FocNameFilter & "" = "" And _
+        Not AccountCodeFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
+            GetFocNameFilter = FocNameFilter _
+                & pAnd & AccountCodeFilter _
+                & pAnd & FiscalYearFilter _
+                & pAnd & FundNameFilter
+    End If
+    If Not FocNameFilter & "" = "" And _
+        AccountCodeFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
+            GetFocNameFilter = FocNameFilter _
+                & pAnd & FiscalYearFilter _
+                & pAnd & FundNameFilter
+    End If
+    If Not FocNameFilter & "" = "" And _
+        AccountCodeFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
+            GetFocNameFilter = FocNameFilter _
+                & pAnd & FundNameFilter
+    End If
+    If Not FocNameFilter & "" = "" And _
+        AccountCodeFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
+            GetFocNameFilter = FocNameFilter _
+                & pAnd & FiscalYearFilter
+    End If
+    If Not FocNameFilter & "" = "" And _
+        Not AccountCodeFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
+            GetFocNameFilter = FocNameFilter _
+                & pAnd & AccountCodeFilter _
+                & pAnd & FundNameFilter
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Event Sub-Procedure
+'   Name        AccountCodeComboBox_Change
+'   Parameters  Void
+'   Retval      Void
+'   Purpose
+'---------------------------------------------------------------------------------
+Private Sub AccountCodeComboBox_Change()
+    On Error GoTo ErrorHandler:
+    Me.Filter = vbNullString
+    AccountCodeFilter = vbNullString
+    AccountCodeFilter = "[AccountCode] = '" & Me.AccountCodeComboBox.Value & "'"
+    Me.Filter = RpioNameFilter & pAnd & GetAccountCodeFilter
     Me.RecordSource = "SELECT * FROM Obligations WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
@@ -270,70 +410,83 @@ ErrorHandler:
 End Sub
 
 
+
 '----------------------------------------------------------------------------------
-'   Type:        Function
-'   Name:        GetFiscalYearFilter
-'   Parameters:  Void
-'   Retval:      String
-'   Purpose:
+'   Type        Function
+'   Name        GetAccountCodeFilter
+'   Parameters  Void
+'   Retval      String
+'   Purpose
 '---------------------------------------------------------------------------------
-Private Function GetFiscalYearFilter() As String
+Private Function GetAccountCodeFilter() As String
     On Error GoTo ErrorHandler:
-     If Not FiscalYearFilter & "" = "" And _
-        BocNameFilter & "" = "" And _
-        FundNameFilter & "" = "" And _
-        RpioNameFilter & "" = "" Then
-            GetFiscalYearFilter = FiscalYearFilter
+    If Not AccountCodeFilter & "" = "" And _
+        FocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
+            GetAccountCodeFilter = AccountCodeFilter
     End If
-    If Not FiscalYearFilter & "" = "" And _
-        Not BocNameFilter & "" = "" And _
-        FundNameFilter & "" = "" And _
-        RpioNameFilter & "" = "" Then
-            GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter
+    If Not AccountCodeFilter & "" = "" And _
+        Not FocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
+            GetAccountCodeFilter = AccountCodeFilter _
+            & pAnd & FocNameFilter
     End If
-    If Not FiscalYearFilter & "" = "" And _
-        Not BocNameFilter & "" = "" And _
-        Not FundNameFilter & "" = "" And _
-        RpioNameFilter & "" = "" Then
-            GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
+    If Not AccountCodeFilter & "" = "" And _
+        Not FocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
+            GetAccountCodeFilter = AccountCodeFilter _
+                & pAnd & FocNameFilter _
+                & pAnd & FiscalYearFilter
+    End If
+    If Not AccountCodeFilter & "" = "" And _
+        Not FocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
+            GetAccountCodeFilter = AccountCodeFilter _
+                & pAnd & FiscalYearFilter _
+                & pAnd & FocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FiscalYearFilter & "" = "" And _
-        Not BocNameFilter & "" = "" And _
-        Not FundNameFilter & "" = "" And _
-        Not RpioNameFilter & "" = "" Then
-            GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
-                & pAnd & FundNameFilter _
-                & pAnd & RpioNameFilter
-    End If
-    If Not FiscalYearFilter & "" = "" And _
-        BocNameFilter & "" = "" And _
-        Not FundNameFilter & "" = "" And _
-        Not RpioNameFilter & "" = "" Then
-            GetFiscalYearFilter = FiscalYearFilter _
-                & pAnd & FundNameFilter _
-                & pAnd & RpioNameFilter
-    End If
-    If Not FiscalYearFilter & "" = "" And _
-        Not BocNameFilter & "" = "" And _
-        FundNameFilter & "" = "" And _
-        Not RpioNameFilter & "" = "" Then
-            GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
-                & pAnd & RpioNameFilter
-    End If
-    If Not FiscalYearFilter & "" = "" And _
-        BocNameFilter & "" = "" And _
-        Not FundNameFilter & "" = "" And _
-        RpioNameFilter & "" = "" Then
-            GetFiscalYearFilter = FiscalYearFilter _
+    If Not AccountCodeFilter & "" = "" And _
+        FocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
+            GetAccountCodeFilter = AccountCodeFilter _
+                & pAnd & FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FiscalYearFilter & "" = "" And _
-        BocNameFilter & "" = "" And _
-        FundNameFilter & "" = "" And _
-        Not RpioNameFilter & "" = "" Then
-            GetFiscalYearFilter = FiscalYearFilter _
-                & pAnd & RpioNameFilter
+    If Not AccountCodeFilter & "" = "" And _
+        FocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
+            GetAccountCodeFilter = AccountCodeFilter _
+                & pAnd & FundNameFilter
+    End If
+    If Not AccountCodeFilter & "" = "" And _
+        FocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
+            GetAccountCodeFilter = AccountCodeFilter _
+                & pAnd & FiscalYearFilter
+    End If
+    If Not AccountCodeFilter & "" = "" And _
+        Not FocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
+            GetAccountCodeFilter = AccountCodeFilter _
+                & pAnd & FocNameFilter _
+                & pAnd & FundNameFilter
+    End If
+    If Not AccountCodeFilter & "" = "" And _
+        FocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
+            GetAccountCodeFilter = AccountCodeFilter _
+                & pAnd & FiscalYearFilter _
+                & pAnd & FundNameFilter
     End If
 ErrorHandler:
     ProcessError
@@ -343,28 +496,28 @@ End Function
 
 
 '----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        FundNameComboBox_Change
-'   Parameters:  Void
-'   Retval:      Void
-'   Purpose:
+'   Type        Event Sub-Procedure
+'   Name        FundNameComboBox_Change
+'   Parameters  Void
+'   Retval      Void
+'   Purpose
 '---------------------------------------------------------------------------------
 Private Sub FundNameComboBox_Change()
     On Error GoTo ErrorHandler:
-    FundNameFilter = vbNullString
     Me.Filter = vbNullString
-    Args.FundName = Me.FundNameComboBox.Value
+    FundNameFilter = vbNullString
+    Me.FocNameComboBox.Value = vbNullString
+    Me.AccountCodeComboBox.Value = vbNullString
     FundNameFilter = "[FundName] = '" & Me.FundNameComboBox.Value & "'"
     Me.Filter = RpioNameFilter & pAnd & GetFundNameFilter
-    Me.ProgramProjectNameComboBox.RowSource = "SELECT DISTINCT Obligations.FundName" _
-        & " FROM Obligations" _
-        & " WHERE " & Me.Filter
-    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Obligations.BocName" _
-        & " FROM Obligations" _
-        & " WHERE " & Me.Filter
-    Me.RecordSource = "SELECT * FROM Obligations WHERE " & Me.Filter
+    Me.RecordSource = "SELECT * FROM Obligations WHERE" & Me.Filter
     Me.Requery
-    SetRpioIcon (Args.RpioName)
+    Me.FocNameComboBox.RowSource = "SELECT DISTINCT Obligations.FocName" _
+        & " FROM Obligations" _
+        & " WHERE " & Me.Filter
+    Me.AccountCodeComboBox.RowSource = "SELECT DISTINCT Obligations.AccountCode" _
+        & " FROM Obligations" _
+        & " WHERE " & Me.Filter
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -379,263 +532,67 @@ End Sub
 '   Retval:      String
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Function GetProgramProjectNameFilter()
+Private Function GetFundNameFilter() As String
     On Error GoTo ErrorHandler:
     If Not FundNameFilter & "" = "" And _
+        FocNameFilter & "" = "" And _
         FiscalYearFilter & "" = "" And _
-        BocNameFilter & "" = "" And _
-        ProgramProjectNameFilter & "" = "" Then
-            GetProgramProjectNameFilter = FundNameFilter
-    End If
-    If Not FundNameFilter & "" = "" And _
-        Not FiscalYearFilter & "" = "" And _
-        BocNameFilter & "" = "" And _
-        ProgramProjectNameFilter & "" = "" Then
-            GetProgramProjectNameFilter = FiscalYearFilter _
-                & pAnd & FundNameFilter
-    End If
-    If Not FundNameFilter & "" = "" And _
-        Not FiscalYearFilter & "" = "" And _
-        Not BocNameFilter & "" = "" And _
-        ProgramProjectNameFilter & "" = "" Then
-            GetProgramProjectNameFilter = FiscalYearFilter _
-                & pAnd & BocNameFilter _
-                & pAnd & FundNameFilter
-    End If
-    If Not FundNameFilter & "" = "" And _
-        Not FiscalYearFilter & "" = "" And _
-        Not BocNameFilter & "" = "" And _
-        Not ProgramProjectNameFilter & "" = "" Then
-            GetProgramProjectNameFilter = FiscalYearFilter _
-                & pAnd & BocNameFilter _
-                & pAnd & ProgramProjectNameFilter _
-                & pAnd & FundNameFilter
-    End If
-    If Not FundNameFilter & "" = "" And _
-        FiscalYearFilter & "" = "" And _
-        Not BocNameFilter & "" = "" And _
-        Not ProgramProjectNameFilter & "" = "" Then
-            GetProgramProjectNameFilter = BocNameFilter _
-                & pAnd & ProgramProjectNameFilter _
-                & pAnd & FundNameFilter
-    End If
-    If Not FundNameFilter & "" = "" And _
-        FiscalYearFilter & "" = "" And _
-        BocNameFilter & "" = "" And _
-        Not ProgramProjectNameFilter & "" = "" Then
-            GetProgramProjectNameFilter = ProgramProjectNameFilter _
-                & pAnd & FundNameFilter
-    End If
-    If Not FundNameFilter & "" = "" And _
-        FiscalYearFilter & "" = "" And _
-        Not BocNameFilter & "" = "" And _
-        ProgramProjectNameFilter & "" = "" Then
-            GetProgramProjectNameFilter = BocNameFilter _
-                & pAnd & FundNameFilter
-    End If
-    If Not FundNameFilter & "" = "" And _
-        Not FiscalYearFilter & "" = "" And _
-        BocNameFilter & "" = "" And _
-        Not ProgramProjectNameFilter & "" = "" Then
-            GetProgramProjectNameFilter = FiscalYearFilter _
-                & pAnd & ProgramProjectNameFilter _
-                & pAnd & FundNameFilter
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
-
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        BocNameComboBox_Change
-'   Parameters:  Void
-'   Retval:      Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub BocNameComboBox_Change()
-    On Error GoTo ErrorHandler:
-    Me.Filter = vbNullString
-    BocNameFilter = vbNullString
-    Args.BocCode = Me.BocNameComboBox.Value
-    BocNameFilter = "[BocName] = '" & Me.BocNameComboBox.Value & "'"
-    Me.Filter = GetBocNameFilter
-    Me.RecordSource = "SELECT * FROM Obligations WHERE " & Me.Filter
-    Me.Requery
-ErrorHandler:
-    ProcessError
-    Exit Sub
-End Sub
-
-
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Function
-'   Name:        GetBocNameFilter
-'   Parameters:  Void
-'   Retval:      String
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Function GetBocNameFilter() As String
-    On Error GoTo ErrorHandler:
-    If Not BocNameFilter & "" = "" And _
-        FiscalYearFilter & "" = "" And _
-        FundNameFilter & "" = "" And _
-        RpioNameFilter & "" = "" Then
-            GetBocNameFilter = BocNameFilter
-    End If
-    If Not BocNameFilter & "" = "" And _
-        Not FiscalYearFilter & "" = "" And _
-        FundNameFilter & "" = "" And _
-        RpioNameFilter & "" = "" Then
-            GetBocNameFilter = FiscalYearFilter & pAnd & BocNameFilter
-    End If
-    If Not BocNameFilter & "" = "" And _
-        Not FiscalYearFilter & "" = "" And _
-        Not FundNameFilter & "" = "" And _
-        RpioNameFilter & "" = "" Then
-            GetBocNameFilter = FiscalYearFilter & pAnd & BocNameFilter _
-                & pAnd & FundNameFilter
-    End If
-    If Not BocNameFilter & "" = "" And _
-        Not FiscalYearFilter & "" = "" And _
-        Not FundNameFilter & "" = "" And _
-        Not RpioNameFilter & "" = "" Then
-            GetBocNameFilter = FiscalYearFilter & pAnd & BocNameFilter _
-                & pAnd & FundNameFilter _
-                & pAnd & RpioNameFilter
-    End If
-    If Not BocNameFilter & "" = "" And _
-        FiscalYearFilter & "" = "" And _
-        Not FundNameFilter & "" = "" And _
-        Not RpioNameFilter & "" = "" Then
-            GetBocNameFilter = BocNameFilter _
-                & pAnd & FundNameFilter _
-                & pAnd & RpioNameFilter
-    End If
-    If Not BocNameFilter & "" = "" And _
-        FiscalYearFilter & "" = "" And _
-        FundNameFilter & "" = "" And _
-        Not RpioNameFilter & "" = "" Then
-            GetBocNameFilter = BocNameFilter _
-                & pAnd & RpioNameFilter
-    End If
-    If Not BocNameFilter & "" = "" And _
-        FiscalYearFilter & "" = "" And _
-        Not FundNameFilter & "" = "" And _
-        RpioNameFilter & "" = "" Then
-            GetBocNameFilter = BocNameFilter _
-                & pAnd & FundNameFilter
-    End If
-    If Not BocNameFilter & "" = "" And _
-        Not FiscalYearFilter & "" = "" And _
-        FundNameFilter & "" = "" And _
-        Not RpioNameFilter & "" = "" Then
-            GetBocNameFilter = FiscalYearFilter & pAnd & BocNameFilter _
-                & pAnd & RpioNameFilter
-    End If
-ErrorHandler:
-    ProcessError
-    Exit Function
-End Function
-
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProgramProjectNameComboBox_Change
-'   Parameters:  Void
-'   Retval:      Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub ProgramProjectNameComboBox_Change()
-    On Error GoTo ErrorHandler:
-    Me.Filter = vbNullString
-    Args.ProgramProjectName = Me.ProgramProjectNameComboBox.Value
-    ProgramProjectNameFilter = "[ProgramProjectName] = '" & Me.ProgramProjectNameComboBox.Value & "'"
-    Me.Filter = ProgramProjectNameFilter _
-        & pAnd & FiscalYearFilter _
-        & pAnd & FundNameFilter
-    Me.BocNameComboBox.RowSource = "SELECT DISTINCT BocName" _
-        & " FROM Obligations" _
-        & " WHERE " & Me.Filter
-    Me.RecordSource = "SELECT * FROM Obligations WHERE " & Me.Filter
-    Me.Requery
-ErrorHandler:
-    ProcessError
-    Exit Sub
-End Sub
-
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Function
-'   Name:        GetFundNameFilter
-'   Parameters:  Void
-'   Retval:      String
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Function GetFundNameFilter()
-    On Error GoTo ErrorHandler:
-    If Not FundNameFilter & "" = "" And _
-        FiscalYearFilter & "" = "" And _
-        BocNameFilter & "" = "" And _
-        ProgramProjectNameFilter & "" = "" Then
+        AccountCodeFilter & "" = "" Then
             GetFundNameFilter = FundNameFilter
     End If
     If Not FundNameFilter & "" = "" And _
-        Not FiscalYearFilter & "" = "" And _
-        BocNameFilter & "" = "" And _
-        ProgramProjectNameFilter & "" = "" Then
-            GetFundNameFilter = FiscalYearFilter & pAnd & FundNameFilter
-    End If
-    If Not FundNameFilter & "" = "" And _
-        Not FiscalYearFilter & "" = "" And _
-        Not BocNameFilter & "" = "" And _
-        ProgramProjectNameFilter & "" = "" Then
-            GetFundNameFilter = FiscalYearFilter & pAnd & BocNameFilter _
-                & pAnd & FundNameFilter
-    End If
-    If Not FundNameFilter & "" = "" And _
-        Not FiscalYearFilter & "" = "" And _
-        Not BocNameFilter & "" = "" And _
-        Not ProgramProjectNameFilter & "" = "" Then
-            GetFundNameFilter = FiscalYearFilter & pAnd & BocNameFilter _
-                & pAnd & FundNameFilter _
-                & pAnd & ProgramProjectNameFilter
-    End If
-    If Not FundNameFilter & "" = "" And _
+        Not FocNameFilter & "" = "" And _
         FiscalYearFilter & "" = "" And _
-        Not BocNameFilter & "" = "" And _
-        Not ProgramProjectNameFilter & "" = "" Then
-            GetFundNameFilter = BocNameFilter _
-                & pAnd & FundNameFilter _
-                & pAnd & ProgramProjectNameFilter
+        AccountCodeFilter & "" = "" Then
+            GetFundNameFilter = FundNameFilter _
+            & pAnd & FocNameFilter
     End If
     If Not FundNameFilter & "" = "" And _
-        FiscalYearFilter & "" = "" And _
-        BocNameFilter & "" = "" And _
-        Not ProgramProjectNameFilter & "" = "" Then
-            Me.Filter = FundNameFilter _
-                & pAnd & ProgramProjectNameFilter
-    End If
-    If Not FundNameFilter & "" = "" And _
-        FiscalYearFilter & "" = "" And _
-        Not BocNameFilter & "" = "" And _
-        ProgramProjectNameFilter & "" = "" Then
-            GetFundNameFilter = BocNameFilter _
-                & pAnd & FundNameFilter
-    End If
-    If Not FundNameFilter & "" = "" And _
+        Not FocNameFilter & "" = "" And _
         Not FiscalYearFilter & "" = "" And _
-        BocNameFilter & "" = "" And _
-        Not ProgramProjectNameFilter & "" = "" Then
-            GetFundNameFilter = FiscalYearFilter _
-                & pAnd & FundNameFilter _
-                & pAnd & ProgramProjectNameFilter
+        AccountCodeFilter & "" = "" Then
+            GetFundNameFilter = FundNameFilter _
+                & pAnd & FocNameFilter _
+                & pAnd & FiscalYearFilter
+    End If
+    If Not FundNameFilter & "" = "" And _
+        Not FocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not AccountCodeFilter & "" = "" Then
+            GetFundNameFilter = FundNameFilter _
+                & pAnd & FocNameFilter _
+                & pAnd & FiscalYearFilter _
+                & pAnd & AccountCodeFilter
+    End If
+    If Not FundNameFilter & "" = "" And _
+        FocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not AccountCodeFilter & "" = "" Then
+            GetFundNameFilter = FundNameFilter _
+                & pAnd & FiscalYearFilter _
+                & pAnd & AccountCodeFilter
+    End If
+    If Not FundNameFilter & "" = "" And _
+        FocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not AccountCodeFilter & "" = "" Then
+            GetFundNameFilter = FundNameFilter _
+                & pAnd & AccountCodeFilter
+    End If
+    If Not FundNameFilter & "" = "" And _
+        FocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        AccountCodeFilter & "" = "" Then
+            GetFundNameFilter = FundNameFilter _
+                & pAnd & FiscalYearFilter
+    End If
+    If Not FundNameFilter & "" = "" And _
+        Not FocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not AccountCodeFilter & "" = "" Then
+            GetFundNameFilter = FundNameFilter _
+                & pAnd & FocNameFilter _
+                & pAnd & AccountCodeFilter
     End If
 ErrorHandler:
     ProcessError
@@ -643,12 +600,116 @@ ErrorHandler:
 End Function
 
 
+
 '----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        CalculatorButton_Click
-'   Parameters:  Void
-'   Retval:      Void
-'   Purpose:
+'   Type        Event Sub-Procedure
+'   Name        FiscalYearOptionGroup_AfterUpdate
+'   Parameters  Void
+'   Retval      Void
+'   Purpose
+'---------------------------------------------------------------------------------
+Private Sub FiscalYearOptionGroup_AfterUpdate()
+    On Error GoTo ErrorHandler:
+    Me.Filter = vbNullString
+    FiscalYearFilter = vbNullString
+    Select Case FiscalYearOptionGroup.Value
+        Case 1
+            FiscalYearFilter = "[BFY] = '2021'"
+        Case 2
+            FiscalYearFilter = "[BFY] = '2022'"
+    End Select
+    Me.Filter = RpioNameFilter & pAnd & GetFiscalYearFilter
+    Me.RecordSource = "SELECT * FROM Obligations WHERE " & Me.Filter
+    Me.Requery
+ErrorHandler:
+    ProcessError
+    Exit Sub
+End Sub
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Function
+'   Name        GetFiscalYearFilter
+'   Parameters  Void
+'   Retval      String
+'   Purpose
+'---------------------------------------------------------------------------------
+Private Function GetFiscalYearFilter() As String
+    On Error GoTo ErrorHandler:
+    If Not FiscalYearFilter & "" = "" And _
+        AccountCodeFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        FocNameFilter & "" = "" Then
+            GetFiscalYearFilter = FiscalYearFilter
+    End If
+    If Not FiscalYearFilter & "" = "" And _
+        Not AccountCodeFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        FocNameFilter & "" = "" Then
+            GetFiscalYearFilter = FiscalYearFilter _
+                & pAnd & AccountCodeFilter
+    End If
+    If Not FiscalYearFilter & "" = "" And _
+        Not AccountCodeFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        FocNameFilter & "" = "" Then
+            GetFiscalYearFilter = FiscalYearFilter _
+                & pAnd & AccountCodeFilter _
+                & pAnd & FundNameFilter
+    End If
+    If Not FiscalYearFilter & "" = "" And _
+        AccountCodeFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        FocNameFilter & "" = "" Then
+            GetFiscalYearFilter = FiscalYearFilter _
+            & pAnd & FundNameFilter
+    End If
+    If Not FiscalYearFilter & "" = "" And _
+        AccountCodeFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        Not FocNameFilter & "" = "" Then
+            GetFiscalYearFilter = FiscalYearFilter _
+                & pAnd & FundNameFilter _
+                & pAnd & FocNameFilter
+    End If
+    If Not FiscalYearFilter & "" = "" And _
+        Not AccountCodeFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        Not FocNameFilter & "" = "" Then
+            GetFiscalYearFilter = FiscalYearFilter _
+                & pAnd & AccountCodeFilter _
+                & pAnd & FundNameFilter _
+                & pAnd & FocNameFilter
+    End If
+    If Not FiscalYearFilter & "" = "" And _
+        AccountCodeFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        Not FocNameFilter & "" = "" Then
+            GetFiscalYearFilter = FiscalYearFilter _
+                & pAnd & FocNameFilter
+    End If
+    If Not FiscalYearFilter & "" = "" And _
+        Not AccountCodeFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        Not FocNameFilter & "" = "" Then
+            GetFiscalYearFilter = FiscalYearFilter _
+                & pAnd & AccountCodeFilter _
+                & pAnd & FocNameFilter
+    End If
+ErrorHandler:
+    ProcessError
+    Exit Function
+End Function
+
+
+
+'----------------------------------------------------------------------------------
+'   Type        Event Sub-Procedure
+'   Name        CalculatorButton_Click
+'   Parameters  Void
+'   Retval      Void
+'   Purpose
 '---------------------------------------------------------------------------------
 Private Sub CalculatorButton_Click()
     On Error GoTo ErrorHandler:
@@ -660,14 +721,12 @@ End Sub
 
 
 
-
 '----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        CompassSpendingQueryButton_Click()
-'   Parameters:  Void
-'   Retval:      Void
+'   Type:            Sub-Procedure
+'   Name:
+'   Parameters:      Void
 '   Purpose:
-'----------------------------------------------------------------------------------
+'---------------------------------------------------------------------------------
 Private Sub CompassSpendingQueryButton_Click()
     On Error GoTo ErrorHandler:
     DoCmd.OpenForm "BudgetDetailedSpendingQuery"
@@ -678,11 +737,11 @@ End Sub
 
 
 '----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        MenuButton_Click
-'   Parameters:  Void
-'   Retval:      Void
-'   Purpose:
+'   Type        Event Sub-Procedure
+'   Name        MenuButton_Click
+'   Parameters  Void
+'   Retval      Void
+'   Purpose
 '---------------------------------------------------------------------------------
 Private Sub MenuButton_Click()
     On Error GoTo ErrorHandler:
@@ -694,48 +753,37 @@ End Sub
 
 
 '----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ResetOptionGroupValues
-'   Parameters:  Void
-'   Retval:      Void
-'   Purpose:
+'   Type        Event Sub-Procedure
+'   Name        OriginalActionDateTextBox_Click
+'   Parameters  Void
+'   Retval      Void
+'   Purpose
 '---------------------------------------------------------------------------------
-Private Sub ResetOptionGroupValues()
+Private Sub OriginalActionDateTextBox_Click()
     On Error GoTo ErrorHandler:
-    Me.FiscalYearOptionGroup.Value = 2
-    FiscalYearFilter = "[BFY] = '2022'"
+    DoCmd.OpenForm "BudgetCalendar", , , , , , Me.OriginalActionDateTextBox
 ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
 
 
-
 '----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        RefreshButton_Click
-'   Parameters:  Void
-'   Retval:      Void
-'   Purpose:
+'   Type        Event Sub-Procedure
+'   Name        RefreshButton_Click
+'   Parameters  Void
+'   Retval      Void
+'   Purpose
 '---------------------------------------------------------------------------------
 Private Sub RefreshButton_Click()
     On Error GoTo ErrorHandler:
-    Me.Filter = vbNullString
     ClearComboBoxValues
     ClearFilterValues
-    ResetOptionGroupValues
-    Me.Filter = GetFiscalYearFilter _
-        & pAnd & RpioNameFilter
-    Me.RecordSource = "SELECT * FROM Obligations" _
-        & " WHERE Not IsNull(Obligations.DocumentControlNumber)" _
-        & " AND " & Me.Filter
-    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Obligations.RpioName" _
-        & " FROM Obligations WHERE " & Me.Filter
-    Me.ProgramProjectNameComboBox.RowSource = "SELECT DISTINCT Obligations.FundName" _
-        & " FROM Obligations WHERE " & Me.Filter
-    Me.BocNameComboBox.RowSource = "SELECT DISTINCT Obligations.BocName" _
-        & " FROM Obligations WHERE " & Me.Filter
-    Me.Requery
+    SetFiscalYearOptionValue ("2021")
+    Me.AccountCodeComboBox.RowSource = "SELECT DISTINCT Obligations.AccountCode FROM Obligations"
+    Me.FocNameComboBox.RowSource = "SELECT DISTINCT Obligations.FocName FROM Obligations"
+    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Obligations.FundName FROM Obligations"
+    Me.RecordSource = "SELECT * FROM Obligations;"
 ErrorHandler:
     ProcessError
     Exit Sub
@@ -824,7 +872,7 @@ Private Sub ExcelButton_Click()
     Set p_Allocations = p_Excel.Workbooks.Open(p_BudgetPath.ReportTemplate)
     p_Allocations.Worksheets(2).Visible = False
     Set p_Worksheet = p_Allocations.Worksheets(1)
-    p_Worksheet.Name = "Programmatic Obligations"
+    p_Worksheet.Name = "Obligations By FOC"
     p_Worksheet.Cells.HorizontalAlignment = xlHAlignLeft
     p_Worksheet.Cells.Font.Name = "Source Code Pro"
     p_Worksheet.Cells.Font.Size = 8
@@ -850,8 +898,6 @@ ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
-
-
 
 
 
@@ -894,42 +940,6 @@ End Sub
 
 
 '----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ClearComboBoxValues
-'   Retval:      Void
-'   Parameters:  Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub ClearComboBoxValues()
-    On Error GoTo ErrorHandler:
-    Me.BocNameComboBox.Value = vbNullString
-    Me.ProgramProjectNameComboBox.Value = vbNullString
-    Me.FundNameComboBox.Value = vbNullString
-ErrorHandler:
-    ProcessError
-    Exit Sub
-End Sub
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ClearFilterValues
-'   Retval:      Void
-'   Parameters:  Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub ClearFilterValues()
-    On Error GoTo ErrorHandler:
-    FiscalYearFilter = vbNullString
-    FundNameFilter = vbNullString
-    BocNameFilter = vbNullString
-    RpioNameFilter = vbNullString
-ErrorHandler:
-    ProcessError
-    Exit Sub
-End Sub
-
-'----------------------------------------------------------------------------------
 '   Type:        Event Sub-Procedure
 '   Name:        DeleteButton_Click
 '   Parameters:  Void
@@ -945,6 +955,10 @@ ErrorHandler:
     ProcessError
     Exit Sub
 End Sub
+
+
+
+
 
 
 
@@ -1048,8 +1062,6 @@ End Sub
 
 
 
-
-
 '----------------------------------------------------------------------------------
 '   Type:        Event Sub-Procedure
 '   Name:        Process
@@ -1077,6 +1089,7 @@ Private Sub ProcessError(Optional Name As String, Optional Member As String)
     Err.Clear
     MessageFactory.ShowError (m_Error)
 End Sub
+
 
 
 

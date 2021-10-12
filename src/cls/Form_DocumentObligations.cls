@@ -85,6 +85,9 @@ Private Sub Form_Load()
     Me.Filter = FiscalYearFilter _
         & pAnd & RpioNameFilter _
         & pAnd & FundNameFilter
+    If Not Args.FundName & "" = "" Then
+        Me.FundNameComboBox.Value = CStr(Args.FundName)
+    End If
     Me.FundNameComboBox.RowSource = "SELECT DISTINCT Obligations.FundName" _
         & " FROM Obligations" _
         & " WHERE NOT IsNull(Obligations.DocumentNumber)" _
@@ -99,9 +102,6 @@ Private Sub Form_Load()
         & " WHERE NOT IsNull(Obligations.DocumentNumber)" _
         & pAnd & Me.Filter
     Me.Requery
-    If Not Args.FundName & "" = "" Then
-        Me.FundNameComboBox.Value = CStr(Args.FundName)
-    End If
     Me.Caption = Args.RpioName
 ErrorHandler:
     ProcessError
@@ -945,23 +945,34 @@ End Sub
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
     End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
+    End If
+    Err.Clear
     MessageFactory.ShowError (m_Error)
 End Sub
-
 
 
 

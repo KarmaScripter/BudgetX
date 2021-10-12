@@ -41,7 +41,7 @@ Private Sub Form_Load()
     SetComboBoxColors
     pAnd = " AND "
     Set Args = New AccountArgs
-    m_BFY = "[BFY] = '2021'"
+    m_BFY = "[BFY] = '2022'"
     Me.RpioNameComboBox.RowSource = "SELECT DISTINCT StatusOfFunds.RpioName" _
         & " FROM StatusOfFunds " _
         & " WHERE StatusOfFunds.RpioCode NOT IN" _
@@ -52,7 +52,8 @@ Private Sub Form_Load()
     Me.FiscalYearOptionGroup.DefaultValue = 2
     Me.FiscalYearOptionGroup.Value = 2
 ErrorHandler:
-    ProcessError
+    ProcessError Name:=Me.Name, _
+        Member:="Form_Load()"
     Exit Sub
 End Sub
 
@@ -76,16 +77,17 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     m_BFY = vbNullString
     Select Case Me.FiscalYearOptionGroup.Value
         Case 1
-            m_BFY = "[BFY] = '2020'"
-            Args.BFY = "2020"
-            Me.Filter = GetFiscalYearFilter
-        Case 2
             m_BFY = "[BFY] = '2021'"
             Args.BFY = "2021"
             Me.Filter = GetFiscalYearFilter
+        Case 2
+            m_BFY = "[BFY] = '2022'"
+            Args.BFY = "2022"
+            Me.Filter = GetFiscalYearFilter
     End Select
 ErrorHandler:
-    ProcessError
+    ProcessError Name:=Me.Name, _
+        Member:="FiscalYearOptionGroup_AfterUpdate()"
     Exit Sub
 End Sub
 
@@ -119,7 +121,8 @@ Private Function GetFiscalYearFilter() As String
                 & pAnd & m_RpioName
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:=Me.Name, _
+        Member:="GetFiscalYearFilter()"
     Exit Function
 End Function
 
@@ -143,7 +146,8 @@ Private Sub RpioNameComboBox_Change()
         & Me.RpioNameComboBox.Value & "'")
     m_RpioName = "[RpioName] = '" & Me.RpioNameComboBox.Value & "'"
 ErrorHandler:
-    ProcessError
+    ProcessError Name:=Me.Name, _
+        Member:="RpioNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -177,7 +181,8 @@ Private Function GetRpioNameFilter() As String
                 & pAnd & m_FundName
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:=Me.Name, _
+        Member:="GetRpioNameFilter()"
     Exit Function
 End Function
 
@@ -203,7 +208,8 @@ Private Sub FundNameComboBox_Change()
     Args.FundName = Me.FundNameComboBox.Value
     Args.FundCode = m_FundCode
 ErrorHandler:
-    ProcessError
+    ProcessError Name:=Me.Name, _
+        Member:="FundNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -237,9 +243,13 @@ Private Function GetFundNameFilter() As String
                 & pAnd & m_RpioName
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:=Me.Name, _
+        Member:="GetFundNameFilter()"
     Exit Function
 End Function
+
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -252,9 +262,13 @@ Private Sub AcceptButton_Click()
     On Error GoTo ErrorHandler:
     Me.Visible = Not Me.Visible
 ErrorHandler:
-    ProcessError
+    ProcessError Name:=Me.Name, _
+        Member:="AcceptButton_Click()"
     Exit Sub
 End Sub
+
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -267,11 +281,15 @@ Private Sub RefreshButton_Click()
     On Error GoTo ErrorHandler:
     ClearComboBoxValues
     ClearFilterValues
-    ClearOptionGroupValues
+    ResetOptionGroups
 ErrorHandler:
-    ProcessError
+    ProcessError Name:=Me.Name, _
+        Member:="RefreshButton_Click()"
     Exit Sub
 End Sub
+
+
+
 
 
 '---------------------------------------------------------------------------------
@@ -289,26 +307,34 @@ Private Sub SetComboBoxColors()
     Me!FundNameComboBox.BackColor = RGB(33, 33, 33)
     Me!FundNameComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
+    ProcessError Name:=Me.Name, _
+        Member:="SetComboBoxColors()"
     ProcessError
     Exit Sub
 End Sub
+
+
 
 
 '----------------------------------------------------------------------------------
 '   Type:        Sub-Procedure
-'   Name:        ClearOptionGroupValues
+'   Name:        ResetOptionGroups
 '   Parameters:  Void
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ClearOptionGroupValues()
+Private Sub ResetOptionGroups()
     On Error GoTo ErrorHandler:
-    Me.FiscalYearOptionGroup.Value = vbNullString
-    m_BFY = vbNullString
+    Me.FiscalYearOptionGroup.Value = 2
+    m_BFY = "2022"
 ErrorHandler:
-    ProcessError
+    ProcessError Name:=Me.Name, _
+        Member:="ResetOptionGroups()"
     Exit Sub
 End Sub
+
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -323,9 +349,13 @@ Private Sub ClearComboBoxValues()
     Me.RpioNameComboBox.Value = vbNullString
     Me.FundNameComboBox.Value = vbNullString
 ErrorHandler:
-    ProcessError
+    ProcessError Name:=Me.Name, _
+        Member:="ClearComboBoxValues()"
     Exit Sub
 End Sub
+
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -342,9 +372,11 @@ Private Sub ClearFilterValues()
     m_FundName = vbNullString
     Me.Filter = vbNullString
 ErrorHandler:
-    ProcessError
+    ProcessError Name:=Me.Name, _
+        Member:="ClearFilterValues()"
     Exit Sub
 End Sub
+
 
 
 
@@ -363,7 +395,8 @@ Private Sub ExitButton_Click()
     End If
     DoCmd.Close acForm, Me.Name
 ErrorHandler:
-    ProcessError
+    ProcessError Name:=Me.Name, _
+        Member:="ExitButton_Click()"
     Exit Sub
 End Sub
 
@@ -373,19 +406,34 @@ End Sub
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+            Err.Clear
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
+            Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
 End Sub
