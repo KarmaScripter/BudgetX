@@ -19,3 +19,5 @@ ORDER BY StatusOfFunds.BFY DESC , StatusOfFunds.FundCode, StatusOfFunds.AccountC
 =======
 >>>>>>> Stashed changes
 *.accdb
+*.accdb
+db/accdb/models/Views.accdb

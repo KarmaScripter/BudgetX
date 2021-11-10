@@ -3,8 +3,8 @@ Option Explicit
 
 
 
-Public PRC As AccountArgs
-Private mDialog As Form_DivisionSelector
+Public Args As AccountArgs
+Private m_Dialog As Form_DivisionSelector
 Private FundNameFilter As String
 Private AccountCodeFilter As String
 Private BocNameFilter As String
@@ -12,8 +12,9 @@ Private FocNameFilter As String
 Private FiscalYearFilter As String
 Private RcCodeFilter As String
 Private pAnd As String
-Private mError As String
-Private mNotification As String
+Private m_Error As String
+Private m_Notification As String
+
 
 
 
@@ -26,25 +27,20 @@ Private mNotification As String
 '---------------------------------------------------------------------------------
 Private Sub Form_Open(Cancel As Integer)
     On Error GoTo ErrorHandler::
-    Set mDialog = New Form_DivisionSelector
-    Set PRC = New AccountArgs
+    Set m_Dialog = New Form_DivisionSelector
+    Set Args = New AccountArgs
     DoCmd.OpenForm FormName:="DivisionSelector", WindowMode:=acDialog
-    Set mDialog = Forms("DivisionSelector")
-    Set PRC = mDialog.Args
-    RcCodeFilter = "[RcCode] = '" & PRC.RcCode & "'"
+    Set m_Dialog = Forms("DivisionSelector")
+    Set Args = m_Dialog.Args
+    RcCodeFilter = "[RcCode] = '" & Args.RcCode & "'"
     Me.RecordSource = "SELECT * FROM Purchases" _
         & " WHERE Purchases.BocCode NOT IN ('10', '17')" _
-        & " AND Purchases.RcCode = '" & PRC.RcCode & "';"
+        & " AND Purchases.RcCode = '" & Args.RcCode & "';"
     SetDivisionIcon
-    DoCmd.Close ObjectType:=acForm, ObjectName:=mDialog.Name, Save:=acSaveNo
+    DoCmd.Close ObjectType:=acForm, ObjectName:=m_Dialog.Name, Save:=acSaveNo
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   DocumentObligations" _
-            & vbCrLf & "Member:     Form_Open()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -66,7 +62,7 @@ Private Sub Form_Load()
     Me.Section(acFooter).AutoHeight = False
     Me.Section(acFooter).Height = 0.5
     Me.FiscalYearOptionGroup.Value = 2
-    FiscalYearFilter = "[BFY] = '2021'"
+    FiscalYearFilter = "[BFY] = '2022'"
     ClearComboBoxValues
     SetComboBoxColors
     pAnd = " AND "
@@ -85,13 +81,8 @@ Private Sub Form_Load()
         & " WHERE " & Me.Filter
     Me.FilterOn = True
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     Form_Close()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -111,13 +102,8 @@ Private Sub Form_Close()
     Me.Filter = vbNullString
     RcCodeFilter = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     Form_Close()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -146,13 +132,8 @@ Private Sub SetButtonVisibility()
     Me.DataButton.Visible = Not Me.DataButton.Visible
     Me.CompassSpendingQueryButton.Visible = Not Me.CompassSpendingQueryButton.Visible
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     SetButtonVisibility()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -170,50 +151,45 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub SetDivisionIcon()
     On Error GoTo ErrorHandler::
-    If Not PRC.RcCode = vbNullString Then
+    If Not Args.RcCode = vbNullString Then
         Me.Caption = "Obligations By Finance Object Class"
-        Select Case PRC.RcCode
+        Select Case Args.RcCode
             Case "06A"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\ORA.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ORA.png"
             Case "06B"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\LCARD.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\LCARD.png"
             Case "06C"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\MSD.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\MSD.png"
             Case "06D"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\ORC.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ORC.png"
             Case "06F"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\EJ.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\EJ.png"
             Case "06G"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\WCF.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\WCF.png"
             Case "06H"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\LSASD.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\LSASD.png"
             Case "06J"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\ARD.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ARD.png"
             Case "06K"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\WD.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\WD.png"
             Case "06L"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\SEMD.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\SEMD.png"
             Case "06M"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\ECAD.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ECAD.png"
             Case "06N"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\WSA.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\WSA.png"
             Case "06R"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\MSR.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\MSR.png"
             Case "06X"
-                Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\XA.png"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\XA.png"
         End Select
     Else
         Me.DivisionIcon.Picture = _
-            CurrentProject.path & "\etc\png\AppIcons\interface\ui\Reports.png"
+            CurrentProject.Path & "\etc\png\AppIcons\interface\ui\Reports.png"
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:      FinanceObligations" _
-            & vbCrLf & "Member:     SetDivisionIcon()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -230,13 +206,8 @@ Private Sub Form_Timer()
     On Error GoTo ErrorHandler:
     HideButtons
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     Form_Timer()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -266,13 +237,8 @@ Private Sub HideButtons()
     Me.SaveButton.Visible = False
     Me.CompassSpendingQueryButton.Visible = False
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:      FinanceObligations" _
-            & vbCrLf & "Member:     HideButtons()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -298,13 +264,8 @@ Private Sub SetComboBoxColors()
     Me.AccountCodeComboBox.BackColor = RGB(33, 33, 33)
     Me.AccountCodeComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -323,13 +284,8 @@ Private Sub ClearComboBoxValues()
     Me.FocNameComboBox.Value = vbNullString
     Me.AccountCodeComboBox.Value = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     ClearComboBoxValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -349,13 +305,8 @@ Private Sub ClearFilterValues()
     AccountCodeFilter = vbNullString
     FiscalYearFilter = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     ClearFilterValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -370,15 +321,10 @@ End Sub
 Private Sub ResetOptionGroupValues()
     On Error GoTo ErrorHandler:
      Me.FiscalYearOptionGroup.Value = 2
-     FiscalYearFilter = "[BFY] = '2021'"
+     FiscalYearFilter = "[BFY] = '2022'"
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     ResetOptionGroupValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -403,13 +349,8 @@ Private Sub FocNameComboBox_Change()
         & " FROM Purchases" _
         & " WHERE " & Me.Filter
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     FocNameComboBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -485,13 +426,8 @@ Private Function GetFocNameFilter() As String
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     GetFocNameFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Function
 End Function
 
@@ -514,13 +450,8 @@ Private Sub AccountCodeComboBox_Change()
     Me.RecordSource = "SELECT * FROM Purchases WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     AccountCodeComboBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -604,13 +535,8 @@ Private Function GetAccountCodeFilter() As String
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     GetAccountCodeFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Function
 End Function
 
@@ -640,13 +566,8 @@ Private Sub FundNameComboBox_Change()
         & " FROM Purchases" _
         & " WHERE " & Me.Filter
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     FundNameComboBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -722,13 +643,8 @@ Private Function GetFundNameFilter() As String
                 & pAnd & AccountCodeFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     GetFundNameFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Function
 End Function
 
@@ -747,21 +663,16 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     FiscalYearFilter = vbNullString
     Select Case FiscalYearOptionGroup.Value
         Case 1
-            FiscalYearFilter = "[BFY] = '2020'"
-        Case 2
             FiscalYearFilter = "[BFY] = '2021'"
+        Case 2
+            FiscalYearFilter = "[BFY] = '2022'"
     End Select
     Me.Filter = RcCodeFilter & pAnd & GetFiscalYearFilter
     Me.RecordSource = "SELECT * FROM Purchases WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     FiscalYearOptionGroup_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -837,13 +748,8 @@ Private Function GetFiscalYearFilter() As String
                 & pAnd & FocNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     GetFiscalYearFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Function
 End Function
 
@@ -860,12 +766,8 @@ Private Sub CalculatorButton_Click()
     On Error GoTo ErrorHandler:
     Calculator.Calculate
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member: CalculatorButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -881,13 +783,8 @@ Private Sub CompassSpendingQueryButton_Click()
     On Error GoTo ErrorHandler:
     DoCmd.OpenForm "BudgetDetailedSpendingQuery"
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     CompassSpendingQueryButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -903,13 +800,8 @@ Private Sub MenuButton_Click()
     On Error GoTo ErrorHandler:
     SetButtonVisibility
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     MenuButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -925,13 +817,8 @@ Private Sub OriginalActionDateTextBox_Click()
     On Error GoTo ErrorHandler:
     DoCmd.OpenForm "BudgetCalendar", , , , , , Me.OriginalActionDateTextBox
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     OriginalActionDateTextBox_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -953,13 +840,8 @@ Private Sub RefreshButton_Click()
     Me.FundNameComboBox.RowSource = "SELECT DISTINCT Purchases.FundName FROM Purchases"
     Me.RecordSource = "SELECT * FROM Purchases;"
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     RefreshButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-            Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -974,28 +856,24 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetColumnNames() As String()
     On Error GoTo ErrorHandler:
-    Dim mFields As Collection
+    Dim m_Fields As Collection
     Dim field As DAO.field
-    Dim mData As DAO.Recordset
-    Set mData = Me.Recordset
+    Dim m_Data As DAO.Recordset
+    Set m_Data = Me.Recordset
     Dim i As Integer
     Dim j As Integer
-    Dim mArray() As String
-    j = mData.Fields.count - 1
-    ReDim mArray(j)
-    For i = LBound(mArray()) To UBound(mArray())
-        If Not mData.Fields(i).Name & "" = "" Then
-            mArray(i) = mData.Fields(i).Name
+    Dim m_Array() As String
+    j = m_Data.Fields.Count - 1
+    ReDim m_Array(j)
+    For i = LBound(m_Array()) To UBound(m_Array())
+        If Not m_Data.Fields(i).Name & "" = "" Then
+            m_Array(i) = m_Data.Fields(i).Name
         End If
     Next i
-    GetColumnNames = mArray()
+    GetColumnNames = m_Array()
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:       FinanceObligations" _
-            & vbCrLf & "Member:     GetColumnNames" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Function
 End Function
 
@@ -1010,18 +888,13 @@ End Function
 '---------------------------------------------------------------------------------
 Private Function GetReportData() As DAO.Recordset
     On Error GoTo ErrorHandler:
-    Dim mData As DAO.Recordset
-    Set mData = Me.Recordset
-    mData.Filter = Me.Filter
-    Set GetReportData = mData
+    Dim m_Data As DAO.Recordset
+    Set m_Data = Me.Recordset
+    m_Data.Filter = Me.Filter
+    Set GetReportData = m_Data
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     GetReportData" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Function
 End Function
 
@@ -1036,60 +909,52 @@ End Function
 '---------------------------------------------------------------------------------
 Private Sub ExcelButton_Click()
     On Error GoTo ErrorHandler:
-    Dim mFields() As String
-    mFields() = GetColumnNames
-    Dim mBudgetPath As BudgetPath
-    Dim mExcel As Excel.Application
-    Dim mAllocations As Excel.Workbook
-    Dim mWorksheet As Excel.Worksheet
-    Dim mList As Excel.ListObject
-    Dim mRange As Excel.Range
-    Dim mCell As Object
-    Dim mHeader As Excel.Range
-    Dim mStart As Excel.Range
-    Dim mEnd As Excel.Range
+    Dim p_Fields() As String
+    p_Fields() = GetColumnNames
+    Dim p_BudgetPath As BudgetPath
+    Dim p_Excel As Excel.Application
+    Dim p_Allocations As Excel.Workbook
+    Dim p_Worksheet As Excel.Worksheet
+    Dim p_List As Excel.ListObject
+    Dim p_Range As Excel.Range
+    Dim p_Cell As Object
+    Dim p_Header As Excel.Range
+    Dim p_Start As Excel.Range
+    Dim p_End As Excel.Range
     Dim field As DAO.field
-    Dim mData As DAO.Recordset
+    Dim p_Data As DAO.Recordset
     Dim i As Integer
     Dim j As Integer
-    Set mBudgetPath = New BudgetPath
-    Set mExcel = CreateObject("Excel.Application")
-    Set mAllocations = mExcel.Workbooks.Open(mBudgetPath.ReportTemplate)
-    mAllocations.Worksheets(2).Visible = False
-    Set mWorksheet = mAllocations.Worksheets(1)
-    mWorksheet.Name = "Obligations By FOC"
-    mWorksheet.Cells.HorizontalAlignment = xlHAlignLeft
-    mWorksheet.Cells.Font.Name = "Source Code Pro"
-    mWorksheet.Cells.Font.Size = 8
-    Set mStart = mWorksheet.Cells(1, 1)
-    Set mEnd = mWorksheet.Cells(1, UBound(mFields) - 1)
-    Set mHeader = mWorksheet.Range(mStart, mEnd)
-    mHeader.HorizontalAlignment = xlHAlignLeft
-    mHeader.Borders(xlEdgeBottom).Color = RGB(0, 0, 0)
-    mHeader.Font.Name = "Source Code Pro"
-    mHeader.Font.Color = vbBlack
-    mHeader.Font.Bold = True
-    mHeader.Font.Size = 8
-    For i = LBound(mFields) To UBound(mFields)
-        mHeader.Cells(i + 1).Value = mFields(i)
+    Set p_BudgetPath = New BudgetPath
+    Set p_Excel = CreateObject("Excel.Application")
+    Set p_Allocations = p_Excel.Workbooks.Open(p_BudgetPath.ReportTemplate)
+    p_Allocations.Worksheets(2).Visible = False
+    Set p_Worksheet = p_Allocations.Worksheets(1)
+    p_Worksheet.Name = "Obligations By FOC"
+    p_Worksheet.Cells.HorizontalAlignment = xlHAlignLeft
+    p_Worksheet.Cells.Font.Name = "Source Code Pro"
+    p_Worksheet.Cells.Font.Size = 8
+    Set p_Start = p_Worksheet.Cells(1, 1)
+    Set p_End = p_Worksheet.Cells(1, UBound(p_Fields) - 1)
+    Set p_Header = p_Worksheet.Range(p_Start, p_End)
+    p_Header.HorizontalAlignment = xlHAlignLeft
+    p_Header.Borders(xlEdgeBottom).Color = RGB(0, 0, 0)
+    p_Header.Font.Name = "Source Code Pro"
+    p_Header.Font.Color = vbBlack
+    p_Header.Font.Bold = True
+    p_Header.Font.Size = 8
+    For i = LBound(p_Fields) To UBound(p_Fields)
+        p_Header.Cells(i + 1).Value = p_Fields(i)
     Next i
-    Set mData = Me.Recordset
-    mData.Filter = Me.Filter
-    mWorksheet.Cells(2, 1).CopyFromRecordset mData
-    mHeader.Font.Color = vbBlack
-    mExcel.WindowState = xlMaximized
-    mExcel.Visible = True
+    Set p_Data = Me.Recordset
+    p_Data.Filter = Me.Filter
+    p_Worksheet.Cells(2, 1).CopyFromRecordset p_Data
+    p_Header.Font.Color = vbBlack
+    p_Excel.WindowState = xlMaximized
+    p_Excel.Visible = True
 ErrorHandler:
-    If Err.Number <> 0 Then
-        mError = "Source:   FinanceObligations" _
-            & vbCrLf & "Member:     ExcelButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-        Set mExcel = Nothing
-        Set mAllocations = Nothing
-        Set mWorksheet = Nothing
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -1108,13 +973,8 @@ Private Sub UndoButton_Click()
         DoCmd.RunCommand acCmdUndo
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   AllocationForm" _
-            & vbCrLf & "Member: SaveButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -1134,15 +994,63 @@ Private Sub SaveButton_Click()
         DoCmd.RunCommand acCmdSave
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   AllocationForm" _
-            & vbCrLf & "Member: SaveButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        DeleteButton_Click
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub DeleteButton_Click()
+    On Error GoTo ErrorHandler:
+    If Me.Dirty Then
+        DoCmd.RunCommand acCmdDelete
+    End If
+ErrorHandler:
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
+    Exit Sub
+End Sub
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Err.Clear
+End Sub
+
+
 
 
 
