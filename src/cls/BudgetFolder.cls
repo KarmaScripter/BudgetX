@@ -75,7 +75,7 @@ Public Property Let Base(pFilePath As String)
         m_Base = pFilePath
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -94,7 +94,7 @@ Public Property Get Base() As String
         Base = m_Base
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -115,7 +115,7 @@ Public Property Get FileCount() As Integer
         FileCount = m_FileSys.GetFolder(m_Base).Files.count
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -137,7 +137,7 @@ Public Property Get FolderCount() As Integer
         FolderCount = m_SubFolders.count
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -163,7 +163,7 @@ Public Property Get Exists() As Boolean
         End If
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -188,7 +188,7 @@ Public Property Get IsRooted() As Boolean
         End If
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -208,7 +208,7 @@ Public Property Get CurrentDirectory() As String
     p_Current = CurDir()
     CurrentDirectory = p_Current
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -232,7 +232,7 @@ Public Property Get Path() As String
             Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -255,7 +255,7 @@ Public Property Get Drive() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -278,7 +278,7 @@ Public Property Get ParentFolder() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -301,7 +301,7 @@ Public Property Get DateCreated() As Date
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -324,7 +324,7 @@ Public Property Get LastAccessed() As Date
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -347,7 +347,7 @@ Public Property Get LastModified() As Date
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -370,7 +370,7 @@ Public Property Get Name() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -393,7 +393,7 @@ Public Property Get Size() As Variant
     End If
     Set m_FileSys = Nothing
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -417,7 +417,7 @@ Public Property Get SubFolders() As Scripting.folders
         Set SubFolders = m_SubFolders
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -442,7 +442,7 @@ Public Static Function Verify(pPath As String) As Boolean
             End If
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Function
 End Function
 
@@ -466,7 +466,7 @@ Public Function GetName(pPath As String) As String
             Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Function
 End Function
 
@@ -489,7 +489,7 @@ Public Function GetSubFiles(pPath As String) As Scripting.Files
             Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Function
 End Function
 
@@ -513,7 +513,7 @@ Public Function GetSubFolders(pPath As String) As Scripting.folders
             Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Function
 End Function
 
@@ -536,7 +536,7 @@ Public Function GetSize(pPath As String) As Variant
     Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Function
 End Function
 
@@ -559,7 +559,7 @@ Public Function Create() As Scripting.folder
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Function
 End Function
 
@@ -584,7 +584,7 @@ Public Static Function CreateDirectory(pPath As String) As Scripting.folder
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Function
 End Function
 
@@ -603,7 +603,7 @@ Public Static Sub ChangeDirectory(pPath As String)
         ChDir (m_Base)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Sub
 End Sub
 
@@ -627,7 +627,7 @@ Public Sub AddSubFolder(pFolderName As String)
         Set p_Folder = m_SubFolders.add(pFolderName)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Sub
 End Sub
 
@@ -653,7 +653,7 @@ Public Property Get SubFiles() As Collection
         Set SubFiles = p_FileCollection
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Property
 End Property
 
@@ -685,7 +685,7 @@ Public Function ContainsFile(pFile As String) As Boolean
         End If
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Function
 End Function
 
@@ -719,7 +719,7 @@ Public Function ContainsSubFolder(pFolder As String) As Boolean
         End If
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Function
 End Function
 
@@ -740,7 +740,7 @@ Public Sub Move(des As String)
     If Not m_Base & "" = "" Then
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Sub
 End Sub
 
@@ -759,7 +759,7 @@ Public Sub Copy(dest As String)
     If Not m_Base & "" = "" Then
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Sub
 End Sub
 
@@ -780,7 +780,7 @@ Public Sub Delete()
         m_FileSys.DeleteFolder (m_Base)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Sub
 End Sub
 
@@ -805,7 +805,7 @@ Public Function CreateTextFile(pFilePath As String) As Scripting.TextStream
             CreateTextFile = p_TextFile
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Function
 End Function
 
@@ -835,7 +835,7 @@ Public Sub Browse()
        m_FileSys.OpenTextFile (p_Dialog.Item)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Sub
 End Sub
 
@@ -858,7 +858,7 @@ Public Sub Rename(pName As String)
         End If
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Sub
 End Sub
 
@@ -884,7 +884,7 @@ Public Sub OpenFolderDialog()
        Debug.Print p_Dialog.SelectedItems(1)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Sub
 End Sub
 
@@ -911,7 +911,7 @@ Public Sub Zip(pFolderPath As Variant, pZippedPath As Variant)
         p_Shell.Wait (Now + TimeValue("0:00:01"))
     Loop
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFolder"
     Exit Sub
 End Sub
 
@@ -920,22 +920,33 @@ End Sub
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError Name:="BudgetFolder"(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
-
-

@@ -37,13 +37,8 @@ Private Sub Form_Load()
         & " WHERE StatusOfFunds.BudgetLevel = '7'" _
         & " AND StatusOfFunds.BocCode = '10';"
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollStatusDialog" _
-            & vbCrLf & "Member:      Form_Load()" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayrollDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -61,13 +56,8 @@ Private Sub SetComboBoxColors()
     Me.FundNameComboBox.BackColor = RGB(33, 33, 33)
     Me.FundNameComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FundDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayrollDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -82,13 +72,8 @@ Private Sub AcceptButton_Click()
     On Error GoTo ErrorHandler:
     Me.Visible = Not Me.Visible
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FundDialog" _
-            & vbCrLf & "Member:     AcceptButton_Click()" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayrollDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -105,13 +90,8 @@ Private Sub ExitButton_Click()
     ClearFilterValues
     DoCmd.Close acForm, Me.Name
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FundDialog" _
-            & vbCrLf & "Member: ExitButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayrollDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -133,13 +113,8 @@ Private Sub FundNameComboBox_Change()
         & Me.FundNameComboBox.Value & "'")
     FundNameFilter = "[FundName] = '" & Me.FundNameComboBox.Value & "'"
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollStatusDialog" _
-            & vbCrLf & "Member:     FundNameComboBox_Change()" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayrollDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -164,13 +139,8 @@ Private Function GetFundNameFilter() As String
             GetFundNameFilter = FundNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FundDialog" _
-            & vbCrLf & "Member:     GetFundNameFilter()" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayrollDialog", _ 
+        Member:=""
     Exit Function
 End Function
 
@@ -199,13 +169,8 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     End Select
     Me.Filter = GetFiscalYearFilter
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FundDialog" _
-            & vbCrLf & "Member:      FiscalYearOptionGroup_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayrollDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -228,13 +193,8 @@ Private Function GetFiscalYearFilter()
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FundDialog" _
-            & vbCrLf & "Member: GetFiscalYearFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayrollDialog", _ 
+        Member:=""
     Exit Function
 End Function
 
@@ -253,13 +213,8 @@ Private Sub RefreshButton_Click()
     ClearFilterValues
     Me.FiscalYearOptionGroup.Value = 2
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FundDialog" _
-            & vbCrLf & "Member:     RefreshButton_Click()" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayrollDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -280,13 +235,8 @@ Private Sub ClearComboBoxValues()
         & " FROM StatusOfFunds" _
         & " WHERE StatusOfFunds.BocCode = '10';"
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FundDialog" _
-            & vbCrLf & "Member:     ClearComboBoxValues()" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayrollDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -307,14 +257,40 @@ Private Sub ClearFilterValues()
     Args.FundCode = vbNullString
     Me.Filter = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   FundDialog" _
-            & vbCrLf & "Member:     ClearFilterValues()" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayrollDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
 
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Err.Clear
+End Sub

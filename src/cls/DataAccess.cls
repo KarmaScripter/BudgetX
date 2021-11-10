@@ -55,7 +55,7 @@ End Sub
 '   RetVal:      Boolean
 '   Purpose:     Function returns boolean value indicating if Workspace is open
 '---------------------------------------------------------------------------------
-Public Property Get IsConnected() As Boolean
+Public Property Get IsConnectedIsConnected() As Boolean
     On Error GoTo ErrorHandler:
     If Not IsObject(m_Data) Then
         IsConnected = True
@@ -64,7 +64,8 @@ Public Property Get IsConnected() As Boolean
         IsConnected = False
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DeleteRecord", _ 
+        Member:="IsConnected"
     Exit Property
 End Property
 
@@ -85,7 +86,8 @@ Public Property Get IsOpen() As Boolean
         IsOpen = False
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DeleteRecord", _ 
+        Member:="IsOpen"
     Exit Property
 End Property
 
@@ -107,7 +109,8 @@ Public Function GetDataSet(table As String) As DAO.Recordset
     End If
     Set GetDataSet = rs
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DeleteRecord", _ 
+        Member:="GetDataSet"
     Exit Function
 End Function
 
@@ -135,7 +138,8 @@ Public Function GetDataRecord(table As String, primarykey As String, ID As Integ
             Set GetDataRecord = rs
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DeleteRecord", _ 
+        Member:="GetDataRecord"
     Exit Function
 End Function
 
@@ -155,7 +159,8 @@ Public Sub CloseDatabase()
         Set m_Data = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DeleteRecord", _ 
+        Member:="CloseDatabase"
     Exit Sub
 End Sub
 
@@ -174,7 +179,8 @@ Public Sub CloseWorkspace()
         Set m_BudgetExecution = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DeleteRecord", _ 
+        Member:="CloseWorkspace"
     Exit Sub
 End Sub
 
@@ -201,7 +207,8 @@ Public Sub UpdateData(table As String, field As String, Value As Variant)
             rs.Update
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DeleteRecord", _ 
+        Member:="UpdateData"
     Exit Sub
 End Sub
 
@@ -224,7 +231,8 @@ Public Sub AddRecord(table As String, field As String, Value As Variant)
       .Update
     End With
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DeleteRecord", _ 
+        Member:="AddRecord"
     Exit Sub
 End Sub
 
@@ -249,7 +257,8 @@ Public Sub UpdateRecord(table As String, field As String, NewValue As Variant, I
         End With
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DeleteRecord", _ 
+        Member:="UpdateRecord"
     Exit Sub
 End Sub
 
@@ -270,7 +279,8 @@ Public Sub DeleteRecord(table As String, pk As String, ID As Integer)
     SQL = "DELETE FROM table WHERE pk = id"
     Set rs = DB.OpenRecordset(SQL)
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DeleteRecord", _ 
+        Member:="DeleteRecord"
     Exit Sub
 End Sub
 
@@ -280,22 +290,35 @@ End Sub
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
-
 

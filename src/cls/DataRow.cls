@@ -67,7 +67,8 @@ Public Property Let Base(pBase As Record)
         Set m_Base = pBase(0)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataRow", _ 
+        Member:="Base"
     Exit Property
 End Property
 
@@ -86,7 +87,8 @@ Public Property Get Base() As Record
         Set Base = m_Base
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataRow", _ 
+        Member:="Base"
     Exit Property
 End Property
 
@@ -105,7 +107,8 @@ Public Property Get Fields() As DAO.Fields
         Set Fields = m_Base.Fields
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataRow", _ 
+        Member:="Fields"
     Exit Property
 End Property
 
@@ -129,7 +132,8 @@ Public Property Get Values() As Variant()
         Values = p_Values
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataRow", _ 
+        Member:="Values"
     Exit Property
 End Property
 
@@ -148,7 +152,8 @@ Public Property Get Index() As DataColumn
         Set Index = GetIndex(m_Base.Fields)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataRow", _ 
+        Member:="Index"
     Exit Property
 End Property
 
@@ -172,7 +177,8 @@ Private Function GetValues(pData As DAO.Fields) As Variant()
         GetValues = p_Values
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataRow", _ 
+        Member:="GetValues"
     Exit Function
 End Function
 
@@ -196,7 +202,8 @@ Private Function GetNames(pData As DAO.Fields) As String()
         GetNames = p_Names
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataRow", _ 
+        Member:="GetNames"
     Exit Function
 End Function
 
@@ -220,7 +227,8 @@ Private Function GetIndex(pData As DAO.Fields) As DataColumn
         Set GetIndex = p_Index
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataRow", _ 
+        Member:="GetIndex"
     Exit Function
 End Function
 
@@ -248,7 +256,8 @@ Private Function GetDataColumns(pData As DAO.Fields) As DataColumn()
         GetDataColumns = p_DataColumns
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataRow", _ 
+        Member:="GetDataColumns"
     Exit Function
 End Function
 
@@ -270,7 +279,8 @@ Public Property Get IsConnected() As Boolean
         IsConnected = False
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataRow" Name:="DataRow", _ 
+        Member:="IsConnected"
     Exit Property
 End Property
 
@@ -279,25 +289,37 @@ End Property
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError Name:="DataRow"(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
-
-
 
 
 

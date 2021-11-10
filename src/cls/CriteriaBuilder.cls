@@ -70,7 +70,8 @@ Public Property Let Names(pNames() As String)
             Names = m_Names
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="CriteriaBuilder"
+        Member:="Names"
     Exit Property
 End Property
 
@@ -91,7 +92,8 @@ Public Property Get Names() As String()
             Names = m_Names
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="CriteriaBuilder"
+        Member:="Names"
     Exit Property
 End Property
 
@@ -119,7 +121,8 @@ Public Property Let Values(pValues() As Variant)
             Values = m_Values
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="CriteriaBuilder"
+        Member:="Values"
     Exit Property
 End Property
 
@@ -139,7 +142,8 @@ Public Property Get Values() As Variant()
         Values = m_Values
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="CriteriaBuilder"
+        Member:="Values"
     Exit Property
 End Property
 
@@ -170,7 +174,8 @@ Public Function GetNameValuePairs() As Scripting.Dictionary
             Set GetNameValuePairs = p_Criteria
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="CriteriaBuilder"
+        Member:="GetNameValuePairs"
     Exit Function
 End Function
 
@@ -198,7 +203,8 @@ Public Function GetDataAccessCriteria(pData As DAO.Recordset) As Scripting.Dicti
         Set GetDataAccessCriteria = p_Criteria.Items
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="CriteriaBuilder"
+        Member:="GetDataAccessCriteria"
     Exit Function
 End Function
 
@@ -227,7 +233,8 @@ Public Function GetAccessDataCriteria(pData As ADODB.Recordset) As Scripting.Dic
         Set GetAccessDataCriteria = p_Criteria.Items
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="CriteriaBuilder"
+        Member:="GetAccessDataCriteria"
     Exit Function
 End Function
 
@@ -240,21 +247,31 @@ End Function
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
-

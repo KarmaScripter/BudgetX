@@ -56,7 +56,8 @@ Public Property Let Base(pBase As DAO.Recordset)
         Set m_Base = pBase
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataTable", _ 
+        Member:="Base"
     Exit Property
 End Property
 
@@ -75,7 +76,8 @@ Public Property Get Base() As DAO.Recordset
         Set Base = m_Base
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataTable", _ 
+        Member:="Base"
     Exit Property
 End Property
 
@@ -93,7 +95,8 @@ End Property
 Public Property Let Name(pName As String)
     On Error GoTo ErrorHandler:
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataTable", _ 
+        Member:="Name"
     Exit Property
 End Property
 
@@ -112,7 +115,8 @@ Public Property Get Name() As String
         Name = m_Name
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataTable", _ 
+        Member:="Name"
     Exit Property
 End Property
 
@@ -132,7 +136,8 @@ Public Property Get RowCount() As Integer
         RowCount = m_Base.RecordCount
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataTable", _ 
+        Member:="RowCount"
     Exit Property
 End Property
 
@@ -152,7 +157,8 @@ Public Property Get ColumnCount() As Integer
         ColumnCount = m_Base.Fields.count
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataTable", _ 
+        Member:="ColumnCount"
     Exit Property
 End Property
 
@@ -176,7 +182,8 @@ Public Property Get Columns() As DataColumn()
         Columns = GetDataColumns(m_Base.Fields)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataTable", _ 
+        Member:="Columns"
     Exit Property
 End Property
 
@@ -197,13 +204,8 @@ Public Property Get Rows() As DataRow()
         Rows = GetDataRows(m_Base.Fields)
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:       DataTable" _
-            & vbCrLf & "Member:     Rows" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="DataTable", _ 
+        Member:="Rows"
     Exit Property
 End Property
 
@@ -228,7 +230,8 @@ Public Property Get Schema() As DataSchema
         Schema = m_DataSchema
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataTable", _ 
+        Member:="Schema"
     Exit Property
 End Property
 
@@ -259,7 +262,8 @@ Private Function GetDataColumns(pData As DAO.Fields) As DataColumn()
         GetDataColumns = p_DataColumns
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataTable", _ 
+        Member:="GetDataColumns"
     Exit Function
 End Function
 
@@ -288,7 +292,8 @@ Private Function GetDataRows(pData As DAO.Recordset) As DataRow()
         GetDataRows = p_DataRows
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataTable", _ 
+        Member:="GetDataRows"
     Exit Function
 End Function
 
@@ -311,7 +316,8 @@ Public Property Get IsConnected() As Boolean
         IsConnected = False
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataTable", _ 
+        Member:="IsConnected"
     Exit Property
 End Property
 
@@ -337,7 +343,8 @@ Private Sub KillData()
         Set m_Base = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataTable", _ 
+        Member:="KillData"
     Exit Sub
 End Sub
 
@@ -348,22 +355,41 @@ End Sub
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
 
 

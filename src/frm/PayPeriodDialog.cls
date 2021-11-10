@@ -21,7 +21,12 @@ Private mError As String
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub Form_Open(Cancel As Integer)
+    On Error GoTo ErrorHandler
     Set Args = New PayrollArgs
+ErrorHandler:
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="Form_Open"
+    Exit Sub
 End Sub
 
 
@@ -44,13 +49,8 @@ Private Sub Form_Load()
     Me.StartDateTextBox.Value = #10/1/2020#
     Me.EndDateTextBox.Value = Date
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollDialog" _
-            & vbCrLf & "Member:     Form_Load()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="Form_Load()"
     Exit Sub
 End Sub
 
@@ -72,13 +72,8 @@ Private Sub DivisionNameComboBox_Change()
         & " FROM PayrollObligations WHERE" _
         & " PayrollObligations.DivisionName = '" & Me.DivisionNameComboBox.Value & "'"
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollDialog" _
-            & vbCrLf & "Member:     DivisionNameComboBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="DivisionNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -96,13 +91,8 @@ Private Sub FundNameComboBox_Change()
     mFundName = Me.FundNameComboBox.Value
     Args.FundName = mFundName
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollDialog" _
-            & vbCrLf & "Member:     FundNameComboBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="FundNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -120,13 +110,8 @@ Private Sub StartDateTextBox_AfterUpdate()
     mStartDate = Me.StartDateTextBox.text
     Args.StartDate = mStartDate
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollDialog" _
-            & vbCrLf & "Member:     StartDateTextBox_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="StartDateTextBox_AfterUpdate()"
     Exit Sub
 End Sub
 
@@ -144,13 +129,8 @@ Private Sub EndDateTextBox_Change()
     mEndDate = Me.EndDateTextBox.text
     Args.EndDate = mEndDate
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollDialog" _
-            & vbCrLf & "Member:     EndDateTextBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="EndDateTextBox_Change()"
     Exit Sub
 End Sub
 
@@ -164,7 +144,12 @@ End Sub
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub AcceptButton_Click()
+    On Error GoTo ErrorHandler
     Me.Visible = Not Me.Visible
+ErrorHandler:   
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="AcceptButton_Click()"
+    Exit Sub
 End Sub
 
 
@@ -180,13 +165,8 @@ Private Sub RefreshButton_Click()
     ClearFilterValues
     ClearTextBoxValues
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollDialog" _
-            & vbCrLf & "Member:     RefreshButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="RefreshButton_Click()"
     Exit Sub
 End Sub
 
@@ -213,13 +193,8 @@ Private Sub SetComboBoxColors()
     Me!EndDateTextBox.BackColor = RGB(33, 33, 33)
     Me!EndDateTextBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollDialog" _
-            & vbCrLf & "Member:     SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="SetComboBoxColors()"
     Exit Sub
 End Sub
 
@@ -237,13 +212,8 @@ Private Sub ClearComboBoxValues()
     Me.DivisionNameComboBox.Value = vbNullString
     Me.FundNameComboBox.Value = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollDialog" _
-            & vbCrLf & "Member:     ClearComboBoxValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="ClearComboBoxValues()"
     Exit Sub
 End Sub
 
@@ -260,13 +230,8 @@ Private Sub ClearTextBoxValues()
     Me.StartDateTextBox.Value = vbNullString
     Me.EndDateTextBox.Value = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollDialog" _
-            & vbCrLf & "Member:     ClearTextBoxValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="ClearTextBoxValues()"
     Exit Sub
 End Sub
 
@@ -286,13 +251,8 @@ Private Sub ClearFilterValues()
     mDivisionName = vbNullString
     mFundName = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollDialog" _
-            & vbCrLf & "Member:     ClearFilterValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="ClearFilterValues()"
     Exit Sub
 End Sub
 
@@ -309,13 +269,8 @@ Private Sub ExitButton_Click()
     Set Args = Nothing
     DoCmd.Close ObjectType:=acForm, ObjectName:=Me.Name, Save:=acSaveNo
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollDialog" _
-            & vbCrLf & "Member:     EndDateTextBox_Enter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="ExitButton_Click()"
     Exit Sub
 End Sub
 
@@ -338,13 +293,8 @@ Private Sub StartDateTextBox_Enter()
     Args.StartDate = mStartDate
     DoCmd.Close ObjectType:=acForm, ObjectName:="BudgetCalendar", Save:=acSaveNo
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollDialog" _
-            & vbCrLf & "Member:     StartDateTextBox_Enter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="StartDateTextBox_Enter()"
     Exit Sub
 End Sub
 
@@ -369,13 +319,39 @@ Private Sub EndDateTextBox_Enter()
     Args.EndDate = mEndDate
     DoCmd.Close ObjectType:=acForm, ObjectName:="BudgetCalendar", Save:=acSaveNo
 ErrorHandler:
-    If Err.Number > 0 Then
-        mError = "Source:   PayrollDialog" _
-            & vbCrLf & "Member:     EndDateTextBox_Enter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (mError)
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:="EndDateTextBox_Enter()"
     Exit Sub
 End Sub
 
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Err.Clear
+End Sub

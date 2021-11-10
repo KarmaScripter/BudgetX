@@ -150,8 +150,8 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub FundNameComboBox_Change()
     On Error GoTo ErrorHandler:
-    Me.Filter = vbNullString
-    FundNameFilter = vbNullString
+    Me.Filter & "" = ""
+    FundNameFilter & "" = ""
     FundNameFilter = "[FundName] = '" & Me.FundNameComboBox.Value & "'"
     Me.Filter = DivisionNameFilter & pAnd & GetFundNameFilter
     Me.RecordSource = "SELECT * FROM PayrollObligations" _
@@ -187,59 +187,59 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetFundNameFilter() As String
     On Error GoTo ErrorHandler:
-    If Not FundNameFilter = vbNullString And _
-        PayPeriodFilter = vbNullString And _
-        WorkCodeFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        PayPeriodFilter & "" = "" And _
+        WorkCodeFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetFundNameFilter = FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not PayPeriodFilter = vbNullString And _
-        WorkCodeFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not PayPeriodFilter & "" = "" And _
+        WorkCodeFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetFundNameFilter = PayPeriodFilter & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not PayPeriodFilter = vbNullString And _
-        Not WorkCodeFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not PayPeriodFilter & "" = "" And _
+        Not WorkCodeFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetFundNameFilter = PayPeriodFilter & pAnd & WorkCodeFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not PayPeriodFilter = vbNullString And _
-        Not WorkCodeFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not PayPeriodFilter & "" = "" And _
+        Not WorkCodeFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetFundNameFilter = PayPeriodFilter & pAnd & WorkCodeFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        PayPeriodFilter = vbNullString And _
-        Not WorkCodeFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        PayPeriodFilter & "" = "" And _
+        Not WorkCodeFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetFundNameFilter = WorkCodeFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        PayPeriodFilter = vbNullString And _
-        WorkCodeFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        PayPeriodFilter & "" = "" And _
+        WorkCodeFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             Me.Filter = FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        PayPeriodFilter = vbNullString And _
-        Not WorkCodeFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        PayPeriodFilter & "" = "" And _
+        Not WorkCodeFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetFundNameFilter = WorkCodeFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not PayPeriodFilter = vbNullString And _
-        WorkCodeFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not PayPeriodFilter & "" = "" And _
+        WorkCodeFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetFundNameFilter = PayPeriodFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
@@ -287,8 +287,8 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ProgramProjectNameComboBox_Change()
     On Error GoTo ErrorHandler:
-    ProgramProjectNameFilter = vbNullString
-    Me.Filter = vbNullString
+    ProgramProjectNameFilter & "" = ""
+    Me.Filter & "" = ""
     ProgramProjectNameFilter = "[AccountCode] = '" & Me.ProgramProjectNameComboBox.Value & "'"
     Me.Filter = DivisionNameFilter & pAnd & GetProgramProjectNameFilter
     Me.WorkCodeComboBox.RowSource = "SELECT DISTINCT PayrollObligations.WorkCode" _
@@ -319,62 +319,62 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetProgramProjectNameFilter() As String
     On Error GoTo ErrorHandler:
-    If Not ProgramProjectNameFilter = vbNullString And _
-        PayPeriodFilter = vbNullString And _
-        WorkCodeFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        PayPeriodFilter & "" = "" And _
+        WorkCodeFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = ProgramProjectNameFilter
     End If
-    If Not ProgramProjectNameFilter = vbNullString And _
-        Not PayPeriodFilter = vbNullString And _
-        WorkCodeFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        Not PayPeriodFilter & "" = "" And _
+        WorkCodeFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = PayPeriodFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not ProgramProjectNameFilter = vbNullString And _
-        Not PayPeriodFilter = vbNullString And _
-        Not WorkCodeFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        Not PayPeriodFilter & "" = "" And _
+        Not WorkCodeFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = PayPeriodFilter _
                 & pAnd & WorkCodeFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not ProgramProjectNameFilter = vbNullString And _
-        Not PayPeriodFilter = vbNullString And _
-        Not WorkCodeFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        Not PayPeriodFilter & "" = "" And _
+        Not WorkCodeFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = PayPeriodFilter _
                 & pAnd & WorkCodeFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not ProgramProjectNameFilter = vbNullString And _
-        PayPeriodFilter = vbNullString And _
-        Not WorkCodeFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        PayPeriodFilter & "" = "" And _
+        Not WorkCodeFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = WorkCodeFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not ProgramProjectNameFilter = vbNullString And _
-        PayPeriodFilter = vbNullString And _
-        WorkCodeFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        PayPeriodFilter & "" = "" And _
+        WorkCodeFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not ProgramProjectNameFilter = vbNullString And _
-        PayPeriodFilter = vbNullString And _
-        Not WorkCodeFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        PayPeriodFilter & "" = "" And _
+        Not WorkCodeFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = WorkCodeFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not ProgramProjectNameFilter = vbNullString And _
-        Not PayPeriodFilter = vbNullString And _
-        WorkCodeFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        Not PayPeriodFilter & "" = "" And _
+        WorkCodeFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = PayPeriodFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
@@ -401,8 +401,8 @@ End Function
 '---------------------------------------------------------------------------------
 Private Sub PayPeriodComboBox_Change()
     On Error GoTo ErrorHandler:
-    PayPeriodFilter = vbNullString
-    Me.Filter = vbNullString
+    PayPeriodFilter & "" = ""
+    Me.Filter & "" = ""
     PayPeriodFilter = "[PayPeriod] = '" & Me.PayPeriodComboBox.Value & "'"
     Me.Filter = DivisionNameFilter & pAnd & GetPayPeriodFilter
     Me.RecordSource = "SELECT * FROM PayrollObligations WHERE " & Me.Filter
@@ -438,62 +438,62 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetPayPeriodFilter() As String
     On Error GoTo ErrorHandler:
-    If Not PayPeriodFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        WorkCodeFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not PayPeriodFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        WorkCodeFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetPayPeriodFilter = PayPeriodFilter
     End If
-    If Not PayPeriodFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        WorkCodeFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not PayPeriodFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        WorkCodeFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetPayPeriodFilter = PayPeriodFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not PayPeriodFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        Not WorkCodeFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not PayPeriodFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        Not WorkCodeFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetPayPeriodFilter = PayPeriodFilter _
                 & pAnd & WorkCodeFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not PayPeriodFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        Not WorkCodeFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not PayPeriodFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        Not WorkCodeFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetPayPeriodFilter = PayPeriodFilter _
                 & pAnd & WorkCodeFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not PayPeriodFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        Not WorkCodeFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not PayPeriodFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        Not WorkCodeFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetPayPeriodFilter = WorkCodeFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & PayPeriodFilter
     End If
-    If Not PayPeriodFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        WorkCodeFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not PayPeriodFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        WorkCodeFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetPayPeriodFilter = FundNameFilter _
                 & pAnd & PayPeriodFilter
     End If
-    If Not PayPeriodFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        Not WorkCodeFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not PayPeriodFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        Not WorkCodeFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetPayPeriodFilter = WorkCodeFilter _
                 & pAnd & PayPeriodFilter
     End If
-    If Not PayPeriodFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        WorkCodeFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not PayPeriodFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        WorkCodeFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetPayPeriodFilter = PayPeriodFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
@@ -519,8 +519,8 @@ End Function
 '---------------------------------------------------------------------------------
 Private Sub WorkCodeComboBox_Change()
     On Error GoTo ErrorHandler:
-    WorkCodeFilter = vbNullString
-    Me.Filter = vbNullString
+    WorkCodeFilter & "" = ""
+    Me.Filter & "" = ""
     WorkCodeFilter = "[WorkCode] = '" & Me.WorkCodeComboBox.Value & "'"
     Me.Filter = DivisionNameFilter & pAnd & GetWorkCodeFilter
     Me.RecordSource = "SELECT * FROM PayrollObligations" _
@@ -557,62 +557,62 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetWorkCodeFilter() As String
     On Error GoTo ErrorHandler:
-    If Not WorkCodeFilter = vbNullString And _
-        PayPeriodFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not WorkCodeFilter & "" = "" And _
+        PayPeriodFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetWorkCodeFilter = WorkCodeFilter
     End If
-    If Not WorkCodeFilter = vbNullString And _
-        Not PayPeriodFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not WorkCodeFilter & "" = "" And _
+        Not PayPeriodFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetWorkCodeFilter = PayPeriodFilter _
                 & pAnd & WorkCodeFilter
     End If
-    If Not WorkCodeFilter = vbNullString And _
-        Not PayPeriodFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not WorkCodeFilter & "" = "" And _
+        Not PayPeriodFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetWorkCodeFilter = PayPeriodFilter _
                 & pAnd & WorkCodeFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not WorkCodeFilter = vbNullString And _
-        Not PayPeriodFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not WorkCodeFilter & "" = "" And _
+        Not PayPeriodFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetWorkCodeFilter = PayPeriodFilter _
                 & pAnd & WorkCodeFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not WorkCodeFilter = vbNullString And _
-        PayPeriodFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not WorkCodeFilter & "" = "" And _
+        PayPeriodFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetWorkCodeFilter = WorkCodeFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not WorkCodeFilter = vbNullString And _
-        PayPeriodFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not WorkCodeFilter & "" = "" And _
+        PayPeriodFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetWorkCodeFilter = FundNameFilter _
                 & pAnd & WorkCodeFilter
     End If
-    If Not WorkCodeFilter = vbNullString And _
-        PayPeriodFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not WorkCodeFilter & "" = "" And _
+        PayPeriodFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetWorkCodeFilter = WorkCodeFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not WorkCodeFilter = vbNullString And _
-        Not PayPeriodFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not WorkCodeFilter & "" = "" And _
+        Not PayPeriodFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetWorkCodeFilter = PayPeriodFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & WorkCodeFilter
@@ -671,10 +671,10 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ClearComboBoxValues()
     On Error GoTo ErrorHandler:
-    Me.FundNameComboBox.Value = vbNullString
-    Me.WorkCodeComboBox.Value = vbNullString
-    Me.ProgramProjectNameComboBox.Value = vbNullString
-    Me.PayPeriodComboBox.Value = vbNullString
+    Me.FundNameComboBox.Value & "" = ""
+    Me.WorkCodeComboBox.Value & "" = ""
+    Me.ProgramProjectNameComboBox.Value & "" = ""
+    Me.PayPeriodComboBox.Value & "" = ""
 ErrorHandler:
     If Err.Number > 0 Then
         mError = "Source:   PayrollObligations" _
@@ -825,10 +825,10 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ClearFilterValues()
     On Error GoTo ErrorHandler:
-    WorkCodeFilter = vbNullString
-    ProgramProjectNameFilter = vbNullString
-    FundNameFilter = vbNullString
-    PayPeriodFilter = vbNullString
+    WorkCodeFilter & "" = ""
+    ProgramProjectNameFilter & "" = ""
+    FundNameFilter & "" = ""
+    PayPeriodFilter & "" = ""
     Me.Filter = DivisionNameFilter
 ErrorHandler:
     If Err.Number > 0 Then
@@ -940,7 +940,7 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub SetDivisionIcon()
     On Error GoTo ErrorHandler:::
-    If Not Args.RcCode = vbNullString Then
+    If Not Args.RcCode & "" = "" Then
         Select Case Args.RcCode
             Case "06A"
                 Me.DivisionIcon.Picture = CurrentProject.path & "\etc\png\DivisionLogo\ORA.png"
@@ -1169,4 +1169,35 @@ ErrorHandler:
 End Sub
 
 
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
+    End If
+    MessageFactory.ShowError (m_Error)
+    Err.Clear
+End Sub
 
