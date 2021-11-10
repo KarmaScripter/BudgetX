@@ -36,13 +36,14 @@ Private Sub Form_Open(Cancel As Integer)
     On Error GoTo ErrorHandler:
     pAnd = " AND "
     BudgetLevelFilter = "[BudgetLevel] = '7'"
-    FiscalYearFilter = "[BFY] = '2021'"
+    FiscalYearFilter = "[BFY] = '2022'"
     Me.Filter = BudgetLevelFilter & pAnd & FiscalYearFilter
     Me.RecordSource = "SELECT *" _
         & " FROM Allocations" _
         & " WHERE " & Me.Filter
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="Form_Open"
     Exit Sub
 End Sub
 
@@ -79,7 +80,8 @@ Private Sub Form_Load()
         & " WHERE Allocations.RpioCode IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
         & " AND Allocations.BudgetLevel = '7';"
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="Form_Load"
     Exit Sub
 End Sub
 
@@ -103,7 +105,8 @@ Private Sub SetComboBoxColors()
     Me.BocNameComboBox.BackColor = RGB(33, 33, 33)
     Me.BocNameComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="SetComboBoxColors"
     Exit Sub
 End Sub
 
@@ -132,7 +135,8 @@ Private Sub SetButtonVisibility()
     Me.FilterButton.Visible = Not Me.FilterButton.Visible
     Me.CompassStatusOfFundsButton.Visible = Not Me.CompassStatusOfFundsButton.Visible
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="SetButtonVisibility"
     Exit Sub
 End Sub
 
@@ -150,7 +154,8 @@ Private Sub Form_Timer()
     On Error GoTo ErrorHandler::
     HideButtons
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="Form_Timer"
     Exit Sub
 End Sub
 
@@ -180,7 +185,8 @@ Private Sub HideButtons()
     Me.FilterButton.Visible = False
     Me.CompassStatusOfFundsButton.Visible = False
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="HideButtons"
     Exit Sub
 End Sub
 
@@ -197,9 +203,9 @@ Private Sub ClearFilters()
     FiscalYearFilter = vbNullString
     RpioNameFilter = vbNullString
     FundNameFilter = vbNullString
-    Me.Filter = vbNullString
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="ClearFilters"
     Exit Sub
 End Sub
 
@@ -217,7 +223,8 @@ Private Sub ClearComboBoxes()
     Me.FundNameComboBox.Value = vbNullString
     Me.BocNameComboBox.Value = vbNullString
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="ClearComboBoxes"
     Exit Sub
 End Sub
 
@@ -233,7 +240,8 @@ Private Sub ResetOptionGroupValues()
     On Error GoTo ErrorHandler:
     Me.FiscalYearOptionGroup.Value = 2
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="ResetOptionGroupValues"
     Exit Sub
 End Sub
 
@@ -252,17 +260,18 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     Me.Filter = vbNullString
     Select Case Me.FiscalYearOptionGroup.Value
         Case 1
-            Args.BFY = "2020"
-            FiscalYearFilter = "[BFY] = '2020'"
-        Case 2
             Args.BFY = "2021"
             FiscalYearFilter = "[BFY] = '2021'"
+        Case 2
+            Args.BFY = "2022"
+            FiscalYearFilter = "[BFY] = '2022'"
     End Select
-    Me.Filter = GetFiscalYearFilter & pAnd & BudgetLevelFilter
+    Me.Filter = GetFiscalYearFilter
     Me.RecordSource = "SELECT * FROM Allocations WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="FiscalYearOptionGroup_AfterUpdate"
     Exit Sub
 End Sub
 
@@ -277,64 +286,65 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetFiscalYearFilter()
     On Error GoTo ErrorHandler:
-    If Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & RpioNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & RpioNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="GetFiscalYearFilter"
     Exit Function
 End Function
 
@@ -361,7 +371,8 @@ Private Sub RpioNameComboBox_Change()
     Me.BocNameComboBox.RowSource = "SELECT DISTINCT BocName" _
         & " FROM Allocations WHERE " & Me.Filter
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="RpioNameComboBox_Change"
     Exit Sub
 End Sub
 
@@ -374,37 +385,38 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetRpioNameFilter()
     On Error GoTo ErrorHandler:
-    If Not RpioNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not RpioNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetRpioNameFilter = RpioNameFilter & pAnd & FiscalYearFilter
     End If
-    If Not RpioNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not RpioNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetRpioNameFilter = RpioNameFilter & pAnd & FiscalYearFilter _
                 & pAnd & BocNameFilter
     End If
-    If Not RpioNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not RpioNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetRpioNameFilter = RpioNameFilter & pAnd & FiscalYearFilter _
                 & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not RpioNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not RpioNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetRpioNameFilter = RpioNameFilter _
                 & pAnd & FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="GetRpioNameFilter"
     Exit Function
 End Function
 
@@ -427,7 +439,8 @@ Private Sub FundNameComboBox_Change()
     Me.Requery
     Me.BocNameComboBox.RowSource = "SELECT DISTINCT BocName FROM Allocations WHERE " & Me.Filter
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="FundNameComboBox_Change"
     Exit Sub
 End Sub
 
@@ -441,40 +454,41 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetProgramProjectNameFilter()
     On Error GoTo ErrorHandler:
-    If Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" Then
             GetProgramProjectNameFilter = FundNameFilter _
             & pAnd & FiscalYearFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" Then
             GetProgramProjectNameFilter = FiscalYearFilter _
                 & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not BocNameFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" Then
             GetProgramProjectNameFilter = FiscalYearFilter _
                 & pAnd & BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        BocNameFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" Then
             GetProgramProjectNameFilter = FiscalYearFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="GetProgramProjectNameFilter"
     Exit Function
 End Function
 
@@ -498,7 +512,8 @@ Private Sub BocNameComboBox_Change()
     Me.RecordSource = "SELECT * FROM Allocations WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="BocNameComboBox_Change"
     Exit Sub
 End Sub
 
@@ -512,76 +527,77 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetBocNameFilter() As String
     On Error GoTo ErrorHandler:
-    If Not BocNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = FiscalYearFilter _
                 & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FiscalYearFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & RpioNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        RpioNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not RpioNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FiscalYearFilter
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="GetBocNameFilter"
     Exit Function
 End Function
 
@@ -596,7 +612,8 @@ Private Sub Form_Close()
     On Error GoTo ErrorHandler:
     ClearFilters
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="Form_Close"
     Exit Sub
 End Sub
 
@@ -645,7 +662,8 @@ Private Sub EditButton_Click()
     DoCmd.Close ObjectType:=acForm, _
         ObjectName:=Me.Name, Save:=acSaveYes
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="EditButton_Click"
     Exit Sub
 End Sub
 
@@ -660,7 +678,8 @@ Private Sub CalculatorButton_Click()
     On Error GoTo ErrorHandler:
     Calculator.Calculate
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="CalculatorButton_Click"
     Exit Sub
 End Sub
 
@@ -677,7 +696,8 @@ Private Sub CompassStatusOfFundsButton_Click()
     On Error GoTo ErrorHandler:
     DoCmd.OpenForm "CompassBudgetStatusQuery"
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="CompassStatusOfFundsButton_Click"
     Exit Sub
 End Sub
 
@@ -693,7 +713,8 @@ Private Sub MenuButton_Click()
     On Error GoTo ErrorHandler:
     SetButtonVisibility
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="MenuButton_Click"
     Exit Sub
 End Sub
 
@@ -725,7 +746,8 @@ Private Sub RefreshButton_Click()
         & " AND Allocations.BudgetLevel = '7';"
     Me.RecordSource = "SELECT * FROM Allocations WHERE " & Me.Filter
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="RefreshButton_Click"
     Exit Sub
 End Sub
 
@@ -744,7 +766,8 @@ Private Sub UndoButton_Click()
         DoCmd.RunCommand acCmdUndo
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="UndoButton_Click"
     Exit Sub
 End Sub
 
@@ -764,7 +787,8 @@ Private Sub SaveButton_Click()
         DoCmd.RunCommand acCmdSave
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="SaveButton_Click"
     Exit Sub
 End Sub
 
@@ -783,7 +807,8 @@ Private Sub DeleteButton_Click()
         DoCmd.RunCommand acCmdDelete
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="DeleteButton_Click"
     Exit Sub
 End Sub
 
@@ -798,9 +823,9 @@ End Sub
 Private Sub UpdateBudgetLevel()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.BudgetLevelTextBox.SetFocus
-    Args.BudgetLevel = Me.BudgetLevelTextBox.text
+    Args.BudgetLevel = Me.BudgetLevelTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.BudgetLevel = '" _
         & Args.BudgetLevel & "'" & _
@@ -809,7 +834,8 @@ Private Sub UpdateBudgetLevel()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="UpdateBudgetLevel"
     Exit Sub
 End Sub
 
@@ -822,9 +848,9 @@ End Sub
 Private Sub UpdateBfy()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.BfyTextBox.SetFocus
-    Args.BFY = Me.BfyTextBox.text
+    Args.BFY = Me.BfyTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.BFY = '" _
         & Args.BFY & "'" & _
@@ -833,7 +859,8 @@ Private Sub UpdateBfy()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="UpdateBfy"
     Exit Sub
 End Sub
 
@@ -847,9 +874,9 @@ End Sub
 Private Sub UpdateRpioCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.RpioCodeTextBox.SetFocus
-    Args.RpioCode = Me.RpioCodeTextBox.text
+    Args.RpioCode = Me.RpioCodeTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.RPIO = '" _
         & Args.RpioCode & "'" & _
@@ -858,7 +885,8 @@ Private Sub UpdateRpioCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="UpdateRpioCode"
     Exit Sub
 End Sub
 
@@ -871,9 +899,9 @@ End Sub
 Private Sub UpdateAhCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.AhCodeTextBox.SetFocus
-    Args.AhCode = Me.AhCodeTextBox.text
+    Args.AhCode = Me.AhCodeTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.AhCode = '" _
         & Args.AhCode & "'" & _
@@ -882,7 +910,8 @@ Private Sub UpdateAhCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="UpdateAhCode"
     Exit Sub
 End Sub
 
@@ -895,9 +924,9 @@ End Sub
 Private Sub UpdateOrgCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.OrgCodeTextBox.SetFocus
-    Args.OrgCode = Me.OrgCodeTextBox.text
+    Args.OrgCode = Me.OrgCodeTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.OrgCode = '" _
         & Args.OrgCode & "'" & _
@@ -906,7 +935,8 @@ Private Sub UpdateOrgCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="UpdateOrgCode"
     Exit Sub
 End Sub
 
@@ -919,9 +949,9 @@ End Sub
 Private Sub UpdateAccountCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.AccountCodeTextBox.SetFocus
-    Args.AccountCode = Me.AccountCodeTextBox.text
+    Args.AccountCode = Me.AccountCodeTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.AccountCode = '" _
         & Args.AccountCode & "'" & _
@@ -930,7 +960,8 @@ Private Sub UpdateAccountCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="UpdateAccountCode"
     Exit Sub
 End Sub
 
@@ -943,9 +974,9 @@ End Sub
 Private Sub UpdateBocCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.BocCodeTextBox.SetFocus
-    Args.BocCode = Me.BocCodeTextBox.text
+    Args.BocCode = Me.BocCodeTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.BocCode = '" _
         & Args.BocCode & "'" & _
@@ -954,7 +985,8 @@ Private Sub UpdateBocCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="UpdateBocCode"
     Exit Sub
 End Sub
 
@@ -968,9 +1000,9 @@ End Sub
 Private Sub UpdateRcCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.RcCodeTextBox.SetFocus
-    Args.RcCode = Me.RcCodeTextBox.text
+    Args.RcCode = Me.RcCodeTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.RcCode = '" _
         & Args.RcCode & "'" & _
@@ -979,7 +1011,8 @@ Private Sub UpdateRcCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="UpdateRcCode"
     Exit Sub
 End Sub
 
@@ -992,10 +1025,10 @@ End Sub
 Private Sub UpdateAmount()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.AmountTextBox.SetFocus
     Dim Change As Double
-    Change = CDbl(Me.AmountTextBox.text)
+    Change = CDbl(Me.AmountTextBox.Text)
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.Amount = " _
         & Change & _
@@ -1004,7 +1037,8 @@ Private Sub UpdateAmount()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="UpdateAmount"
     Exit Sub
 End Sub
 
@@ -1030,7 +1064,8 @@ Private Function GetReportData() As DAO.Recordset
     Set m_Data = CurrentDb.OpenRecordset(m_SQL)
     Set GetReportData = m_Data
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="GetReportData"
     Exit Function
 End Function
 
@@ -1054,7 +1089,7 @@ Private Function GetColumnNames() As String()
     Dim j As Integer
     Dim m_Array() As String
     Set m_Data = GetReportData
-    j = m_Data.Fields.count - 1
+    j = m_Data.Fields.Count - 1
     ReDim m_Array(j)
     For i = LBound(m_Array()) To UBound(m_Array())
         If Not m_Data.Fields(i).Name & "" = "" Then
@@ -1063,7 +1098,8 @@ Private Function GetColumnNames() As String()
     Next i
     GetColumnNames = m_Array()
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="GetColumnNames"
     Exit Function
 End Function
 
@@ -1126,7 +1162,103 @@ Private Sub ExcelButton_Click()
     m_Excel.WindowState = xlMaximized
     m_Excel.Visible = True
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="RegionalAllocations", _
+        Member:="ExcelButton_Click"
+    Exit Sub
+End Sub
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        SetRpioIcon
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub SetRpioIcon(pRpioCode As String)
+    On Error GoTo ErrorHandler:
+    Dim p_RpioCode As String
+    If Not pRpioCode & "" = "" Then
+        p_RpioCode = DLookup("RpioCode", "StatusOfFunds", _
+            "[RpioName] = '" & pRpioCode & "'")
+        Me.Caption = pRpioCode
+        Select Case CStr(p_RpioCode)
+            Case "01"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R1.png"
+            Case "02"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R2.png"
+            Case "03"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R3.png"
+            Case "04"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R4.png"
+            Case "05"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R5.png"
+            Case "06"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R6.png"
+            Case "07"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R7.png"
+            Case "08"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R8.png"
+            Case "09"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R9.png"
+            Case "10"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R10.png"
+            Case "11"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OA.png"
+            Case "13"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OITA.png"
+            Case "16"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OMS.png"
+            Case "17"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OCFO.png"
+            Case "20"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OCSPP.png"
+            Case "26"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\ORD.png"
+            Case "27"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OAR.png"
+            Case "30"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OW.png"
+            Case "35"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OIG.png"
+            Case "39"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OGC.png"
+            Case "75"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OLEM.png"
+            Case "77"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OECA.png"
+            Case Else
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\ui\capital.png"
+        End Select
+    End If
+ErrorHandler:
+    ProcessError Name:="RegionalAllocations", _
+        Member:="SetRpioIcon"
     Exit Sub
 End Sub
 
@@ -1136,22 +1268,32 @@ End Sub
 
 
 
-
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
 
 

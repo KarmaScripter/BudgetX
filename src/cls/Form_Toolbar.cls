@@ -39,12 +39,8 @@ Private Sub Form_Timer()
     On Error GoTo ErrorHandler:
     HideButtons
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: Form_Timer()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -73,12 +69,8 @@ Private Sub HideButtons()
     Me.UndoButton.Visible = False
     Me.SaveButton.Visible = False
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: HideButtons()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -96,12 +88,8 @@ Private Sub ClearComboBoxValues()
     Me.ProgramProjectNameComboBox.Value = vbNullString
     Me.FundNameComboBox.Value = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: ClearComboBoxValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -120,12 +108,8 @@ Private Sub ClearFilterValues()
     BocNameFilter = vbNullString
     ProgramProjectNameFilter = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: ClearFilterValues()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -149,12 +133,8 @@ Private Sub SetComboBoxColors()
     Me.BocNameComboBox.BackColor = RGB(33, 33, 33)
     Me.BocNameComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: SetComboBoxColors()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -182,12 +162,8 @@ Private Sub SetButtonVisibility()
     Me.SaveButton.Visible = Not Me.SaveButton.Visible
     Me.DataButton.Visible = Not Me.DataButton.Visible
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: SetButtonVisibility()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -212,12 +188,8 @@ Private Sub Form_Load()
     Me.FundNameComboBox.RowSource = "SELECT DISTINCT Purchases.FundName FROM Purchases;"
     Me.BocNameComboBox.RowSource = "SELECT DISTINCT Purchases.BocName FROM Purchases;"
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: Form_Load()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -233,12 +205,8 @@ Private Sub Form_Close()
     On Error GoTo ErrorHandler:
     Me.Filter = vbNullString
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: Form_Close()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -266,12 +234,8 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     Me.RecordSource = "SELECT * FROM Purchases WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: FiscalYearOptionGroup_AfterUpdate()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -342,12 +306,8 @@ Private Function GetFiscalYearFilter() As String
                 & pAnd & ProgramProjectNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: GetFiscalYearFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Function
 End Function
 
@@ -373,12 +333,8 @@ Private Sub ProgramProjectNameComboBox_Change()
     Me.RecordSource = "SELECT * FROM Purchases WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: ProgramProjectNameComboBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -453,12 +409,8 @@ Private Function GetProgramProjectNameFilter()
                 & pAnd & ProgramProjectNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: GetProgramProjectNameFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Function
 End Function
 
@@ -479,12 +431,8 @@ Private Sub BocNameComboBox_Change()
     Me.RecordSource = "SELECT * FROM Purchases WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: BocNameComboBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -555,12 +503,8 @@ Private Function GetBocNameFilter() As String
                 & pAnd & ProgramProjectNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: GetBocNameFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Function
 End Function
 
@@ -586,12 +530,8 @@ Private Sub FundNameComboBox_Change()
     Me.RecordSource = "SELECT * FROM Purchases WHERE Purchases.BocCode IN ('36', '37', '38', '41')" & pAnd & Me.Filter
     Me.Requery
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: FundNameComboBox_Change()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -663,12 +603,8 @@ Private Function GetFundNameFilter()
                 & pAnd & ProgramProjectNameFilter
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: GetFundNameFilter()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Function
 End Function
 
@@ -683,12 +619,8 @@ Private Sub CalculatorButton_Click()
     On Error GoTo ErrorHandler:
     Calculator.Calculate
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: CalculatorButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -704,12 +636,8 @@ Private Sub MenuButton_Click()
     On Error GoTo ErrorHandler:
     SetButtonVisibility
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: MenuButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -728,12 +656,8 @@ Private Sub RefreshButton_Click()
     Me.Filter = vbNullString
     Me.RecordSource = "SELECT * FROM Purchases WHERE Purchases.BocCode IN ('36', '37', '38', '41')"
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   ProgrammaticObligations" _
-            & vbCrLf & "Member: RefreshButton_Click()" _
-            & vbCrLf & "Descript:   " & Err.Description
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -750,11 +674,8 @@ Private Sub SaveButton_Click()
     On Error GoTo ErrorHandler:
     UpdateAmount
 ErrorHandler:
-    If Err.Number > 0 Then
-        MessageFactory.ShowError "SaveButton_Click() Sub-Procedure Error"
-        Resume ExitFunction
-    End If
-ExitFunction:
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -769,9 +690,9 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub UpdateBudgetLevel()
     On Error GoTo ErrorHandler:
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.BudgetLevelTextBox.SetFocus
-    Args.BudgetLevel = Me.BudgetLevelTextBox.text
+    Args.BudgetLevel = Me.BudgetLevelTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.BudgetLevel = '" _
         & Args.BudgetLevel & "'" & _
@@ -780,11 +701,8 @@ Private Sub UpdateBudgetLevel()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        MessageFactory.ShowError "UpdateBudgetLevel() Sub-Procedure Error"
-        Resume ExitFunction
-    End If
-ExitFunction:
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -797,9 +715,9 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub UpdateBfy()
     On Error GoTo ErrorHandler:
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.BfyTextBox.SetFocus
-    Args.BFY = Me.BfyTextBox.text
+    Args.BFY = Me.BfyTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.BFY = '" _
         & Args.BFY & "'" & _
@@ -808,11 +726,8 @@ Private Sub UpdateBfy()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        MessageFactory.ShowError "UpdateBfy() Sub-Procedure Error"
-        Resume ExitFunction
-    End If
-ExitFunction:
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -826,9 +741,9 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub UpdateRpioCode()
     On Error GoTo ErrorHandler:
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.RpioCodeTextBox.SetFocus
-    Args.RpioCode = Me.RpioCodeTextBox.text
+    Args.RpioCode = Me.RpioCodeTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.RPIO = '" _
         & Args.RpioCode & "'" & _
@@ -837,11 +752,8 @@ Private Sub UpdateRpioCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        MessageFactory.ShowError "UpdateRpioCode() Sub-Procedure Error"
-        Resume ExitFunction
-    End If
-ExitFunction:
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -854,9 +766,9 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub UpdateAhCode()
     On Error GoTo ErrorHandler:
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.AhCodeTextBox.SetFocus
-    Args.AhCode = Me.AhCodeTextBox.text
+    Args.AhCode = Me.AhCodeTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.AhCode = '" _
         & Args.AhCode & "'" & _
@@ -865,11 +777,8 @@ Private Sub UpdateAhCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        MessageFactory.ShowError "UpdateAhCode() Sub-Procedure Error"
-        Resume ExitFunction
-    End If
-ExitFunction:
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -883,9 +792,9 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub UpdateOrgCode()
     On Error GoTo ErrorHandler:
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.OrgCodeTextBox.SetFocus
-    Args.OrgCode = Me.OrgCodeTextBox.text
+    Args.OrgCode = Me.OrgCodeTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.OrgCode = '" _
         & Args.OrgCode & "'" & _
@@ -894,11 +803,8 @@ Private Sub UpdateOrgCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        MessageFactory.ShowError "UpdateAhCode() Sub-Procedure Error"
-        Resume ExitFunction
-    End If
-ExitFunction:
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -911,9 +817,9 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub UpdateAccountCode()
     On Error GoTo ErrorHandler:
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.AccountCodeTextBox.SetFocus
-    Args.AccountCode = Me.AccountCodeTextBox.text
+    Args.AccountCode = Me.AccountCodeTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.AccountCode = '" _
         & Args.AccountCode & "'" & _
@@ -922,11 +828,8 @@ Private Sub UpdateAccountCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        MessageFactory.ShowError "UpdateAcccountCode() Sub-Procedure Error"
-        Resume ExitFunction
-    End If
-ExitFunction:
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -939,9 +842,9 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub UpdateBocCode()
     On Error GoTo ErrorHandler:
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.BocCodeTextBox.SetFocus
-    Args.BocCode = Me.BocCodeTextBox.text
+    Args.BocCode = Me.BocCodeTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.BocCode = '" _
         & Args.BocCode & "'" & _
@@ -950,11 +853,8 @@ Private Sub UpdateBocCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        MessageFactory.ShowError "UpdateBocCode() Sub-Procedure Error"
-        Resume ExitFunction
-    End If
-ExitFunction:
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -967,9 +867,9 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub UpdateRcCode()
     On Error GoTo ErrorHandler:
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.RcCodeTextBox.SetFocus
-    Args.RcCode = Me.RcCodeTextBox.text
+    Args.RcCode = Me.RcCodeTextBox.Text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.RcCode = '" _
         & Args.RcCode & "'" & _
@@ -978,11 +878,8 @@ Private Sub UpdateRcCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        MessageFactory.ShowError "UpdateRcCode() Sub-Procedure Error"
-        Resume ExitFunction
-    End If
-ExitFunction:
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -996,10 +893,10 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub UpdateAmount()
     On Error GoTo ErrorHandler:
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    Args.ID = CInt(Me!PrcIdTextBox.Text)
     Me.AmountTextBox.SetFocus
     Dim Change As Double
-    Change = CDbl(Me.AmountTextBox.text)
+    Change = CDbl(Me.AmountTextBox.Text)
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.Amount = " _
         & Change & _
@@ -1008,11 +905,8 @@ Private Sub UpdateAmount()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    If Err.Number > 0 Then
-        MessageFactory.ShowError "UpdateAmount() Sub-Procedure Error"
-        Resume ExitFunction
-    End If
-ExitFunction:
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
@@ -1037,104 +931,75 @@ Private Sub ExitButton_Click()
             WindowMode:=acDialog
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="", _
+        Member:=""
     Exit Sub
 End Sub
 
 
 
 
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Event Sub-Procedure
-'   Name:        SetNpmIcon
-'   Parameters:  Void
-'   Retval:      Void
+'---------------------------------------------------------------------------------
+'   Type:        Functio
+'   Name:        ArgCheck
+'   Parameters:  AccountArgs
+'   RetVal:      Boolean
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub SetRpioIcon(pRpioCode As String)
-    On Error GoTo ErrorHandler:
-    If Not pRpioCode & "" = "" Then
-        Select Case CStr(pRpioCode)
-            Case "01"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R1.png"
-            Case "02"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R2.png"
-            Case "03"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R3.png"
-            Case "04"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R4.png"
-            Case "05"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R5.png"
-            Case "06"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R6.png"
-            Case "07"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R7.png"
-            Case "08"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R8.png"
-            Case "09"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R9.png"
-            Case "10"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R10.png"
-            Case "11"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OA.png"
-            Case "13"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OITA.png"
-            Case "16"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OMS.png"
-            Case "17"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OCFO.png"
-            Case "20"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OCSPP.png"
-            Case "26"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\ORD.png"
-            Case "27"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OAR.png"
-            Case "30"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OW.png"
-            Case "35"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OIG.png"
-            Case "39"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OGC.png"
-            Case "75"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OLEM.png"
-            Case "77"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OECA.png"
-            Case Else
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OCFO.png"
-        End Select
+Public Function ArgCheck(pArg As AccountArgs) As Boolean
+    On Error GoTo ErrorHandler
+    If pArg Is Nothing Then
+        ArgCheck = False
     End If
 ErrorHandler:
-    ProcessError Name:=Me.Name, _
-        Member:="SetRpioIcon()"
-    Exit Sub
-End Sub
+    ProcessError Name:="", _
+        Member:=""
+    Exit Function
+End Function
 
 
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:        Function
+'   Name:        VerifyArgs
+'   Parameters:  AccountArgs
+'   RetVal:      Boolean
+'   Purpose:
+'---------------------------------------------------------------------------------
+Public Function VerifyArgs(pArg As AccountArgs) As Boolean
+    On Error GoTo ErrorHandler
+    Dim p_Text As String
+    If pArg Is Nothing Then
+        p_Text = "AccountArgs Object is NULL or Nothing"
+        MessageFactory.Notify (p_Text)
+        VerifyArgs = False
+        Exit Function
+    End If
+    If pArg.BFY & "" = "" Then
+        p_Text = "AccountArgs BFY Property is not NULL or Empty"
+        MessageFactory.Notify (p_Text)
+        VerifyArgs = False
+        Exit Function
+    End If
+    If pArg.RpioName & "" = "" Then
+        p_Text = "AccountArgs Fiscal Year is not NULL or Empty"
+        MessageFactory.Notify (p_Text)
+        VerifyArgs = False
+        Exit Function
+    End If
+    If pArg.FundName & "" = "" Then
+        p_Text = "AccountArgs FundName Property is NULL or Empty"
+        MessageFactory.Notify (p_Text)
+        VerifyArgs = False
+        Exit Function
+    End If
+    VerifyArgs = True
+ErrorHandler:
+    ProcessError Name:="", _
+        Member:="VerifyArgs"
+End Function
 
 
 
@@ -1159,7 +1024,6 @@ Private Sub ProcessError(Optional Name As String, Optional Member As String)
                 & vbCrLf & "Issue:      " & Err.Description _
                 & vbCrLf & "Class:      " & Name _
                 & vbCrLf & "Member:     " & Member
-            Err.Clear
     End If
     If Err.Number <> 0 And _
         IsMissing(Name) And _
@@ -1167,12 +1031,10 @@ Private Sub ProcessError(Optional Name As String, Optional Member As String)
             m_Error = "Source:      " & Err.Source _
                 & vbCrLf & "Number:     " & Err.Number _
                 & vbCrLf & "Issue:      " & Err.Description
-            Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
-
 
 
 
