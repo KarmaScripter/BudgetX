@@ -116,7 +116,8 @@ Public Property Set control(ByVal pControl As WebbrowserControl)
     On Error GoTo ErrorHandler:
     Set control = pControl
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="Control"
     Exit Property
 End Property
 
@@ -136,7 +137,8 @@ Public Property Get control() As WebbrowserControl
     On Error GoTo ErrorHandler:
     Set control = m_Control
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="Control"
     Exit Property
 End Property
 
@@ -166,7 +168,8 @@ Public Property Let ChartType(ByVal pChartType As chChartType)
             'Do Nothing
     End Select
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ChartType"
     Exit Property
 End Property
 
@@ -184,7 +187,8 @@ Public Property Get ChartType() As chChartType
     On Error GoTo ErrorHandler:
     ChartType = m_ChartType
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ChartType"
     Exit Property
 End Property
 
@@ -203,7 +207,8 @@ Public Property Let DataSourceObjectName(ByVal pDataSourceObjectName As String)
     On Error GoTo ErrorHandler:
     m_DataSourceName = pDataSourceObjectName
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DataSourceObjectName"
     Exit Property
 End Property
 
@@ -222,7 +227,8 @@ Public Property Get DataSourceObjectName() As String
     On Error GoTo ErrorHandler:
     DataSourceObjectName = m_DataSourceName
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DataSourceObjectName"
     Exit Property
 End Property
 
@@ -242,7 +248,8 @@ Public Property Let DataSourceSQLStatement(ByVal pDataSourceSQLStatement As Stri
     On Error GoTo ErrorHandler:
     m_SqlStatement = pDataSourceSQLStatement
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DataSourceSQLStatement"
     Exit Property
 End Property
 
@@ -261,7 +268,8 @@ Public Property Get DataSourceSQLStatement() As String
     On Error GoTo ErrorHandler:
     DataSourceSQLStatement = m_SqlStatement
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DataSourceSQLStatement"
     Exit Property
 End Property
 
@@ -280,7 +288,8 @@ Public Property Set DataSourceRecordset(ByVal pDataSourceRecordset As DAO.Record
     On Error GoTo ErrorHandler:
     Set m_DataSet = pDataSourceRecordset
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DataSourceRecordset"
     Exit Property
 End Property
 
@@ -300,7 +309,8 @@ Public Property Get DataSourceRecordset() As DAO.Recordset
     On Error GoTo ErrorHandler:
     Set DataSourceRecordset = m_DataSet
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DataSourceRecordset"
     Exit Property
 End Property
 
@@ -320,7 +330,8 @@ Public Property Let DataSourceLabelFieldName(ByVal pDataSourceLabelFieldName As 
     On Error GoTo ErrorHandler:
     m_DataSourceLabelFieldName = pDataSourceLabelFieldName
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DataSourceLabelFieldName"
     Exit Property
 End Property
 
@@ -337,7 +348,8 @@ Public Property Get DataSourceLabelFieldName() As String
     On Error GoTo ErrorHandler:
     DataSourceLabelFieldName = m_DataSourceLabelFieldName
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DataSourceLabelFieldName"
     Exit Property
 End Property
 
@@ -363,7 +375,8 @@ Public Property Let DataSourceDataFieldName(ByRef pDataSourceDataFieldName As Va
         m_IsSingleDataset = False
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DataSourceDataFieldName"
     Exit Property
 End Property
 
@@ -380,7 +393,8 @@ Public Property Get DataSourceDataFieldName() As Variant
     On Error GoTo ErrorHandler:
     DataSourceDataFieldName = m_DataSourceDataFieldName
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DataSourceDataFieldName"
     Exit Property
 End Property
 
@@ -398,7 +412,8 @@ Public Property Let ShowTitle(ByVal pShowTitle As Boolean)
     On Error GoTo ErrorHandler:
     m_ShowTitle = pShowTitle
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ShowTitle"
     Exit Property
 End Property
 
@@ -415,7 +430,8 @@ Public Property Get ShowTitle() As Boolean
     On Error GoTo ErrorHandler:
     ShowTitle = m_ShowTitle
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ShowTitle"
     Exit Property
 End Property
 
@@ -432,7 +448,8 @@ Public Property Let TitlePostition(ByVal pTitlePostition As chPosition)
     On Error GoTo ErrorHandler:
     m_TitlePostition = pTitlePostition
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="TitlePostition"
     Exit Property
 End Property
 
@@ -449,7 +466,8 @@ Public Property Get TitlePostition() As chPosition
     On Error GoTo ErrorHandler:
     TitlePostition = m_TitlePostition
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="TitlePostition"
     Exit Property
 End Property
 
@@ -468,7 +486,8 @@ Public Property Let TitleText(ByVal pTitleText As String)
     On Error GoTo ErrorHandler:
     m_TitleText = pTitleText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="TitleText"
     Exit Property
 End Property
 
@@ -485,7 +504,8 @@ Public Property Get TitleText() As String
     On Error GoTo ErrorHandler:
     TitleText = m_TitleText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="TitleText"
     Exit Property
 End Property
 
@@ -503,7 +523,8 @@ Public Property Let ShowLegend(ByVal pShowLegend As Boolean)
     On Error GoTo ErrorHandler:
     m_ShowLegend = pShowLegend
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ShowLegend"
     Exit Property
 End Property
 
@@ -521,7 +542,8 @@ Public Property Get ShowLegend() As Boolean
     On Error GoTo ErrorHandler:
     ShowLegend = m_ShowLegend
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ShowLegend"
     Exit Property
 End Property
 
@@ -539,7 +561,8 @@ Public Property Let LegendPostition(ByVal pLegendPostition As chPosition)
     On Error GoTo ErrorHandler:
     m_LegendPostition = pLegendPostition
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="LegendPostition"
     Exit Property
 End Property
 
@@ -557,7 +580,8 @@ Public Property Get LegendPostition() As chPosition
     On Error GoTo ErrorHandler:
     LegendPostition = m_LegendPostition
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="LegendPostition"
     Exit Property
 End Property
 
@@ -575,7 +599,8 @@ Public Property Let ShowYAxis(ByVal pShowYAxis As Boolean)
     On Error GoTo ErrorHandler:
     m_ShowYAxis = pShowYAxis
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ShowYAxis"
     Exit Property
 End Property
 
@@ -593,7 +618,8 @@ Public Property Get ShowYAxis() As Boolean
     On Error GoTo ErrorHandler:
     ShowYAxis = m_ShowYAxis
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ShowYAxis"
     Exit Property
 End Property
 
@@ -611,7 +637,8 @@ Public Property Let ShowXAxis(ByVal pShowXAxis As Boolean)
     On Error GoTo ErrorHandler:
     m_ShowXAxis = pShowXAxis
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ShowXAxis"
     Exit Property
 End Property
 
@@ -629,7 +656,8 @@ Public Property Get ShowXAxis() As Boolean
     On Error GoTo ErrorHandler:
     ShowXAxis = m_ShowXAxis
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ShowXAxis"
     Exit Property
 End Property
 
@@ -647,7 +675,8 @@ Public Property Let YAxisLabelText(ByVal pYAxisLabelText As String)
     On Error GoTo ErrorHandler:
     m_YAxisLabelText = pYAxisLabelText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="YAxisLabelText"
     Exit Property
 End Property
 
@@ -665,7 +694,8 @@ Public Property Get YAxisLabelText() As String
     On Error GoTo ErrorHandler:
     YAxisLabelText = m_YAxisLabelText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="YAxisLabelText"
     Exit Property
 End Property
 
@@ -683,7 +713,8 @@ Public Property Let XAxisLabelText(ByVal pXAxisLabelText As String)
     On Error GoTo ErrorHandler:
     m_XAxisLabelText = pXAxisLabelText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="XAxisLabelText"
     Exit Property
 End Property
 
@@ -701,7 +732,8 @@ Public Property Get XAxisLabelText() As String
     On Error GoTo ErrorHandler:
     XAxisLabelText = m_XAxisLabelText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="XAxisLabelText"
     Exit Property
 End Property
 
@@ -719,7 +751,8 @@ Public Property Let ChartJsSource(ByVal pChartJsSource As chScriptSource)
     On Error GoTo ErrorHandler:
     m_ChartJsSource = pChartJsSource
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ChartJsSource"
     Exit Property
 End Property
 
@@ -737,7 +770,8 @@ Public Property Get ChartJsSource() As chScriptSource
     On Error GoTo ErrorHandler:
     ChartJsSource = m_ChartJsSource
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ChartJsSource"
     Exit Property
 End Property
 
@@ -755,7 +789,8 @@ Public Property Let ChartJsCDN(ByVal pChartJsCDN As String)
     On Error GoTo ErrorHandler:
     m_ChartJsCDN = pChartJsCDN
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ChartJsCDN"
     Exit Property
 End Property
 
@@ -773,7 +808,8 @@ Public Property Get ChartJsCDN() As String
     On Error GoTo ErrorHandler:
     ChartJsCDN = m_ChartJsCDN
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ChartJsCDN"
     Exit Property
 End Property
 
@@ -791,7 +827,8 @@ Public Property Let ChartJsPathFilename(ByVal pChartJsPathFilename As String)
     On Error GoTo ErrorHandler:
     m_ChartJsPathFilename = pChartJsPathFilename
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ChartJsPathFilename"
     Exit Property
 End Property
 
@@ -809,7 +846,8 @@ Public Property Get ChartJsPathFilename() As String
     On Error GoTo ErrorHandler:
     ChartJsPathFilename = m_ChartJsPathFilename
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ChartJsPathFilename"
     Exit Property
 End Property
 
@@ -827,7 +865,8 @@ Public Property Let StackedChart(ByVal pStackedChart As Boolean)
     On Error GoTo ErrorHandler:
     m_StackedChart = pStackedChart
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="StackedChart"
     Exit Property
 End Property
 
@@ -845,7 +884,8 @@ Public Property Get StackedChart() As Boolean
     On Error GoTo ErrorHandler:
     StackedChart = m_StackedChart
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="StackedChart"
     Exit Property
 End Property
 
@@ -863,7 +903,8 @@ Public Property Let ColorSchemaSource(ByVal pColorSchemaSource As chScriptSource
     On Error GoTo ErrorHandler:
     m_ColorSchemaSource = pColorSchemaSource
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ColorSchemaSource"
     Exit Property
 End Property
 
@@ -881,7 +922,8 @@ Public Property Get ColorSchemaSource() As chScriptSource
     On Error GoTo ErrorHandler:
     ColorSchemaSource = m_ColorSchemaSource
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ColorSchemaSource"
     Exit Property
 End Property
 
@@ -899,7 +941,8 @@ Public Property Let ColorSchemaCDN(ByVal pColorSchemaCDN As String)
     On Error GoTo ErrorHandler:
     m_ColorSchemaCDN = pColorSchemaCDN
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ColorSchemaCDN"
     Exit Property
 End Property
 
@@ -917,7 +960,8 @@ Public Property Get ColorSchemaCDN() As String
     On Error GoTo ErrorHandler:
     ColorSchemaCDN = m_ColorSchemaCDN
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ColorSchemaCDN"
     Exit Property
 End Property
 
@@ -935,7 +979,8 @@ Public Property Let ColorSchemaPathFilename(ByVal pColorSchemaPathFilename As St
     On Error GoTo ErrorHandler:
     m_ColorSchemaPathFilename = pColorSchemaPathFilename
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ColorSchemaPathFilename"
     Exit Property
 End Property
 
@@ -953,7 +998,8 @@ Public Property Get ColorSchemaPathFilename() As String
     On Error GoTo ErrorHandler:
     ColorSchemaPathFilename = m_ColorSchemaPathFilename
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ColorSchemaPathFilename"
     Exit Property
 End Property
 
@@ -971,7 +1017,8 @@ Public Property Let ColorSchema(ByVal pColorSchema As String)
     On Error GoTo ErrorHandler:
     m_ColorSchema = pColorSchema
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ColorSchema"
     Exit Property
 End Property
 
@@ -989,7 +1036,8 @@ Public Property Get ColorSchema() As String
     On Error GoTo ErrorHandler:
     ColorSchema = m_ColorSchema
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ColorSchema"
     Exit Property
 End Property
 
@@ -1007,7 +1055,8 @@ Public Property Let AreaFilled(ByVal pAreaFilled As Boolean)
     On Error GoTo ErrorHandler:
     m_AreaFilled = pAreaFilled
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="AreaFilled"
     Exit Property
 End Property
 
@@ -1025,7 +1074,8 @@ Public Property Get AreaFilled() As Boolean
     On Error GoTo ErrorHandler:
     AreaFilled = m_AreaFilled
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="AreaFilled"
     Exit Property
 End Property
 
@@ -1043,7 +1093,8 @@ Public Property Let ChartBackgroundColor(ByVal pChartBackgroundColor As String)
     On Error GoTo ErrorHandler:
     m_ChartBackgroundColor = pChartBackgroundColor
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ChartBackgroundColor"
     Exit Property
 End Property
 
@@ -1061,7 +1112,8 @@ Public Property Get ChartBackgroundColor() As String
     On Error GoTo ErrorHandler:
     ChartBackgroundColor = m_ChartBackgroundColor
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="ChartBackgroundColor"
     Exit Property
 End Property
 
@@ -1079,7 +1131,8 @@ Public Property Let DefaultFontColor(ByVal pDefaultFontColor As String)
     On Error GoTo ErrorHandler:
     m_DefaultFontColor = pDefaultFontColor
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DefaultFontColor"
     Exit Property
 End Property
 
@@ -1097,7 +1150,8 @@ Public Property Get DefaultFontColor() As String
     On Error GoTo ErrorHandler:
     DefaultFontColor = m_DefaultFontColor
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DefaultFontColor"
     Exit Property
 End Property
 
@@ -1115,7 +1169,8 @@ Public Property Let DefaultFontFamily(ByVal pDefaultFontFamily As String)
     On Error GoTo ErrorHandler:
     m_DefaultFontFamily = pDefaultFontFamily
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DefaultFontFamily"
     Exit Property
 End Property
 
@@ -1133,7 +1188,8 @@ Public Property Get DefaultFontFamily() As String
     On Error GoTo ErrorHandler:
     DefaultFontFamily = m_DefaultFontFamily
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DefaultFontFamily"
     Exit Property
 End Property
 
@@ -1151,7 +1207,8 @@ Public Property Let DefaultFontSize(ByVal pDefaultFontSize As Integer)
     On Error GoTo ErrorHandler:
     m_DefaultFontSize = pDefaultFontSize
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DefaultFontSize"
     Exit Property
 End Property
 
@@ -1169,7 +1226,8 @@ Public Property Get DefaultFontSize() As Integer
     On Error GoTo ErrorHandler:
     DefaultFontSize = m_DefaultFontSize
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DefaultFontSize"
     Exit Property
 End Property
 
@@ -1187,7 +1245,8 @@ Public Property Let YAxisBeginAtZero(ByVal pYAxisBeginAtZero As Boolean)
     On Error GoTo ErrorHandler:
     m_YAxisBeginAtZero = pYAxisBeginAtZero
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="YAxisBeginAtZero"
     Exit Property
 End Property
 
@@ -1205,7 +1264,8 @@ Public Property Get YAxisBeginAtZero() As Boolean
     On Error GoTo ErrorHandler:
     YAxisBeginAtZero = m_YAxisBeginAtZero
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="YAxisBeginAtZero"
     Exit Property
 End Property
 
@@ -1223,7 +1283,8 @@ Public Property Let XAxisBeginAtZero(ByVal pXAxisBeginAtZero As Boolean)
     On Error GoTo ErrorHandler:
     m_XAxisBeginAtZero = pXAxisBeginAtZero
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="XAxisBeginAtZero"
     Exit Property
 End Property
 
@@ -1240,7 +1301,8 @@ Public Property Get XAxisBeginAtZero() As Boolean
     On Error GoTo ErrorHandler:
     XAxisBeginAtZero = m_XAxisBeginAtZero
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:=" XAxisBeginAtZero"
     Exit Property
 End Property
 
@@ -1308,7 +1370,8 @@ Public Sub DrawChart()
     filename = CurrentProject.Path & "\" & m_HtmlFileName
     control.Object.Navigate filename
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DrawChart"
     Exit Sub
 End Sub
 
@@ -1342,7 +1405,8 @@ Private Sub CreateChartFile()
     Print #f, strContent;
     Close f
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="CreateChartFile"
     Exit Sub
 End Sub
 
@@ -1393,7 +1457,8 @@ Private Function getHeader() As String
     strText = strText & "    var myChart = new Chart(ctx, {" & vbCrLf
     getHeader = strText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="GetHeader"
     Exit Function
 End Function
 
@@ -1435,7 +1500,8 @@ Private Function getChartType() As String
     strText = strText & "        type: '" & strType & "'," & vbCrLf
     getChartType = strText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="GetChartType"
     Exit Function
 End Function
 
@@ -1484,7 +1550,8 @@ Private Function getChartData() As String
     strText = strText & "        }," & vbCrLf
     getChartData = strText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="GetChartData"
     Exit Function
 End Function
 
@@ -1508,7 +1575,8 @@ Private Function getChartOptions() As String
     strText = strText & "        }" & vbCrLf
     getChartOptions = strText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="GetChartOptions"
     Exit Function
 End Function
 
@@ -1529,7 +1597,8 @@ Private Function getFooter() As String
     strText = strText & "</html>"
     getFooter = strText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="GetFooter"
     Exit Function
 End Function
 
@@ -1554,7 +1623,8 @@ Private Function getChartJsLocation() As String
     End Select
     getChartJsLocation = strText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="GetChartJsLocation"
     Exit Function
 End Function
 
@@ -1579,7 +1649,8 @@ Private Function GetColorSchemaLocation() As String
     End Select
     GetColorSchemaLocation = strText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="GetColorSchemaLocation"
     Exit Function
 End Function
 
@@ -1715,7 +1786,8 @@ Private Sub DetermineSingleBarChart()
             m_IsSingleBarChart = False
     End Select
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="DetermineSingleBarChart"
     Exit Sub
 End Sub
 
@@ -1746,7 +1818,8 @@ Private Function GetTitle() As String
     strText = strText & "            }," & vbCrLf
     GetTitle = strText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="GetTitle"
     Exit Function
 End Function
 
@@ -1775,7 +1848,8 @@ Private Function GetLegend() As String
     strText = strText & "            }," & vbCrLf
     GetLegend = strText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="GetLegend"
     Exit Function
 End Function
 
@@ -1849,7 +1923,8 @@ Private Function GetScales() As String
     strText = strText & "            }," & vbCrLf
     GetScales = strText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="GetScales"
     Exit Function
 End Function
 
@@ -1872,7 +1947,8 @@ Private Function GetColorSchema() As String
     strText = strText & "                }," & vbCrLf
     GetColorSchema = strText
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="GetColorSchema"
     Exit Function
 End Function
 
@@ -1900,7 +1976,8 @@ Private Function getPositionString(ByVal ThisPosition As chPosition) As String
             getPositionString = "'top'"
     End Select
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="GetPositionString"
     Exit Function
 End Function
 
@@ -1922,7 +1999,8 @@ Private Function CutTrailingComma(ByVal strText As String) As String
         CutTrailingComma = strText
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Chart"
+        Member:="CutTrailingComma"
     Exit Function
 End Function
 
@@ -1932,22 +2010,34 @@ End Function
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
-
 

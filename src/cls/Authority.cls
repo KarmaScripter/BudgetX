@@ -41,7 +41,8 @@ Public Property Let ID(num As Integer)
         m_ID = num
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="ID"
     Exit Property
 End Property
 
@@ -59,7 +60,8 @@ Public Property Get ID() As Integer
         ID = m_ID
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="ID"
     Exit Property
 End Property
 
@@ -81,7 +83,8 @@ Public Property Let BFY(pYear As BudgetFiscalYear)
         m_BFY = pYear
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="BFY"
     Exit Property
 End Property
 
@@ -103,7 +106,8 @@ Public Property Get BFY() As BudgetFiscalYear
         BFY = m_BFY
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="BFY"
     Exit Property
 End Property
 
@@ -123,7 +127,8 @@ Public Property Let Account(cd As Account)
         m_Account = cd
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="Account"
     Exit Property
 End Property
 
@@ -141,7 +146,8 @@ Public Property Get Account() As Account
         Account = m_Account
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="Account"
     Exit Property
 End Property
 
@@ -159,7 +165,8 @@ Public Property Let Name(nm As String)
         m_Name = nm
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="Name"
     Exit Property
 End Property
 
@@ -177,7 +184,8 @@ Public Property Get Name() As String
         Name = m_Name
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="Name"
     Exit Property
 End Property
 
@@ -197,7 +205,8 @@ Public Property Let Fund(pFund As Fund)
         m_Fund = pFund
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="Fund"
     Exit Property
 End Property
 
@@ -219,7 +228,8 @@ Public Property Get Fund() As Fund
         Fund = m_Fund
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="Fund"
     Exit Property
 End Property
 
@@ -245,7 +255,8 @@ Public Property Let RPIO(pRPIO As ResourcePlanningOffice)
         m_RPIO = pRPIO
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="RPIO"
     Exit Property
 End Property
 
@@ -267,7 +278,8 @@ Public Property Get RPIO() As ResourcePlanningOffice
         RPIO = m_RPIO
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="RPIO"
     Exit Property
 End Property
 
@@ -294,7 +306,8 @@ Public Property Let RC(pRC As ResponsibilityCenter)
         m_RC = pRC
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="RC"
     Exit Property
 End Property
 
@@ -316,7 +329,8 @@ Public Property Get RC() As ResponsibilityCenter
         RC = m_RC
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="RC"
     Exit Property
 End Property
 
@@ -342,7 +356,8 @@ Public Property Let ORG(pOrg As Organization)
         m_ORG = pOrg
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="ORG"
     Exit Property
 End Property
 
@@ -364,7 +379,8 @@ Public Property Get ORG() As Organization
         ORG = m_ORG
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="ORG"
     Exit Property
 End Property
 
@@ -388,7 +404,8 @@ Public Property Let AH(pAH As AllowanceHolder)
         m_AH = pAH
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="AH"
     Exit Property
 End Property
 
@@ -410,7 +427,8 @@ Public Property Get AH() As AllowanceHolder
         AH = m_AH
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="AH"
     Exit Property
 End Property
 
@@ -437,7 +455,8 @@ Public Property Let Amount(pAmount As Double)
         m_Amount = pAmount
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="Amount"
     Exit Property
 End Property
 
@@ -459,7 +478,8 @@ Public Property Get Amount() As Double
         Amount = m_Amount
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Authority", _ 
+        Member:="Amount"
     Exit Property
 End Property
 
@@ -473,23 +493,34 @@ End Property
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
 
 
 

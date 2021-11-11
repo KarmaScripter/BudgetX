@@ -85,7 +85,8 @@ Public Sub CreateWorkbook(pFilePath As String)
             m_Workbook.Close SaveChanges:=False
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="CreateWorkbook"
     Exit Sub
 End Sub
 
@@ -106,7 +107,8 @@ Public Function GetTemplate() As Excel.Workbook
     Set m_Workbook = m_Excel.Workbooks.Open(p_Template)
     Set GetTemplate = m_Workbook
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="GetTemplate"
     Exit Function
 End Function
 
@@ -134,7 +136,8 @@ Public Function GetRange(pColumn As Integer, pRow As Integer, Optional pName As 
         Set GetRange = m_Range
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="GetRange"
     Exit Function
 End Function
 
@@ -159,7 +162,8 @@ Public Sub PopulateData(pData As DAO.Recordset)
     m_Range.CopyFromRecordset Data:=pData, MaxRows:=10, MaxColumns:=8
     m_Excel.Visible = True
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="PopulateData"
     Exit Sub
 End Sub
 
@@ -183,7 +187,8 @@ Public Sub OpenFileDialog()
     m_Dialog.Filters.add "Excel files", "*.xlsx"
     m_Dialog.Filters.add "All files", "*.*"
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="OpenFileDialog"
     Exit Sub
 End Sub
 
@@ -209,7 +214,8 @@ Public Sub OpenFolderDialog()
        Debug.Print p_Dialog.SelectedItems(1)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="OpenFolderDialog"
     Exit Sub
 End Sub
 
@@ -236,7 +242,8 @@ Public Sub OpenSaveDialog()
        Debug.Print p_Dialog.SelectedItems(1)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="OpenSaveDialog"
     Exit Sub
 End Sub
 
@@ -255,7 +262,8 @@ Public Sub OpenExcelFile(pFileName As String, pFilePath As String)
     Set m_Workbook = m_Excel.Workbooks.Open(pFilePath)
     m_Excel.Visible = True
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="OpenExcelFile"
     Exit Sub
 End Sub
 
@@ -281,7 +289,8 @@ Public Sub CreateCsvFile(pFileName As String, pFilePath As String)
                 FileFormat:=xlCSV, CreateBackup:=False
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="CreateCsvFile"
     Exit Sub
 End Sub
 
@@ -325,7 +334,8 @@ Function ExportQuery(ByVal pQuery As String)
         End If
     End With
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="ExportQuery"
     Exit Function
 End Function
 
@@ -371,7 +381,8 @@ Public Function ExportData(pData As DAO.Recordset)
         End With
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="ExportData"
     Exit Function
 End Function
 
@@ -393,7 +404,8 @@ Public Sub SetLeftHeader(pText As String)
     p_LeftHeader = pText
     ActiveSheet.PageSetup.LeftHeader = p_LeftHeader
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="SetLeftHeader"
     Exit Sub
 End Sub
 
@@ -413,7 +425,8 @@ Public Sub SetCenterHeader(pText As String)
     p_CenterHeader = pText
     ActiveSheet.PageSetup.CenterHeader = p_CenterHeader
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="SetCenterHeader"
     Exit Sub
 End Sub
 
@@ -433,7 +446,8 @@ Public Sub SetRightHeader(pText As String)
     p_RightHeader = pText
     ActiveSheet.PageSetup.RightFooter = p_RightHeader
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="SetRightHeader"
     Exit Sub
 End Sub
 
@@ -455,7 +469,8 @@ Public Sub SetLeftFooter(pText As String)
         ActiveSheet.PageSetup.LeftFooter = p_LeftFooter
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="SetLeftFooter"
     Exit Sub
 End Sub
 
@@ -475,7 +490,8 @@ Public Sub SetCenterFooter(pText As String)
     p_CenterFooter = pText
     ActiveSheet.PageSetup.CenterFooter = p_CenterFooter
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="SetCenterFooter"
     Exit Sub
 End Sub
 
@@ -503,7 +519,8 @@ Private Sub KillExcel()
         Set m_Worksheet = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="KillExcel"
     Exit Sub
 End Sub
 
@@ -527,7 +544,8 @@ Private Sub KillData()
         Set m_DataSet = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="KillData"
     Exit Sub
 End Sub
 
@@ -550,7 +568,8 @@ Private Sub KillFiles()
         Set m_BudgetPath = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelFile", _ 
+        Member:="KillFiles"
     Exit Sub
 End Sub
 
@@ -560,22 +579,40 @@ End Sub
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
+
 
 
 

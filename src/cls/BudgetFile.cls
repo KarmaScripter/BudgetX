@@ -62,7 +62,8 @@ Public Property Let Base(fp As String)
         m_Base = fp
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Base"
     Exit Property
 End Property
 
@@ -81,7 +82,8 @@ Public Property Get Base() As String
         Base = m_Base
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Base"
     Exit Property
 End Property
 
@@ -105,7 +107,8 @@ Public Property Get ParentFolder() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="ParentFolder"
     Exit Property
 End Property
 
@@ -129,7 +132,8 @@ Public Property Get Path() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Path"
     Exit Property
 End Property
 
@@ -151,7 +155,8 @@ Public Property Get DateCreated() As Date
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="DateCreated"
     Exit Property
 End Property
 
@@ -173,7 +178,8 @@ Public Property Get LastAccessed() As Date
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="LastAccessed"
     Exit Property
 End Property
 
@@ -196,7 +202,8 @@ Public Property Get LastModified() As Date
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="LastModified"
     Exit Property
 End Property
 
@@ -219,7 +226,8 @@ Public Property Get Name() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Name"
     Exit Property
 End Property
 
@@ -242,7 +250,8 @@ Public Property Get FileType() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="FileType"
     Exit Property
 End Property
 
@@ -264,7 +273,8 @@ Public Property Get Size() As Variant
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Size"
     Exit Property
 End Property
 
@@ -288,7 +298,8 @@ Public Property Get Extension() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Extension"
     Exit Property
 End Property
 
@@ -307,7 +318,8 @@ Public Property Get Length() As Long
         Length = FileLen(m_Base)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Length"
     Exit Property
 End Property
 
@@ -331,7 +343,8 @@ Public Property Get Drive() As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Drive"
     Exit Property
 End Property
 
@@ -354,7 +367,8 @@ Public Function GetPath(pPath As String) As String
             Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="GetPath"
     Exit Function
 End Function
 
@@ -377,7 +391,8 @@ Public Function GetName(pPath As String) As String
             Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="GetName"
     Exit Function
 End Function
 
@@ -399,7 +414,8 @@ Public Function GetSize(pPath As String) As Integer
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="GetSize"
     Exit Function
 End Function
 
@@ -423,7 +439,8 @@ Public Function GetExtension(pPath As String) As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="GetExtension"
     Exit Function
 End Function
 
@@ -447,7 +464,8 @@ Public Function GetCreationDate(pPath As String) As Date
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="GetCreationDate"
     Exit Function
 End Function
 
@@ -472,7 +490,8 @@ Public Function GetParentFolder(pPath As String) As Scripting.folder
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="GetParentFolder"
     Exit Function
 End Function
 
@@ -496,7 +515,8 @@ Public Function GetAccessDate(pPath As String) As Date
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="GetAccessDate"
     Exit Function
 End Function
 
@@ -520,7 +540,8 @@ Public Function GetModifiedDate(pPath As String) As Date
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="GetModifiedDate"
     Exit Function
 End Function
 
@@ -544,7 +565,8 @@ Public Function GetDrive(pPath As String) As Scripting.Drive
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="GetDrive"
     Exit Function
 End Function
 
@@ -569,7 +591,8 @@ Public Function GetType(pPath As String) As String
         Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="GetType"
     Exit Function
 End Function
 
@@ -596,7 +619,8 @@ Public Static Function Verify(pPath As String) As Boolean
         End If
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Verify"
     Exit Function
 End Function
 
@@ -618,7 +642,8 @@ Public Function GetStreamReader() As Scripting.TextStream
             Format:=TristateUseDefault)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="GetStreamReader"
     Exit Function
 End Function
 
@@ -641,7 +666,8 @@ Public Function GetStreamWriter() As Scripting.TextStream
                 Format:=TristateUseDefault)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="GetStreamWriter"
     Exit Function
 End Function
 
@@ -664,7 +690,8 @@ Public Function CreateText(pFileName As String) As Scripting.TextStream
             Set m_FileSys = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="CreateText"
     Exit Function
 End Function
 
@@ -692,7 +719,8 @@ Public Function ReadAll() As String
         Set m_Stream = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="ReadAll"
     Exit Function
 End Function
 
@@ -724,7 +752,8 @@ Public Function Readline() As String
         End If
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Readline"
     Exit Function
 End Function
 
@@ -748,7 +777,8 @@ Public Sub Move(des As String)
         Set m_File = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Move"
     Exit Sub
 End Sub
 
@@ -773,7 +803,8 @@ Public Sub Copy(pSource As String, pDestination As String)
             m_File.Copy Destination:=pDestination, OverWriteFiles:=True
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Copy"
     Exit Sub
 End Sub
 
@@ -795,7 +826,8 @@ Public Sub Delete(pPath As String)
     End If
     Set m_FileSys = Nothing
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Delete"
     Exit Sub
 End Sub
 
@@ -815,7 +847,8 @@ Public Sub Rename(pName As String)
             Name m_Path As pName
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Rename"
     Exit Sub
 End Sub
 
@@ -853,7 +886,8 @@ Public Sub RecursiveDelete(pFilePath As String, pFileName As String)
         RecursiveDelete CStr(p_File), pFileName
     Next p_File
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="RecursiveDelete"
     Exit Sub
 End Sub
 
@@ -880,7 +914,8 @@ Public Sub Browse()
        Debug.Print p_Dialog.SelectedItems(1)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="Browse"
     Exit Sub
 End Sub
  
@@ -908,7 +943,8 @@ Public Function UnZip(pSource As String, pDestination As String) As String
         Kill pSource
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="UnZip"
     Exit Function
 End Function
 
@@ -926,7 +962,8 @@ Public Static Function GetCurrentDirectory() As String
     m_CurrentDirectory = CurDir()
     GetCurrentDirectory = m_CurrentDirectory
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="GetCurrentDirectory"
     Exit Function
 End Function
 
@@ -952,7 +989,8 @@ Public Sub OpenSaveDialog()
        Debug.Print p_Dialog.SelectedItems(1)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="OpenSaveDialog"
     Exit Sub
 End Sub
 
@@ -974,7 +1012,8 @@ Public Function GetAttribute() As VbFileAttribute
         GetAttribute = p_Attribute
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="BudgetFile", _ 
+        Member:="GetAttribute"
     Exit Function
 End Function
 
@@ -1002,23 +1041,32 @@ End Sub
 
 
 
-
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
     Err.Clear
 End Sub
-
 
 

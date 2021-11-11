@@ -40,7 +40,8 @@ Public Property Let AhCode(ac As String)
         Args.AhCode = m_AhCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Budget", _ 
+        Member:="AhCode"
     Exit Property
 End Property
 
@@ -58,7 +59,8 @@ Public Property Get AhCode() As String
         AhCode = m_AhCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Budget", _ 
+        Member:="AhCode"
     Exit Property
 End Property
 
@@ -77,7 +79,8 @@ Public Property Let BFY(fy As String)
         Args.BFY = m_BFY
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Budget", _ 
+        Member:="BFY"
     Exit Property
 End Property
 
@@ -95,7 +98,8 @@ Public Property Get BFY() As String
         BFY = m_BFY
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Budget", _ 
+        Member:="BFY"
     Exit Property
 End Property
 
@@ -114,7 +118,8 @@ Public Property Let RcCode(rc As String)
         Args.RcCode = m_RcCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Budget", _ 
+        Member:="RcCode"
     Exit Property
 End Property
 
@@ -132,7 +137,8 @@ Public Property Get RcCode() As String
         RcCode = m_RcCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Budget", _ 
+        Member:="RcCode"
     Exit Property
 End Property
 
@@ -152,7 +158,8 @@ Public Property Let FundCode(fc As String)
         Args.FundCode = m_FundCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Budget", _ 
+        Member:="FundCode"
     Exit Property
 End Property
 
@@ -170,7 +177,8 @@ Public Property Get FundCode() As String
         FundCode = m_FundCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Budget", _ 
+        Member:="FundCode"
     Exit Property
 End Property
 
@@ -189,7 +197,8 @@ Public Property Get PublicLaw() As String
             "Appropriations.BFY = '" & m_BFY & "'")
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Budget", _ 
+        Member:="PublicLaw"
     Exit Property
 End Property
 
@@ -208,7 +217,8 @@ Public Property Get AppropriationBill() As String
             "Appropriations.BFY = '" & m_BFY & "'")
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Budget", _ 
+        Member:="PublicLaw"
     Exit Property
 End Property
 
@@ -227,7 +237,8 @@ Public Property Get DivisionName() As String
             "Divisions.Code = '" & m_RcCode & "'")
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Budget", _ 
+        Member:="DivisionName"
     Exit Property
 End Property
 
@@ -246,7 +257,8 @@ Public Property Get DivisionCaption() As String
             "Divisions.Code = '" & m_RcCode & "'")
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Budget", _ 
+        Member:="DivisionCaption"
     Exit Property
 End Property
 
@@ -291,7 +303,8 @@ Public Sub Generate(bargs As BudgetArgs)
     DoCmd.OpenReport (Budget.Name)
     query.Close
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Budget", _ 
+        Member:="Generate"
     Exit Sub
 End Sub
 
@@ -299,22 +312,35 @@ End Sub
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
-
 

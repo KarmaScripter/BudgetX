@@ -57,9 +57,12 @@ Public Property Let ID(num As Integer)
         m_ID = num
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="ID"
     Exit Property
 End Property
+
+
 
 
 '---------------------------------------------------------------------------------
@@ -75,7 +78,8 @@ Public Property Get ID() As Integer
         ID = m_ID
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="ID"
     Exit Property
 End Property
 
@@ -93,7 +97,8 @@ Public Property Let AccountCode(pCode As String)
         m_AccountCode = pCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="AccountCode"
     Exit Property
 End Property
 
@@ -111,9 +116,13 @@ Public Property Get AccountCode() As String
         AccountCode = m_AccountCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="AccountCode"
     Exit Property
 End Property
+
+
+
 
 '---------------------------------------------------------------------------------
 '   Type            Property-Let
@@ -128,7 +137,8 @@ Public Property Let BFY(pBFY As String)
         m_BFY = pBFY
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="BFY"
     Exit Property
 End Property
 
@@ -146,7 +156,8 @@ Public Property Get BFY() As String
         BFY = m_BFY
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="BFY"
     Exit Property
 End Property
 
@@ -164,7 +175,8 @@ Public Property Let Fund(pFund As String)
         m_Fund = pFund
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="Fund"
     Exit Property
 End Property
 
@@ -182,7 +194,8 @@ Public Property Get Fund() As String
         Fund = m_Fund
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="Fund"
     Exit Property
 End Property
 
@@ -203,7 +216,8 @@ Public Property Let AH(pAH As String)
         m_AH = pAH
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="AH"
     Exit Property
 End Property
 
@@ -221,7 +235,8 @@ Public Property Get AH() As String
         AH = m_AH
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="AH"
     Exit Property
 End Property
 
@@ -239,7 +254,8 @@ Public Property Let Document(pDocument As String)
         m_Document = pDocument
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="Document"
     Exit Property
 End Property
 
@@ -258,7 +274,8 @@ Public Property Get Document() As String
         Document = m_Document
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="Document"
     Exit Property
 End Property
 
@@ -277,7 +294,8 @@ Public Property Let ORG(pOrg As String)
         m_ORG = pOrg
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="ORG"
     Exit Property
 End Property
 
@@ -295,7 +313,8 @@ Public Property Get ORG() As String
         ORG = m_ORG
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="ORG"
     Exit Property
 End Property
 
@@ -314,7 +333,8 @@ Public Property Let Activity(pActivity As String)
         m_Activity = pActivity
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="Activity"
     Exit Property
 End Property
 
@@ -332,7 +352,8 @@ Public Property Get Activity() As String
         Activity = m_Activity
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="Activity"
     Exit Property
 End Property
 
@@ -352,7 +373,8 @@ Public Property Let Amount(pAmount As Double)
         m_Amount = pAmount
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="Amount"
     Exit Property
 End Property
 
@@ -370,28 +392,43 @@ Public Property Get Amount() As Double
         Amount = m_Amount
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Expenditure", _ 
+        Member:="Amount"
     Exit Property
 End Property
 
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
+
 
 

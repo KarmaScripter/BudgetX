@@ -43,7 +43,8 @@ Private Sub Form_Open(Cancel As Integer)
     Me.ProgramProjectCodeComboBox.RowSource = "SELECT DISTINCT ProgramProjectCode" _
         & " FROM ProgramDescriptions;"
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -64,7 +65,8 @@ Private Sub Form_Load()
     pAnd = " AND "
     DataModelFilter = "[ProgramProjectCode] = '" & m_ProgramProjectCode & "'"
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -81,7 +83,8 @@ End Sub
 Private Sub TableNameComboBox_Change()
     On Error GoTo ErrorHandler:
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -98,7 +101,8 @@ End Sub
 Private Sub ClearFilterValues()
     On Error GoTo ErrorHandler:
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -122,7 +126,8 @@ Private Sub ProgramProjectCodeComboBox_Change()
     Me.Requery
     Me.ProgramProjectCodeComboBox.SetFocus
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -142,7 +147,8 @@ Private Sub RefreshButton_Click()
     Me.ProgramProjectCodeComboBox.RowSource = "SELECT DISTINCT ProgramProjectCode FROM ProgramDescriptions;"
     Me.ProgramProjectCodeComboBox.Value = vbNullString
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -159,7 +165,8 @@ Private Sub ExitButton_Click()
     On Error GoTo ErrorHandler:
     DoCmd.Close acForm, Me.Name
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -178,7 +185,8 @@ Private Sub NextButton_Click()
     On Error GoTo ErrorHandler:
     DoCmd.RunCommand acCmdRecordsGoToNext
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -196,7 +204,8 @@ Private Sub PreviousButton_Click()
     On Error GoTo ErrorHandler:
     DoCmd.RunCommand acCmdRecordsGoToPrevious
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -213,7 +222,8 @@ Private Sub FirstButton_Click()
     On Error GoTo ErrorHandler:
     DoCmd.RunCommand acCmdRecordsGoToFirst
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -231,7 +241,8 @@ Private Sub LastButton_Click()
     On Error GoTo ErrorHandler:
     DoCmd.RunCommand acCmdRecordsGoToLast
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -250,7 +261,8 @@ Private Sub MenuButton_Click()
     On Error GoTo ErrorHandler:
     SetButtonVisibility
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -276,7 +288,8 @@ Private Sub SetButtonVisibility()
     Me.ProgramProjectCodeComboBox.Visible = Not Me.ProgramProjectCodeComboBox.Visible
     Me.RefreshButton.Visible = Not Me.RefreshButton.Visible
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -293,7 +306,8 @@ Private Sub CdwQueryButton_Click()
     DoCmd.Close ObjectType:=acForm, ObjectName:=Me.Name, Save:=acSaveNo
     DoCmd.OpenForm FormName:="CompassBudgetStatusQuery", WindowMode:=acDialog
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -315,7 +329,8 @@ Private Sub GoogleSearchButton_Click()
     p_Search.ShellExecute "microsoft-edge:https://www.Google.com/search?q=" & p_Law
     DoCmd.Close ObjectType:=acForm, ObjectName:=Me.Name, Save:=acSaveNo
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -332,7 +347,9 @@ Private Sub CalculatorButton_Click()
     On Error GoTo ErrorHandler:
     Calculator.Calculate
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ProgramProjectDescriptionForm", _ 
+        Member:=""
+    Exit Sub
 End Sub
 
 
@@ -348,20 +365,36 @@ End Sub
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-

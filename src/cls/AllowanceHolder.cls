@@ -22,7 +22,7 @@ Public Property Let ID(num As Integer)
         m_ID = num
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AllowanceHolder"
     End Property
 End Property
 
@@ -40,7 +40,7 @@ Public Property Get ID() As Integer
         ID = m_ID
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AllowanceHolder"
     End Property
 End Property
 
@@ -58,7 +58,7 @@ Public Property Let Code(cd As String)
         m_Code = cd
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AllowanceHolder"
     End Property
 End Property
 
@@ -76,7 +76,7 @@ Public Property Get Code() As String
         Code = m_Code
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AllowanceHolder"
     End Property
 End Property
 
@@ -94,7 +94,7 @@ Public Property Let Name(nm As String)
         m_Name = nm
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AllowanceHolder"
     End Property
 End Property
 
@@ -114,7 +114,7 @@ Public Property Get Name() As String
         Name = m_Name
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AllowanceHolder" Name:="AllowanceHolder"
     End Property
 End Property
 
@@ -122,22 +122,42 @@ End Property
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+
+
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError Name:="AllowanceHolder"(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
 
 

@@ -1,41 +1,17 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "Form_FullTimeAllocations"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = True
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "Form_FullTimeAllocations"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = True
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
 
 Option Compare Database
 Option Explicit
 
-
-
-Private Args As AccountArgs
-Private m_Dialog As Form_AccountEditor
-Private RpioNameFilter As String
+Private PRC As AccountArgs
+Private mDialog As Form_AccountEditor
 Private FiscalYearFilter As String
 Private BudgetLevelFilter As String
 Private FundNameFilter As String
 Private ProgramProjectNameFilter As String
 Private pAnd As String
-Private m_DataSet As DAO.Recordset
-Private m_OriginalAmount As Double
-Private m_Error As String
-
-
-
+Private mDataSet As DAO.Recordset
+Private mOriginalAmount As Double
+Private mError As String
 
 
 '----------------------------------------------------------------------------------
@@ -47,13 +23,14 @@ Private m_Error As String
 '---------------------------------------------------------------------------------
 Private Sub Form_Open(Cancel As Integer)
     On Error GoTo ErrorHandler:
-    Set m_Dialog = New Form_AccountEditor
-    Set Args = New AccountArgs
+    Set mDialog = New Form_AccountEditor
+    Set PRC = New AccountArgs
     Me.RecordSource = "SELECT * FROM Allocations" _
         & " WHERE Allocations.BocCode = '17'" _
         & " AND Allocations.BudgetLevel = '7'"
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="Form_Open"
 End Sub
 
 '----------------------------------------------------------------------------------
@@ -74,7 +51,7 @@ Private Sub Form_Load()
     SetComboBoxColors
     ResetOptionGroupValues
     ClearComboBoxes
-    Set m_DataSet = Me.Recordset
+    Set mDataSet = Me.Recordset
     HideButtons
     BudgetLevelFilter = "[BudgetLevel] = '7'"
     FiscalYearFilter = "[BFY] = '2021'"
@@ -90,8 +67,8 @@ Private Sub Form_Load()
     Me.BudgetLevelOptionGroup.DefaultValue = 1
     Me.FiscalYearOptionGroup.DefaultValue = 2
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="Form_Load()"
     Exit Sub
 End Sub
 
@@ -110,8 +87,8 @@ Private Sub SetComboBoxColors()
     Me.ProgramProjectNameComboBox.BackColor = RGB(33, 33, 33)
     Me.ProgramProjectNameComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="SetComboBoxColors()"
     Exit Sub
 End Sub
 
@@ -135,8 +112,8 @@ Private Sub SetButtonVisibility()
     Me.SaveButton.Visible = Not Me.SaveButton.Visible
     Me.CompassStatusOfFundsButton.Visible = Not Me.CompassStatusOfFundsButton.Visible
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="SetButtonVisibility()"
     Exit Sub
 End Sub
 
@@ -160,8 +137,8 @@ Private Sub HideButtons()
     Me.SaveButton.Visible = False
     Me.CompassStatusOfFundsButton.Visible = False
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="HideButtons()"
     Exit Sub
 End Sub
 
@@ -174,14 +151,14 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ClearFilters()
     On Error GoTo ErrorHandler:
-    BudgetLevelFilter = vbNullString
-    FiscalYearFilter = vbNullString
-    FundNameFilter = vbNullString
-    ProgramProjectNameFilter = vbNullString
-    Me.Filter = vbNullString
+    BudgetLevelFilter & "" = ""
+    FiscalYearFilter & "" = ""
+    FundNameFilter & "" = ""
+    ProgramProjectNameFilter & "" = ""
+    Me.Filter & "" = ""
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="ClearFilters()"
     Exit Sub
 End Sub
 
@@ -198,8 +175,8 @@ Private Sub Form_Timer()
     On Error GoTo ErrorHandler:
     HideButtons
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="Form_Timer()"
     Exit Sub
 End Sub
 
@@ -213,12 +190,12 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ClearComboBoxes()
     On Error GoTo ErrorHandler:
-    Me.FundNameComboBox.Value = vbNullString
-    Me.ProgramProjectNameComboBox.Value = vbNullString
+    Me.FundNameComboBox.Value & "" = ""
+    Me.ProgramProjectNameComboBox.Value & "" = ""
     ClearFilters
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="ClearComboBoxes()"
     Exit Sub
 End Sub
 
@@ -233,13 +210,13 @@ Private Sub ResetOptionGroupValues()
     On Error GoTo ErrorHandler:
     Me.FiscalYearOptionGroup.Value = 2
     FiscalYearFilter = "[BFY] = '2021'"
-    Args.BFY = "2021"
+    PRC.BFY = "2021"
     Me.BudgetLevelOptionGroup.Value = 1
     BudgetLevelFilter = "[BudgetLevel] = '7'"
-    Args.BudgetLevel = "7"
+    PRC.BudgetLevel = "7"
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="ResetOptionGroupValues()"
     Exit Sub
 End Sub
 
@@ -252,15 +229,15 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub FiscalYearOptionGroup_AfterUpdate()
     On Error GoTo ErrorHandler:
-    Args.BFY = vbNullString
-    FiscalYearFilter = vbNullString
-    Me.Filter = vbNullString
+    PRC.BFY & "" = ""
+    FiscalYearFilter & "" = ""
+    Me.Filter & "" = ""
     Select Case Me.FiscalYearOptionGroup.Value
         Case 1
-            Args.BFY = "2020"
+            PRC.BFY = "2020"
             FiscalYearFilter = "[BFY] = '2020'"
         Case 2
-            Args.BFY = "2021"
+            PRC.BFY = "2021"
             FiscalYearFilter = "[BFY] = '2021'"
     End Select
     Me.Filter = GetFiscalYearFilter
@@ -268,8 +245,8 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
         & " WHERE Allocations.BocCode = '17' AND " & Me.Filter
     Me.Requery
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="FiscalYearOptionGroup_AfterUpdate()"
     Exit Sub
 End Sub
 
@@ -284,23 +261,23 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub BudgetLevelOptionGroup_AfterUpdate()
     On Error GoTo ErrorHandler:
-    Args.BudgetLevel = vbNullString
-    BudgetLevelFilter = vbNullString
-    Me.Filter = vbNullString
+    PRC.BudgetLevel & "" = ""
+    BudgetLevelFilter & "" = ""
+    Me.Filter & "" = ""
     Select Case Me.BudgetLevelOptionGroup.Value
         Case 1
-            Args.BudgetLevel = "7"
+            PRC.BudgetLevel = "7"
             BudgetLevelFilter = "[BudgetLevel] = '7'"
         Case 2
-            Args.BudgetLevel = "8"
+            PRC.BudgetLevel = "8"
             BudgetLevelFilter = "[BudgetLevel] = '8'"
     End Select
     Me.Filter = GetBudgetLevelFilter
     Me.RecordSource = "SELECT * FROM Allocations WHERE Allocations.BocCode = '17' AND " & Me.Filter
     Me.Requery
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="BudgetLevelOptionGroup_AfterUpdate()"
     Exit Sub
 End Sub
 
@@ -314,65 +291,65 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetFiscalYearFilter()
     On Error GoTo ErrorHandler:
-    If Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BudgetLevelFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BudgetLevelFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BudgetLevelFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BudgetLevelFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BudgetLevelFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BudgetLevelFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BudgetLevelFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BudgetLevelFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BudgetLevelFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BudgetLevelFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BudgetLevelFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BudgetLevelFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="GetFiscalYearFilter()"
     Exit Function
 End Function
 
@@ -385,10 +362,10 @@ End Function
 '---------------------------------------------------------------------------------
 Private Sub FundNameComboBox_Change()
     On Error GoTo ErrorHandler:
-    FundNameFilter = vbNullString
-    Args.FundName = vbNullString
-    Me.Filter = vbNullString
-    Args.FundName = Me.FundNameComboBox.Value
+    FundNameFilter & "" = ""
+    PRC.FundName & "" = ""
+    Me.Filter & "" = ""
+    PRC.FundName = Me.FundNameComboBox.Value
     FundNameFilter = "[FundName] = '" & Me.FundNameComboBox.Value & "'"
     Me.Filter = GetFundNameFilter
     Me.RecordSource = "SELECT * FROM Allocations WHERE Allocations.BocCode = '17' AND " & Me.Filter
@@ -396,8 +373,8 @@ Private Sub FundNameComboBox_Change()
     Me.ProgramProjectNameComboBox.RowSource = "SELECT DISTINCT ProgramProjectName FROM Allocations" _
         & " WHERE Allocations.BocCode = '17' AND " & Me.Filter
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="FundNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -410,66 +387,66 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetFundNameFilter()
     On Error GoTo ErrorHandler:
-    If Not FundNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        BudgetLevelFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetFundNameFilter = FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BudgetLevelFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetFundNameFilter = FiscalYearFilter & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BudgetLevelFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetFundNameFilter = FiscalYearFilter & pAnd & BudgetLevelFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BudgetLevelFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetFundNameFilter = FiscalYearFilter & pAnd & BudgetLevelFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not BudgetLevelFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetFundNameFilter = BudgetLevelFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        BudgetLevelFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             Me.Filter = FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not BudgetLevelFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetFundNameFilter = BudgetLevelFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BudgetLevelFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetFundNameFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="GetFundNameFilter()"
     Exit Function
 End Function
 
@@ -482,17 +459,17 @@ End Function
 '---------------------------------------------------------------------------------
 Private Sub ProgramProjectNameComboBox_Change()
     On Error GoTo ErrorHandler:
-    Args.ProgramProjectName = vbNullString
-    ProgramProjectNameFilter = vbNullString
-    Me.Filter = vbNullString
-    Args.ProgramProjectName = Me.ProgramProjectNameComboBox.Value
+    PRC.ProgramProjectName & "" = ""
+    ProgramProjectNameFilter & "" = ""
+    Me.Filter & "" = ""
+    PRC.ProgramProjectName = Me.ProgramProjectNameComboBox.Value
     ProgramProjectNameFilter = "[ProgramProjectName] = '" & Me.ProgramProjectNameComboBox.Value & "'"
     Me.Filter = GetProgramProjectNameFilter
     Me.RecordSource = "SELECT * FROM Allocations WHERE Allocations.BocCode = '17' AND " & Me.Filter
     Me.Requery
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="ProgramProjectNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -506,69 +483,69 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetProgramProjectNameFilter()
     On Error GoTo ErrorHandler:
-    If Not ProgramProjectNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        BudgetLevelFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = ProgramProjectNameFilter
     End If
-    If Not ProgramProjectNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BudgetLevelFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = FiscalYearFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not ProgramProjectNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BudgetLevelFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = FiscalYearFilter _
                 & pAnd & BudgetLevelFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not ProgramProjectNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BudgetLevelFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = FiscalYearFilter _
                 & pAnd & BudgetLevelFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not ProgramProjectNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not BudgetLevelFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = BudgetLevelFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not ProgramProjectNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        BudgetLevelFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not ProgramProjectNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        Not BudgetLevelFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not BudgetLevelFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = BudgetLevelFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not ProgramProjectNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        BudgetLevelFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BudgetLevelFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetProgramProjectNameFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="GetProgramProjectNameFilter()"
     Exit Function
 End Function
 
@@ -583,102 +560,102 @@ End Function
 '---------------------------------------------------------------------------------
 Private Function GetBudgetLevelFilter() As String
     On Error GoTo ErrorHandler:
-    If Not BudgetLevelFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not BudgetLevelFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetBudgetLevelFilter = BudgetLevelFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not BudgetLevelFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetBudgetLevelFilter = BudgetLevelFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not BudgetLevelFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetBudgetLevelFilter = BudgetLevelFilter _
                 & pAnd & FiscalYearFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not BudgetLevelFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetBudgetLevelFilter = FiscalYearFilter _
                 & pAnd & BudgetLevelFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not BudgetLevelFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetBudgetLevelFilter = BudgetLevelFilter _
                 & pAnd & FiscalYearFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not BudgetLevelFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetBudgetLevelFilter = BudgetLevelFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not BudgetLevelFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetBudgetLevelFilter = BudgetLevelFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If Not BudgetLevelFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetBudgetLevelFilter = BudgetLevelFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not BudgetLevelFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If Not BudgetLevelFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetBudgetLevelFilter = BudgetLevelFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If BudgetLevelFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If BudgetLevelFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetBudgetLevelFilter = ProgramProjectNameFilter
     End If
-    If BudgetLevelFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If BudgetLevelFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetBudgetLevelFilter = FiscalYearFilter
     End If
-    If BudgetLevelFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        Not FundNameFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString Then
+    If BudgetLevelFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" Then
             GetBudgetLevelFilter = FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If BudgetLevelFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        FundNameFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString Then
+    If BudgetLevelFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" Then
             GetBudgetLevelFilter = FiscalYearFilter
     End If
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="GetBudgetLevelFilter()"
     Exit Function
 End Function
 
@@ -692,10 +669,10 @@ End Function
 Private Sub Form_Close()
     On Error GoTo ErrorHandler:
     ClearFilters
-    Me.Filter = vbNullString
+    Me.Filter & "" = ""
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="Form_Close()"
     Exit Sub
 End Sub
 
@@ -711,8 +688,8 @@ Private Sub CompassStatusOfFundsButton_Click()
     On Error GoTo ErrorHandler:
     DoCmd.OpenForm "CompassBudgetStatusQuery"
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="CompassStatusOfFundsButton_Click()"
     Exit Sub
 End Sub
 
@@ -726,8 +703,8 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub EditButton_Click()
     On Error GoTo ErrorHandler:
-    Dim m_DataSet As DAO.Database
-    Set m_DataSet = CurrentDb
+    Dim mDataSet As DAO.Database
+    Set mDataSet = CurrentDb
     Dim Account As DAO.Recordset
     Dim ID As Integer
     Me.CurrentIdTextBox.SetFocus
@@ -761,8 +738,8 @@ Private Sub EditButton_Click()
     DoCmd.Close ObjectType:=acForm, _
         ObjectName:=Me.Name, Save:=acSaveYes
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="EditButton_Click()"
     Exit Sub
 End Sub
 
@@ -776,8 +753,8 @@ End Sub
 Private Sub CalculatorButton_Click()
     Calculator.Calculate
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="CalculatorButton_Click()"
 End Sub
 
 
@@ -791,8 +768,8 @@ Private Sub MenuButton_Click()
     On Error GoTo ErrorHandler:
     SetButtonVisibility
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="MenuButton_Click()"
     Exit Sub
 End Sub
 
@@ -811,9 +788,7 @@ Private Sub RefreshButton_Click()
     BudgetLevelFilter = "[BudgetLevel] = '7'"
     FiscalYearFilter = "[BFY] = '2021'"
     Me.Filter = BudgetLevelFilter & " AND " & FiscalYearFilter
-    Me.RecordSource = "SELECT *" _
-        & " FROM Allocations" _
-        & " WHERE Allocations.BocCode = '17' AND " & Me.Filter
+    Me.RecordSource = "SELECT * FROM Allocations WHERE Allocations.BocCode = '17' AND " & Me.Filter
     Me.FundNameComboBox.RowSource = "SELECT DISTINCT Allocations.FundName" _
         & " FROM Allocations" _
         & " WHERE Allocations.BocCode = '17'" _
@@ -825,8 +800,8 @@ Private Sub RefreshButton_Click()
     Me.BudgetLevelOptionGroup.Value = 1
     Me.FiscalYearOptionGroup.Value = 2
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="RefreshButton_Click()"
     Exit Sub
 End Sub
 
@@ -840,19 +815,19 @@ End Sub
 Private Sub UpdateBudgetLevel()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    PRC.ID = CInt(Me!PrcIdTextBox.text)
     Me.BudgetLevelTextBox.SetFocus
-    Args.BudgetLevel = Me.BudgetLevelTextBox.text
+    PRC.BudgetLevel = Me.BudgetLevelTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.BudgetLevel = '" _
-        & Args.BudgetLevel & "'" & _
-        " WHERE Allocations.PrcId = " & Args.ID
+        & PRC.BudgetLevel & "'" & _
+        " WHERE Allocations.PrcId = " & PRC.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="UpdateBudgetLevel()"
     Exit Sub
 End Sub
 
@@ -865,19 +840,19 @@ End Sub
 Private Sub UpdateBfy()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    PRC.ID = CInt(Me!PrcIdTextBox.text)
     Me.BfyTextBox.SetFocus
-    Args.BFY = Me.BfyTextBox.text
+    PRC.BFY = Me.BfyTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.BFY = '" _
-        & Args.BFY & "'" & _
-        " WHERE Allocations.PrcId = " & Args.ID
+        & PRC.BFY & "'" & _
+        " WHERE Allocations.PrcId = " & PRC.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="UpdateBfy()"
     Exit Sub
 End Sub
 
@@ -891,19 +866,19 @@ End Sub
 Private Sub UpdateRpioCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    PRC.ID = CInt(Me!PrcIdTextBox.text)
     Me.RpioCodeTextBox.SetFocus
-    Args.RpioCode = Me.RpioCodeTextBox.text
+    PRC.RpioCode = Me.RpioCodeTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.RPIO = '" _
-        & Args.RpioCode & "'" & _
-        " WHERE Allocations.PrcId = " & Args.ID
+        & PRC.RpioCode & "'" & _
+        " WHERE Allocations.PrcId = " & PRC.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="UpdateRpioCode()"
     Exit Sub
 End Sub
 
@@ -916,19 +891,19 @@ End Sub
 Private Sub UpdateAhCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    PRC.ID = CInt(Me!PrcIdTextBox.text)
     Me.AhCodeTextBox.SetFocus
-    Args.AhCode = Me.AhCodeTextBox.text
+    PRC.AhCode = Me.AhCodeTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.AhCode = '" _
-        & Args.AhCode & "'" & _
-        " WHERE Allocations.PrcId = " & Args.ID
+        & PRC.AhCode & "'" & _
+        " WHERE Allocations.PrcId = " & PRC.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="UpdateAhCode()"
     Exit Sub
 End Sub
 
@@ -941,19 +916,19 @@ End Sub
 Private Sub UpdateOrgCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    PRC.ID = CInt(Me!PrcIdTextBox.text)
     Me.OrgCodeTextBox.SetFocus
-    Args.OrgCode = Me.OrgCodeTextBox.text
+    PRC.OrgCode = Me.OrgCodeTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.OrgCode = '" _
-        & Args.OrgCode & "'" & _
-        " WHERE Allocations.PrcId = " & Args.ID
+        & PRC.OrgCode & "'" & _
+        " WHERE Allocations.PrcId = " & PRC.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="UpdateOrgCode()"
     Exit Sub
 End Sub
 
@@ -966,19 +941,19 @@ End Sub
 Private Sub UpdateAccountCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    PRC.ID = CInt(Me!PrcIdTextBox.text)
     Me.AccountCodeTextBox.SetFocus
-    Args.AccountCode = Me.AccountCodeTextBox.text
+    PRC.AccountCode = Me.AccountCodeTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.AccountCode = '" _
-        & Args.AccountCode & "'" & _
-        " WHERE Allocations.PrcId = " & Args.ID
+        & PRC.AccountCode & "'" & _
+        " WHERE Allocations.PrcId = " & PRC.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="UpdateAccountCode()"
     Exit Sub
 End Sub
 
@@ -991,19 +966,19 @@ End Sub
 Private Sub UpdateBocCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    PRC.ID = CInt(Me!PrcIdTextBox.text)
     Me.BocCodeTextBox.SetFocus
-    Args.BocCode = Me.BocCodeTextBox.text
+    PRC.BocCode = Me.BocCodeTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.BocCode = '" _
-        & Args.BocCode & "'" & _
-        " WHERE Allocations.PrcId = " & Args.ID
+        & PRC.BocCode & "'" & _
+        " WHERE Allocations.PrcId = " & PRC.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="UpdateBocCode()"
     Exit Sub
 End Sub
 
@@ -1016,19 +991,19 @@ End Sub
 Private Sub UpdateRcCode()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    PRC.ID = CInt(Me!PrcIdTextBox.text)
     Me.RcCodeTextBox.SetFocus
-    Args.RcCode = Me.RcCodeTextBox.text
+    PRC.RcCode = Me.RcCodeTextBox.text
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.RcCode = '" _
-        & Args.RcCode & "'" & _
-        " WHERE Allocations.PrcId = " & Args.ID
+        & PRC.RcCode & "'" & _
+        " WHERE Allocations.PrcId = " & PRC.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="UpdateRcCode()"
     Exit Sub
 End Sub
 
@@ -1042,20 +1017,20 @@ End Sub
 Private Sub UpdateAmount()
     On Error GoTo ErrorHandler:
     Me.PrcIdTextBox.SetFocus
-    Args.ID = CInt(Me!PrcIdTextBox.text)
+    PRC.ID = CInt(Me!PrcIdTextBox.text)
     Me.AmountTextBox.SetFocus
     Dim Change As Double
     Change = CDbl(Me.AmountTextBox.text)
     Dim SQL As String
     SQL = "UPDATE Allocations SET Allocations.Amount = " _
         & Change & _
-        " WHERE Allocations.PrcId = " & Args.ID
+        " WHERE Allocations.PrcId = " & PRC.ID
     Dim DB As DAO.Database
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="UpdateAmount()"
     Exit Sub
 End Sub
 
@@ -1074,19 +1049,19 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetReportData() As DAO.Recordset
     On Error GoTo ErrorHandler:
-    Dim m_SQL As String
-    Dim m_Data As DAO.Recordset
-    m_SQL = "SELECT FullTimeEquivalents.BudgetLevel AS [Level], FullTimeEquivalents.RPIO, FullTimeEquivalents.BFY," _
+    Dim mSQL As String
+    Dim mData As DAO.Recordset
+    mSQL = "SELECT FullTimeEquivalents.BudgetLevel AS [Level], FullTimeEquivalents.RPIO, FullTimeEquivalents.BFY," _
         & " FullTimeEquivalents.AhCode AS AH, FullTimeEquivalents.FundCode AS Fund," _
         & " FullTimeEquivalents.OrgCode AS ORG, FullTimeEquivalents.AccountCode AS Account," _
         & " FullTimeEquivalents.BocCode AS BOC, FullTimeEquivalents.Amount AS Amount" _
         & " FROM FullTimeEquivalents" _
         & " WHERE FullTimeEquivalents.Amount <> 0" & pAnd & Me.Filter
-    Set m_Data = CurrentDb.OpenRecordset(m_SQL)
-    Set GetReportData = m_Data
+    Set mData = CurrentDb.OpenRecordset(mSQL)
+    Set GetReportData = mData
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="GetReportData()"
     Exit Function
 End Function
 
@@ -1103,24 +1078,24 @@ End Function
 '---------------------------------------------------------------------------------
 Private Function GetColumnNames() As String()
     On Error GoTo ErrorHandler:
-    Dim m_Fields As Collection
+    Dim mFields As Collection
     Dim field As DAO.field
-    Dim m_Data As DAO.Recordset
+    Dim mData As DAO.Recordset
     Dim i As Integer
     Dim j As Integer
-    Dim m_Array() As String
-    Set m_Data = GetReportData
-    j = m_Data.Fields.count - 1
-    ReDim m_Array(j)
-    For i = LBound(m_Array()) To UBound(m_Array())
-        If Not m_Data.Fields(i).Name & "" = "" Then
-            m_Array(i) = m_Data.Fields(i).Name
+    Dim mArray() As String
+    Set mData = GetReportData
+    j = mData.Fields.count - 1
+    ReDim mArray(j)
+    For i = LBound(mArray()) To UBound(mArray())
+        If Not mData.Fields(i).Name & "" = "" Then
+            mArray(i) = mData.Fields(i).Name
         End If
     Next i
-    GetColumnNames = m_Array()
+    GetColumnNames = mArray()
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="GetColumnNames()"
     Exit Function
 End Function
 
@@ -1134,56 +1109,59 @@ End Function
 '---------------------------------------------------------------------------------
 Private Sub ExcelButton_Click()
     On Error GoTo ErrorHandler:
-    Dim m_BudgetPath As BudgetPath
-    Dim m_Excel As Excel.Application
-    Dim m_Allocations As Excel.Workbook
-    Dim m_Worksheet As Excel.Worksheet
-    Dim m_List As Excel.ListObject
-    Dim m_Range As Excel.Range
-    Dim m_Cell As Variant
-    Dim m_Header As Excel.Range
-    Dim m_Start As Excel.Range
-    Dim m_End As Excel.Range
+    Dim mBudgetPath As BudgetPath
+    Dim mExcel As Excel.Application
+    Dim mAllocations As Excel.Workbook
+    Dim mWorksheet As Excel.Worksheet
+    Dim mList As Excel.ListObject
+    Dim mRange As Excel.Range
+    Dim mCell As Variant
+    Dim mHeader As Excel.Range
+    Dim mStart As Excel.Range
+    Dim mEnd As Excel.Range
     Dim field As DAO.field
-    Dim m_Data As DAO.Recordset
-    Dim m_Fields() As String
-    Set m_Data = GetReportData
-    m_Fields() = GetColumnNames
+    Dim mData As DAO.Recordset
+    Dim mFields() As String
+    Set mData = GetReportData
+    mFields() = GetColumnNames
     Dim i As Integer
     Dim j As Integer
-    Set m_BudgetPath = New BudgetPath
-    Set m_Excel = CreateObject("Excel.Application")
-    Set m_Allocations = m_Excel.Workbooks.Open(m_BudgetPath.ReportTemplate)
-    m_Allocations.Worksheets(2).Visible = False
-    Set m_Worksheet = m_Allocations.Worksheets(1)
-    m_Worksheet.Name = "Allocations"
-    m_Worksheet.Cells.HorizontalAlignment = xlHAlignLeft
-    m_Worksheet.Cells.Font.Name = "Source Code Pro"
-    m_Worksheet.Cells.Font.Size = 8
-    Set m_Start = m_Worksheet.Cells(1, 1)
-    Set m_End = m_Worksheet.Cells(1, UBound(m_Fields) + 1)
-    Set m_Header = m_Worksheet.Range(m_Start, m_End)
-    m_Header.Interior.Color = RGB(217, 217, 217)
-    m_Header.HorizontalAlignment = xlHAlignLeft
-    m_Header.Borders(xlEdgeBottom).Color = RGB(0, 0, 0)
-    m_Header.Borders(xlEdgeLeft).Color = RGB(133, 133, 133)
-    m_Header.Borders(xlEdgeRight).Color = RGB(133, 133, 133)
-    m_Header.Borders(xlEdgeTop).Color = RGB(133, 133, 133)
-    m_Header.Font.Name = "Source Code Pro"
-    m_Header.Font.Color = vbBlack
-    m_Header.Font.Bold = True
-    m_Header.Font.Size = 8
-    For i = LBound(m_Fields) To UBound(m_Fields)
+    Set mBudgetPath = New BudgetPath
+    Set mExcel = CreateObject("Excel.Application")
+    Set mAllocations = mExcel.Workbooks.Open(mBudgetPath.ReportTemplate)
+    mAllocations.Worksheets(2).Visible = False
+    Set mWorksheet = mAllocations.Worksheets(1)
+    mWorksheet.Name = "Allocations"
+    mWorksheet.Cells.HorizontalAlignment = xlHAlignLeft
+    mWorksheet.Cells.Font.Name = "Source Code Pro"
+    mWorksheet.Cells.Font.Size = 8
+    Set mStart = mWorksheet.Cells(1, 1)
+    Set mEnd = mWorksheet.Cells(1, UBound(mFields) + 1)
+    Set mHeader = mWorksheet.Range(mStart, mEnd)
+    mHeader.Interior.Color = RGB(217, 217, 217)
+    mHeader.HorizontalAlignment = xlHAlignLeft
+    mHeader.Borders(xlEdgeBottom).Color = RGB(0, 0, 0)
+    mHeader.Borders(xlEdgeLeft).Color = RGB(133, 133, 133)
+    mHeader.Borders(xlEdgeRight).Color = RGB(133, 133, 133)
+    mHeader.Borders(xlEdgeTop).Color = RGB(133, 133, 133)
+    mHeader.Font.Name = "Source Code Pro"
+    mHeader.Font.Color = vbBlack
+    mHeader.Font.Bold = True
+    mHeader.Font.Size = 8
+    For i = LBound(mFields) To UBound(mFields)
         j = i
-        m_Header.Cells(1, i + 1).Value = m_Fields(j)
+        mHeader.Cells(1, i + 1).Value = mFields(j)
     Next i
-    m_Worksheet.Cells(2, 1).CopyFromRecordset m_Data
-    m_Header.Font.Color = vbBlack
-    m_Excel.WindowState = xlMaximized
-    m_Excel.Visible = True
+    mWorksheet.Cells(2, 1).CopyFromRecordset mData
+    mHeader.Font.Color = vbBlack
+    mExcel.WindowState = xlMaximized
+    mExcel.Visible = True
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="ExcelButton_Click()"
+    Set mExcel = Nothing
+    Set mAllocations = Nothing
+    Set mWorksheet = Nothing
     Exit Sub
 End Sub
 
@@ -1203,8 +1181,8 @@ Private Sub UndoButton_Click()
         DoCmd.RunCommand acCmdUndo
     End If
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="UndoButton_Click()"
     Exit Sub
 End Sub
 
@@ -1224,108 +1202,11 @@ Private Sub SaveButton_Click()
         DoCmd.RunCommand acCmdSave
     End If
 ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
+    ProcessError Name:="FullTimeAllocationsForm", _ 
+        Member:="SaveButton_Click()"
     Exit Sub
 End Sub
 
-
-
-
-
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Event Sub-Procedure
-'   Name:        SetNpmIcon
-'   Parameters:  Void
-'   Retval:      Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub SetRpioIcon(pRpioName As String)
-    On Error GoTo ErrorHandler:
-    Dim p_RpioCode As String
-    If Not pRpioName & "" = "" Then
-        p_RpioCode = DLookup("RpioCode", "StatusOfFunds", _
-            "[RpioName] = '" & pRpioName & "'")
-        Me.Caption = pRpioName
-        Select Case CStr(p_RpioCode)
-            Case "01"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R1.png"
-            Case "02"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R2.png"
-            Case "03"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R3.png"
-            Case "04"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R4.png"
-            Case "05"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R5.png"
-            Case "06"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R6.png"
-            Case "07"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R7.png"
-            Case "08"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R8.png"
-            Case "09"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R9.png"
-            Case "10"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R10.png"
-            Case "11"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OA.png"
-            Case "13"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OITA.png"
-            Case "16"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OMS.png"
-            Case "17"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OCFO.png"
-            Case "20"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OCSPP.png"
-            Case "26"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\ORD.png"
-            Case "27"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OAR.png"
-            Case "30"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OW.png"
-            Case "35"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OIG.png"
-            Case "39"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OGC.png"
-            Case "75"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OLEM.png"
-            Case "77"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OECA.png"
-            Case Else
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\ui\capital.png"
-        End Select
-    End If
-ErrorHandler:
-    ProcessError Name:="FullTimeAllocations", _ 
-        Member:=""
-    Exit Sub
-End Sub
 
 
 
@@ -1359,11 +1240,3 @@ Private Sub ProcessError(Optional Name As String, Optional Member As String)
     MessageFactory.ShowError (m_Error)
     Err.Clear
 End Sub
-
-
-
-
-
-
-
-

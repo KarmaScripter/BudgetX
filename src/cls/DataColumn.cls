@@ -55,7 +55,8 @@ Public Property Let Base(pBase As DAO.field)
         Set m_Base = pBase
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataColumn", _ 
+        Member:="Base"
     Exit Property
 End Property
 
@@ -74,7 +75,8 @@ Public Property Get Base() As DAO.field
         Set Base = m_Base
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataColumn", _ 
+        Member:="Base"
     Exit Property
 End Property
 
@@ -92,7 +94,8 @@ Public Property Get Name() As String
     If Not m_Base Is Nothing Then
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataColumn", _ 
+        Member:="Name"
     Exit Property
 End Property
 
@@ -111,7 +114,8 @@ Public Property Get Ordinal() As Integer
         Ordinal = m_Base.OrdinalPosition
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataColumn", _ 
+        Member:="Ordinal"
     Exit Property
 End Property
 
@@ -149,7 +153,8 @@ Public Property Get IsNumeric() As Boolean
         End Select
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataColumn", _ 
+        Member:="IsNumeric"
     Exit Property
 End Property
 
@@ -179,7 +184,8 @@ Public Property Get IsText() As Boolean
         End Select
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataColumn", _ 
+        Member:="IsText"
     Exit Property
 End Property
 
@@ -199,7 +205,8 @@ Public Property Get Value() As Variant
         Value = m_Base.Value
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataColumn", _ 
+        Member:="Value"
     Exit Property
 End Property
 
@@ -218,7 +225,8 @@ Public Property Get DataType() As String
         DataType = m_Base.Type
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataColumn", _ 
+        Member:="DataType"
     Exit Property
 End Property
 
@@ -238,7 +246,8 @@ Public Property Let Caption(pCaption As String)
         m_Caption = pCaption
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataColumn", _ 
+        Member:="Caption"
     Exit Property
 End Property
 
@@ -261,7 +270,8 @@ Public Property Get Caption() As String
         Caption = m_Caption
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataColumn", _ 
+        Member:="Caption"
     Exit Property
 End Property
 
@@ -283,27 +293,45 @@ Public Property Get IsConnected() As Boolean
         IsConnected = False
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="DataColumn", _ 
+        Member:="IsConnected"
     Exit Property
 End Property
 
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
 

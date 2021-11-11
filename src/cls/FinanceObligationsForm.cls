@@ -1,25 +1,16 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "Form_FinanceObligations"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = True
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
 
 
 Public Args As AccountArgs
-Private m_Dialog As Form_StatusOfFundsDialog
+Private m_Dialog As Form_DivisionSelector
 Private FundNameFilter As String
 Private AccountCodeFilter As String
 Private BocNameFilter As String
 Private FocNameFilter As String
 Private FiscalYearFilter As String
-Private RpioNameFilter As String
+Private RcCodeFilter As String
 Private pAnd As String
 Private m_Error As String
 Private m_Notification As String
@@ -36,20 +27,20 @@ Private m_Notification As String
 '---------------------------------------------------------------------------------
 Private Sub Form_Open(Cancel As Integer)
     On Error GoTo ErrorHandler::
-    Set m_Dialog = New Form_StatusOfFundsDialog
+    Set m_Dialog = New Form_DivisionSelector
     Set Args = New AccountArgs
-    DoCmd.OpenForm FormName:="StatusOfFundsDialog", WindowMode:=acDialog
-    Set m_Dialog = Forms("StatusOfFundsDialog")
+    DoCmd.OpenForm FormName:="DivisionSelector", WindowMode:=acDialog
+    Set m_Dialog = Forms("DivisionSelector")
     Set Args = m_Dialog.Args
-    RpioNameFilter = "[RpioName] = '" & Args.RpioName & "'"
-    Me.RecordSource = "SELECT * FROM Obligations" _
-        & " WHERE Obligations.BocCode NOT IN ('10', '17')" _
-        & " AND Obligations.RpioName = '" & Args.RpioName & "';"
-    SetRpioIcon (Args.RpioCode)
+    RcCodeFilter = "[RcCode] = '" & Args.RcCode & "'"
+    Me.RecordSource = "SELECT * FROM Purchases" _
+        & " WHERE Purchases.BocCode NOT IN ('10', '17')" _
+        & " AND Purchases.RcCode = '" & Args.RcCode & "';"
+    SetDivisionIcon
     DoCmd.Close ObjectType:=acForm, ObjectName:=m_Dialog.Name, Save:=acSaveNo
 ErrorHandler:
-    ProcessError Name:=Me.Name, _
-        Member:="Form_Open()"
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -70,24 +61,28 @@ Private Sub Form_Load()
     Me.Section(acDetail).Height = 4
     Me.Section(acFooter).AutoHeight = False
     Me.Section(acFooter).Height = 0.5
-    SetFiscalYearOptionValue (Args.BFY)
+    Me.FiscalYearOptionGroup.Value = 2
+    FiscalYearFilter = "[BFY] = '2022'"
     ClearComboBoxValues
     SetComboBoxColors
     pAnd = " AND "
+    ClearComboBoxValues
+    SetComboBoxColors
     SetButtonVisibility
-    Me.Filter = RpioNameFilter
-    Me.AccountCodeComboBox.RowSource = "SELECT DISTINCT Obligations.AccountCode" _
-        & " FROM Obligations" _
+    Me.Filter = RcCodeFilter
+    Me.AccountCodeComboBox.RowSource = "SELECT DISTINCT Purchases.AccountCode" _
+        & " FROM Purchases" _
         & " WHERE " & Me.Filter
-    Me.FocNameComboBox.RowSource = "SELECT DISTINCT Obligations.FocName" _
-        & " FROM Obligations" _
+    Me.FocNameComboBox.RowSource = "SELECT DISTINCT Purchases.FocName" _
+        & " FROM Purchases" _
         & " WHERE " & Me.Filter
-    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Obligations.FundName" _
-        & " FROM Obligations" _
+    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Purchases.FundName" _
+        & " FROM Purchases" _
         & " WHERE " & Me.Filter
     Me.FilterOn = True
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -104,11 +99,11 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub Form_Close()
     On Error GoTo ErrorHandler:
-    Me.Filter = vbNullString
-    RpioNameFilter = vbNullString
+    Me.Filter & "" = ""
+    RcCodeFilter & "" = ""
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="Form_Close()"
     Exit Sub
 End Sub
 
@@ -138,10 +133,65 @@ Private Sub SetButtonVisibility()
     Me.CompassSpendingQueryButton.Visible = Not Me.CompassSpendingQueryButton.Visible
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="SetButtonVisibility()"
     Exit Sub
 End Sub
 
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        SetDivisionIcon
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub SetDivisionIcon()
+    On Error GoTo ErrorHandler::
+    If Not Args.RcCode & "" = "" Then
+        Me.Caption = "Obligations By Finance Object Class"
+        Select Case Args.RcCode
+            Case "06A"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ORA.png"
+            Case "06B"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\LCARD.png"
+            Case "06C"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\MSD.png"
+            Case "06D"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ORC.png"
+            Case "06F"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\EJ.png"
+            Case "06G"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\WCF.png"
+            Case "06H"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\LSASD.png"
+            Case "06J"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ARD.png"
+            Case "06K"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\WD.png"
+            Case "06L"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\SEMD.png"
+            Case "06M"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ECAD.png"
+            Case "06N"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\WSA.png"
+            Case "06R"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\MSR.png"
+            Case "06X"
+                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\XA.png"
+        End Select
+    Else
+        Me.DivisionIcon.Picture = _
+            CurrentProject.Path & "\etc\png\AppIcons\interface\ui\Reports.png"
+    End If
+ErrorHandler:
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:="SetDivisionIcon()"
+    Exit Sub
+End Sub
 
 
 
@@ -157,7 +207,7 @@ Private Sub Form_Timer()
     HideButtons
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="Form_Timer()"
     Exit Sub
 End Sub
 
@@ -188,7 +238,7 @@ Private Sub HideButtons()
     Me.CompassSpendingQueryButton.Visible = False
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="HideButtons()"
     Exit Sub
 End Sub
 
@@ -215,7 +265,7 @@ Private Sub SetComboBoxColors()
     Me.AccountCodeComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="SetComboBoxColors()"
     Exit Sub
 End Sub
 
@@ -230,12 +280,12 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ClearComboBoxValues()
     On Error GoTo ErrorHandler:
-    Me.FundNameComboBox.Value = vbNullString
-    Me.FocNameComboBox.Value = vbNullString
-    Me.AccountCodeComboBox.Value = vbNullString
+    Me.FundNameComboBox.Value & "" = ""
+    Me.FocNameComboBox.Value & "" = ""
+    Me.AccountCodeComboBox.Value & "" = ""
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="ClearComboBoxValues()"
     Exit Sub
 End Sub
 
@@ -250,13 +300,13 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ClearFilterValues()
     On Error GoTo ErrorHandler:
-    FundNameFilter = vbNullString
-    FocNameFilter = vbNullString
-    AccountCodeFilter = vbNullString
-    FiscalYearFilter = vbNullString
+    FundNameFilter & "" = ""
+    FocNameFilter & "" = ""
+    AccountCodeFilter & "" = ""
+    FiscalYearFilter & "" = ""
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="ClearFilterValues()"
     Exit Sub
 End Sub
 
@@ -264,31 +314,17 @@ End Sub
 
 '----------------------------------------------------------------------------------
 '   Type:        Sub-Procedure
-'   Name:        SetFiscalYearOptionValue
+'   Name:        ResetOptionGroupValues
 '   Parameters:  Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub SetFiscalYearOptionValue(pBFY As String)
+Private Sub ResetOptionGroupValues()
     On Error GoTo ErrorHandler:
-    If Not pBFY & "" = "" Then
-        Select Case pBFY
-            Case "2021"
-                FiscalYearFilter = "[BFY] = '2021'"
-                Me.FiscalYearOptionGroup.Value = 1
-                Args.BFY = "2021"
-            Case "2022"
-                FiscalYearFilter = "[BFY] = '2022'"
-                Me.FiscalYearOptionGroup.Value = 2
-                Args.BFY = "2022"
-            Case Else
-                FiscalYearFilter = "[BFY] = '2021'"
-                Me.FiscalYearOptionGroup.Value = 1
-                Args.BFY = "2021"
-        End Select
-    End If
+     Me.FiscalYearOptionGroup.Value = 2
+     FiscalYearFilter = "[BFY] = '2022'"
 ErrorHandler:
-    ProcessError Name:=Me.Name, _
-        Member:="SetFiscalYearOptionValue(String)"
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:="ResetOptionGroupValues()"
     Exit Sub
 End Sub
 
@@ -302,19 +338,19 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub FocNameComboBox_Change()
     On Error GoTo ErrorHandler:
-    FocNameFilter = vbNullString
-    Me.Filter = vbNullString
-    Me.AccountCodeComboBox.Value = vbNullString
+    FocNameFilter & "" = ""
+    Me.Filter & "" = ""
+    Me.AccountCodeComboBox.Value & "" = ""
     FocNameFilter = "[FocName] = '" & Me.FocNameComboBox.Value & "'"
-    Me.Filter = RpioNameFilter & pAnd & GetFocNameFilter
-    Me.RecordSource = "SELECT * FROM Obligations WHERE " & Me.Filter
+    Me.Filter = RcCodeFilter & pAnd & GetFocNameFilter
+    Me.RecordSource = "SELECT * FROM Purchases WHERE " & Me.Filter
     Me.Requery
-    Me.AccountCodeComboBox.RowSource = "SELECT DISTINCT Obligations.AccountCode" _
-        & " FROM Obligations" _
+    Me.AccountCodeComboBox.RowSource = "SELECT DISTINCT Purchases.AccountCode" _
+        & " FROM Purchases" _
         & " WHERE " & Me.Filter
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="FocNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -391,7 +427,7 @@ Private Function GetFocNameFilter() As String
     End If
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="GetFocNameFilter()"
     Exit Function
 End Function
 
@@ -407,15 +443,15 @@ End Function
 '---------------------------------------------------------------------------------
 Private Sub AccountCodeComboBox_Change()
     On Error GoTo ErrorHandler:
-    Me.Filter = vbNullString
-    AccountCodeFilter = vbNullString
+    Me.Filter & "" = ""
+    AccountCodeFilter & "" = ""
     AccountCodeFilter = "[AccountCode] = '" & Me.AccountCodeComboBox.Value & "'"
-    Me.Filter = RpioNameFilter & pAnd & GetAccountCodeFilter
-    Me.RecordSource = "SELECT * FROM Obligations WHERE " & Me.Filter
+    Me.Filter = RcCodeFilter & pAnd & GetAccountCodeFilter
+    Me.RecordSource = "SELECT * FROM Purchases WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="AccountCodeComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -500,7 +536,7 @@ Private Function GetAccountCodeFilter() As String
     End If
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="GetAccountCodeFilter()"
     Exit Function
 End Function
 
@@ -515,23 +551,23 @@ End Function
 '---------------------------------------------------------------------------------
 Private Sub FundNameComboBox_Change()
     On Error GoTo ErrorHandler:
-    Me.Filter = vbNullString
-    FundNameFilter = vbNullString
-    Me.FocNameComboBox.Value = vbNullString
-    Me.AccountCodeComboBox.Value = vbNullString
+    Me.Filter & "" = ""
+    FundNameFilter & "" = ""
+    Me.FocNameComboBox.Value & "" = ""
+    Me.AccountCodeComboBox.Value & "" = ""
     FundNameFilter = "[FundName] = '" & Me.FundNameComboBox.Value & "'"
-    Me.Filter = RpioNameFilter & pAnd & GetFundNameFilter
-    Me.RecordSource = "SELECT * FROM Obligations WHERE" & Me.Filter
+    Me.Filter = RcCodeFilter & pAnd & GetFundNameFilter
+    Me.RecordSource = "SELECT * FROM Purchases WHERE" & Me.Filter
     Me.Requery
-    Me.FocNameComboBox.RowSource = "SELECT DISTINCT Obligations.FocName" _
-        & " FROM Obligations" _
+    Me.FocNameComboBox.RowSource = "SELECT DISTINCT Purchases.FocName" _
+        & " FROM Purchases" _
         & " WHERE " & Me.Filter
-    Me.AccountCodeComboBox.RowSource = "SELECT DISTINCT Obligations.AccountCode" _
-        & " FROM Obligations" _
+    Me.AccountCodeComboBox.RowSource = "SELECT DISTINCT Purchases.AccountCode" _
+        & " FROM Purchases" _
         & " WHERE " & Me.Filter
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="FundNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -608,7 +644,7 @@ Private Function GetFundNameFilter() As String
     End If
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="GetFundNameFilter()"
     Exit Function
 End Function
 
@@ -623,20 +659,20 @@ End Function
 '---------------------------------------------------------------------------------
 Private Sub FiscalYearOptionGroup_AfterUpdate()
     On Error GoTo ErrorHandler:
-    Me.Filter = vbNullString
-    FiscalYearFilter = vbNullString
+    Me.Filter & "" = ""
+    FiscalYearFilter & "" = ""
     Select Case FiscalYearOptionGroup.Value
         Case 1
             FiscalYearFilter = "[BFY] = '2021'"
         Case 2
             FiscalYearFilter = "[BFY] = '2022'"
     End Select
-    Me.Filter = RpioNameFilter & pAnd & GetFiscalYearFilter
-    Me.RecordSource = "SELECT * FROM Obligations WHERE " & Me.Filter
+    Me.Filter = RcCodeFilter & pAnd & GetFiscalYearFilter
+    Me.RecordSource = "SELECT * FROM Purchases WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="FiscalYearOptionGroup_AfterUpdate()"
     Exit Sub
 End Sub
 
@@ -713,7 +749,7 @@ Private Function GetFiscalYearFilter() As String
     End If
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="GetFiscalYearFilter()"
     Exit Function
 End Function
 
@@ -731,7 +767,7 @@ Private Sub CalculatorButton_Click()
     Calculator.Calculate
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="CalculatorButton_Click()"
     Exit Sub
 End Sub
 
@@ -748,7 +784,7 @@ Private Sub CompassSpendingQueryButton_Click()
     DoCmd.OpenForm "BudgetDetailedSpendingQuery"
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="CompassSpendingQueryButton_Click()"
     Exit Sub
 End Sub
 
@@ -782,7 +818,7 @@ Private Sub OriginalActionDateTextBox_Click()
     DoCmd.OpenForm "BudgetCalendar", , , , , , Me.OriginalActionDateTextBox
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="OriginalActionDateTextBox_Click()"
     Exit Sub
 End Sub
 
@@ -798,14 +834,14 @@ Private Sub RefreshButton_Click()
     On Error GoTo ErrorHandler:
     ClearComboBoxValues
     ClearFilterValues
-    SetFiscalYearOptionValue ("2021")
-    Me.AccountCodeComboBox.RowSource = "SELECT DISTINCT Obligations.AccountCode FROM Obligations"
-    Me.FocNameComboBox.RowSource = "SELECT DISTINCT Obligations.FocName FROM Obligations"
-    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Obligations.FundName FROM Obligations"
-    Me.RecordSource = "SELECT * FROM Obligations;"
+    ResetOptionGroupValues
+    Me.AccountCodeComboBox.RowSource = "SELECT DISTINCT Purchases.AccountCode FROM Purchases"
+    Me.FocNameComboBox.RowSource = "SELECT DISTINCT Purchases.FocName FROM Purchases"
+    Me.FundNameComboBox.RowSource = "SELECT DISTINCT Purchases.FundName FROM Purchases"
+    Me.RecordSource = "SELECT * FROM Purchases;"
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="RefreshButton_Click()"
     Exit Sub
 End Sub
 
@@ -827,7 +863,7 @@ Private Function GetColumnNames() As String()
     Dim i As Integer
     Dim j As Integer
     Dim m_Array() As String
-    j = m_Data.Fields.count - 1
+    j = m_Data.Fields.Count - 1
     ReDim m_Array(j)
     For i = LBound(m_Array()) To UBound(m_Array())
         If Not m_Data.Fields(i).Name & "" = "" Then
@@ -837,7 +873,7 @@ Private Function GetColumnNames() As String()
     GetColumnNames = m_Array()
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="GetColumnNames()"
     Exit Function
 End Function
 
@@ -858,7 +894,7 @@ Private Function GetReportData() As DAO.Recordset
     Set GetReportData = m_Data
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="GetReportData() "
     Exit Function
 End Function
 
@@ -918,7 +954,7 @@ Private Sub ExcelButton_Click()
     p_Excel.Visible = True
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="ExcelButton_Click()"
     Exit Sub
 End Sub
 
@@ -938,7 +974,7 @@ Private Sub UndoButton_Click()
     End If
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="UndoButton_Click()"
     Exit Sub
 End Sub
 
@@ -958,7 +994,8 @@ Private Sub SaveButton_Click()
         DoCmd.RunCommand acCmdSave
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="FinanceObligationsForm", _ 
+        Member:="SaveButton_Click()"
     Exit Sub
 End Sub
 
@@ -977,7 +1014,7 @@ Private Sub DeleteButton_Click()
     End If
 ErrorHandler:
     ProcessError Name:="FinanceObligationsForm", _ 
-        Member:=""
+        Member:="DeleteButton_Click()"
     Exit Sub
 End Sub
 
@@ -985,111 +1022,9 @@ End Sub
 
 
 
-
-
 '----------------------------------------------------------------------------------
 '   Type:        Event Sub-Procedure
-'   Name:        SetNpmIcon
-'   Parameters:  Void
-'   Retval:      Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub SetRpioIcon(pRpioCode As String)
-    On Error GoTo ErrorHandler:
-    Dim p_RpioName As String
-    If Not pRpioCode & "" = "" Then
-        p_RpioName = DLookup("RpioName", "StatusOfFunds", _
-            "[RpioCode] = '" & pRpioCode & "'")
-        Me.Caption = p_RpioName
-        Select Case CStr(pRpioCode)
-            Case "01"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R1.png"
-            Case "02"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R2.png"
-            Case "03"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R3.png"
-            Case "04"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R4.png"
-            Case "05"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R5.png"
-            Case "06"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R6.png"
-            Case "07"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R7.png"
-            Case "08"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R8.png"
-            Case "09"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R9.png"
-            Case "10"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\R10.png"
-            Case "11"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OA.png"
-            Case "13"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OITA.png"
-            Case "16"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OMS.png"
-            Case "17"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OCFO.png"
-            Case "20"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OCSPP.png"
-            Case "26"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\ORD.png"
-            Case "27"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OAR.png"
-            Case "30"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OW.png"
-            Case "35"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OIG.png"
-            Case "39"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OGC.png"
-            Case "75"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OLEM.png"
-            Case "77"
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OECA.png"
-            Case Else
-                Me.RpioIcon.Picture = CurrentProject.Path _
-                    & "\etc\png\AppIcons\interface\RPIO\OCFO.png"
-        End Select
-    End If
-ErrorHandler:
-    ProcessError Name:=Me.Name, _
-        Member:="SetRpioICon"
-    Exit Sub
-End Sub
-
-
-
-
-
-
-
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Event Sub-Procedure
-'   Name:        ProcessError
+'   Name:        Process
 '   Parameters:  Void
 '   Retval:      Void
 '   Purpose:
@@ -1111,9 +1046,10 @@ Private Sub ProcessError(Optional Name As String, Optional Member As String)
                 & vbCrLf & "Number:     " & Err.Number _
                 & vbCrLf & "Issue:      " & Err.Description
     End If
-    Err.Clear
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
+
 
 
 

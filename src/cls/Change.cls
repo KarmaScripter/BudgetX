@@ -23,23 +23,9 @@ Private m_Error As String
 
 
 Private Sub Class_Initialize()
-    m_TableName = ""
-    m_FieldName = ""
-    m_Action = ""
-    m_OldValue = ""
-    m_NewValue = ""
-    m_TimeStamp = Now
-    m_ChangeId = 0
 End Sub
 
 Private Sub Class_Terminate()
-    m_TableName = ""
-    m_FieldName = ""
-    m_Action = ""
-    m_OldValue = ""
-    m_NewValue = ""
-    m_TimeStamp = Now
-    m_ChangeId = 0
 End Sub
 
 
@@ -58,7 +44,8 @@ Public Property Let ID(cid As Integer)
         m_ChangeId = cid
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Change"
+        Member:="ID"
     Exit Property
 End Property
 
@@ -76,9 +63,12 @@ Public Property Get ID() As Integer
         ID = m_ChangeId
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Change"
+        Member:="ID"
     Exit Property
 End Property
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -94,9 +84,13 @@ Public Property Let TableName(table As String)
         m_TableName = table
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Change"
+        Member:="TableName"
     Exit Property
 End Property
+
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -112,9 +106,12 @@ Public Property Get TableName() As String
         TableName = m_TableName
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Change"
+        Member:="TableName"
     Exit Property
 End Property
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -130,9 +127,13 @@ Public Property Let FieldName(field As String)
         m_FieldName = field
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Change"
+        Member:="FieldName"
     Exit Property
 End Property
+
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -148,9 +149,13 @@ Public Property Get FieldName() As String
         FieldName = m_FieldName
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Change"
+        Member:="FieldName"
     Exit Property
 End Property
+
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -166,9 +171,13 @@ Public Property Let Action(act As String)
         m_Action = act
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Change"
+        Member:="Action"
     Exit Property
 End Property
+
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -184,7 +193,8 @@ Public Property Get Action() As String
         Action = m_Action
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Change"
+        Member:="Action"
     Exit Property
 End Property
 
@@ -202,7 +212,8 @@ Public Property Let TimeStamp(tm As String)
         m_TimeStamp = tm
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Change"
+        Member:="TimeStamp"
     Exit Property
 End Property
 
@@ -220,7 +231,8 @@ Public Property Get TimeStamp() As String
         TimeStamp = m_TimeStamp
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Change"
+        Member:="TimeStamp"
     Exit Property
 End Property
 
@@ -238,7 +250,8 @@ Public Property Let OldValue(ov As String)
         m_OldValue = ov
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Change"
+        Member:="OldValue"
     Exit Property
 End Property
 
@@ -255,7 +268,8 @@ Public Property Get OldValue() As String
         OldValue = m_OldValue
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Change"
+        Member:="OldValue"
     Exit Property
 End Property
 
@@ -274,7 +288,8 @@ Public Property Let NewValue(nv As String)
         m_NewValue = nv
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Change"
+        Member:="NewValue"
     Exit Property
 End Property
 
@@ -292,7 +307,8 @@ Public Property Get NewValue() As String
         NewValue = m_NewValue
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="Change"
+        Member:="NewValue"
     Exit Property
 End Property
 
@@ -302,22 +318,36 @@ End Property
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
-
 

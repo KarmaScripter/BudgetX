@@ -59,7 +59,8 @@ Public Property Let ID(pid As Integer)
         m_PrcId = pid
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="ID"
     Exit Property
 End Property
 
@@ -78,7 +79,8 @@ Public Property Get ID() As Integer
         ID = m_PrcId
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="ID"
     Exit Property
 End Property
 
@@ -96,7 +98,8 @@ Public Property Let BFY(yr As String)
         m_BFY = yr
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="BFY"
     Exit Property
 End Property
 
@@ -115,7 +118,8 @@ Public Property Get BFY() As String
         BFY = m_BFY
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="BFY"
     Exit Property
 End Property
 
@@ -133,7 +137,8 @@ Public Property Let BudgetLevel(bl As String)
         m_BudgetLevel = bl
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="BudgetLevel"
     Exit Property
 End Property
 
@@ -152,7 +157,8 @@ Public Property Get BudgetLevel() As String
         BudgetLevel = m_BudgetLevel
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="BudgetLevel"
     Exit Property
 End Property
 
@@ -172,7 +178,8 @@ Public Property Let RpioName(rn As String)
         m_RpioName = rn
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="RpioName"
     Exit Property
 End Property
 
@@ -191,7 +198,8 @@ Public Property Get RpioName() As String
         RpioName = m_RpioName
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="RpioName"
     Exit Property
 End Property
 
@@ -209,7 +217,8 @@ Public Property Let RpioCode(rp As String)
         m_RpioCode = rp
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="RpioCode"
     Exit Property
 End Property
 
@@ -228,7 +237,8 @@ Public Property Get RpioCode() As String
         RpioCode = m_RpioCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="RpioCode"
     Exit Property
 End Property
 
@@ -246,7 +256,8 @@ Public Property Let AhCode(ac As String)
         m_AhCode = ac
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="AhCode"
     Exit Property
 End Property
 
@@ -265,7 +276,8 @@ Public Property Get AhCode() As String
         AhCode = m_AhCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="AhCode"
     Exit Property
 End Property
 
@@ -283,7 +295,8 @@ Public Property Let OrgCode(oc As String)
         m_OrgCode = oc
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="OrgCode"
     Exit Property
 End Property
 
@@ -302,7 +315,8 @@ Public Property Get OrgCode() As String
         OrgCode = m_OrgCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="OrgCode"
     Exit Property
 End Property
 
@@ -321,7 +335,8 @@ Public Property Let FundCode(fc As String)
         m_FundCode = fc
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="FundCode"
     Exit Property
 End Property
 
@@ -340,7 +355,8 @@ Public Property Get FundCode() As String
         FundCode = m_FundCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="FundCode"
     Exit Property
 End Property
 
@@ -358,7 +374,8 @@ Public Property Let FundName(fn As String)
         m_FundName = fn
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="FundName"
     Exit Property
 End Property
 
@@ -377,7 +394,8 @@ Public Property Get FundName() As String
         FundName = m_FundName
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="FundName"
     Exit Property
 End Property
 
@@ -395,7 +413,8 @@ Public Property Let AccountCode(ac As String)
         pAccountCode = ac
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="AccountCode"
     Exit Property
 End Property
 
@@ -414,7 +433,8 @@ Public Property Get AccountCode() As String
         AccountCode = pAccountCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="AccountCode"
     Exit Property
 End Property
 
@@ -432,7 +452,8 @@ Public Property Let ActivityCode(act As String)
         m_ActivityCode = act
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="ActivityCode"
     Exit Property
 End Property
 
@@ -451,7 +472,8 @@ Public Property Get ActivityCode() As String
         ActivityCode = m_ActivityCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="ActivityCode"
     Exit Property
 End Property
 
@@ -470,7 +492,8 @@ Public Property Let BocCode(bc As String)
         m_BocCode = bc
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="BocCode"
     Exit Property
 End Property
 
@@ -489,7 +512,8 @@ Public Property Get BocCode() As String
         BocCode = m_BocCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="BocCode"
     Exit Property
 End Property
 
@@ -507,7 +531,8 @@ Public Property Let BocName(bn As String)
         m_BocName = bn
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="BocName"
     Exit Property
 End Property
 
@@ -526,7 +551,8 @@ Public Property Get BocName() As String
         BocName = m_BocName
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="BocName"
     Exit Property
 End Property
 
@@ -544,7 +570,8 @@ Public Property Let RcCode(RC As String)
         m_RcCode = RC
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="RcCode"
     Exit Property
 End Property
 
@@ -563,7 +590,8 @@ Public Property Get RcCode() As String
         RcCode = m_RcCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="RcCode"
     Exit Property
 End Property
 
@@ -581,7 +609,8 @@ Public Property Let DivisionName(dn As String)
         m_DivisionName = dn
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="DivisionName"
     Exit Property
 End Property
 
@@ -600,7 +629,8 @@ Public Property Get DivisionName() As String
         DivisionName = m_DivisionName
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="DivisionName"
     Exit Property
 End Property
 
@@ -619,7 +649,8 @@ Public Property Let ProgramProjectName(pn As String)
         m_ProgramProjectName = pn
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="ProgramProjectName"
     Exit Property
 End Property
 
@@ -637,7 +668,8 @@ Public Property Get ProgramProjectName() As String
         ProgramProjectName = m_ProgramProjectName
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="ProgramProjectName"
     Exit Property
 End Property
 
@@ -658,7 +690,8 @@ Public Property Let StartDate(pStart As String)
         m_StartDate = pStart
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="StartDate"
     Exit Property
 End Property
 
@@ -676,7 +709,8 @@ Public Property Get StartDate() As String
         StartDate = m_StartDate
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="StartDate"
     Exit Property
 End Property
 
@@ -698,7 +732,8 @@ Public Property Let EndDate(pEnd As String)
         m_EndDate = pEnd
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="EndDate"
     Exit Property
 End Property
 
@@ -716,28 +751,45 @@ Public Property Get EndDate() As String
         EndDate = m_EndDate
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccountArgs", _ 
+        Member:="EndDate"
     Exit Property
 End Property
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
+
 
 
 
