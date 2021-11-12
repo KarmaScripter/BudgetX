@@ -3,22 +3,40 @@ Option Explicit
 
 
 
+
 Public Args As PayrollArgs
+Private m_StartDate As String
+Private m_EndDate As String
+Private m_RpioName As String
+Private m_FundName As String
 Private pAnd As String
-Private mFundCode As String
-Private mFundName As String
-Private FundNameFilter As String
-Private mBFY As String
-Private FiscalYearFilter As String
-Private mAnd As String
-Private mFilter As String
-Private mError As String
-Private mNotification As String
+Private m_Error As String
+
+
+
+
 
 
 '----------------------------------------------------------------------------------
 '   Type:        Event Sub-Procedure
-'   Name:        FundNameComboBox_Change
+'   Name:        Form_Load
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub Form_Open(Cancel As Integer)
+    On Error GoTo ErrorHandler:
+    Set Args = New PayrollArgs
+ErrorHandler:
+    ProcessError Name:="PayrollDialog", _
+        Member:="Form_Open"
+    Exit Sub
+End Sub
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Form_Load
 '   Parameters:  Void
 '   Retval:      Void
 '   Purpose:
@@ -28,17 +46,131 @@ Private Sub Form_Load()
     ClearComboBoxValues
     SetComboBoxColors
     pAnd = " AND "
-    Set Args = New PayrollArgs
-    Me.FiscalYearOptionGroup.DefaultValue = 2
-    FiscalYearFilter = "[BFY] = '2021'"
-    Args.BFY = "2021"
-    Me.FundNameComboBox.RowSource = "SELECT DISTINCT UCase(StatusOfFunds.FundName)" _
-        & " FROM StatusOfFunds" _
-        & " WHERE StatusOfFunds.BudgetLevel = '7'" _
-        & " AND StatusOfFunds.BocCode = '10';"
+    Me.RpioNameComboBox.RowSource = "SELECT DISTINCT PayrollObligations.RpioName" _
+        & " FROM PayrollObligations;"
+    Me.FundNameComboBox.RowSource = "SELECT DISTINCT PayrollObligations.FundName" _
+        & " FROM PayrollObligations;"
+    Me.StartDateTextBox.Value = #10/1/2021#
+    Me.EndDateTextBox.Value = Date
 ErrorHandler:
-    ProcessError Name:="PayrollDialog", _ 
-        Member:=""
+    ProcessError Name:="PayrollDialog", _
+        Member:="Form_Load()"
+    Exit Sub
+End Sub
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        RpioNameComboBox_Change
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub RpioNameComboBox_Change()
+    On Error GoTo ErrorHandler:
+    m_RpioName = vbNullString
+    Args.RpioName = Me.RpioNameComboBox.Value
+    Args.RcCode = DLookup("RcCode", "PayrollObligations", _
+        "PayrollObligations.RpioName = '" & Me.RpioNameComboBox.Value & "'")
+    Me.FundNameComboBox.RowSource = "SELECT DISTINCT PayrollObligations.FundName" _
+        & " FROM PayrollObligations WHERE" _
+        & " PayrollObligations.RpioName = '" & Me.RpioNameComboBox.Value & "'"
+ErrorHandler:
+    ProcessError Name:="PayrollDialog", _
+        Member:="RpioNameComboBox_Change()"
+    Exit Sub
+End Sub
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProgramProjectNameComboBox_Change
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub FundNameComboBox_Change()
+    On Error GoTo ErrorHandler:
+    m_FundName = vbNullString
+    m_FundName = Me.FundNameComboBox.Value
+    Args.FundName = m_FundName
+ErrorHandler:
+    ProcessError Name:="PayrollDialog", _
+        Member:="FundNameComboBox_Change()"
+    Exit Sub
+End Sub
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        FiscalYearOptionGroup_AfterUpdate
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub StartDateTextBox_AfterUpdate()
+    On Error GoTo ErrorHandler:
+    m_StartDate = vbNullString
+    m_StartDate = Me.StartDateTextBox.text
+    Args.StartDate = m_StartDate
+ErrorHandler:
+    ProcessError Name:="PayrollDialog", _
+        Member:="StartDateTextBox_AfterUpdate()"
+    Exit Sub
+End Sub
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        FiscalYearOptionGroup_AfterUpdate
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub EndDateTextBox_Change()
+    On Error GoTo ErrorHandler:
+    m_EndDate = vbNullString
+    m_EndDate = Me.EndDateTextBox.text
+    Args.EndDate = m_EndDate
+ErrorHandler:
+    ProcessError Name:="PayrollDialog", _
+        Member:="EndDateTextBox_Change()"
+    Exit Sub
+End Sub
+
+
+
+'---------------------------------------------------------------------------------
+'   Type:
+'   Name:
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub AcceptButton_Click()
+    On Error GoTo ErrorHandler:
+    Me.Visible = Not Me.Visible
+ErrorHandler:
+    ProcessError Name:="PayrollDialog", _
+        Member:="AcceptButton_Click()"
+    Exit Sub
+End Sub
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        RefreshButton_Click
+'   Parameters:  Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub RefreshButton_Click()
+    On Error GoTo ErrorHandler:
+    ClearComboBoxValues
+    ClearFilterValues
+    ClearTextBoxValues
+ErrorHandler:
+    ProcessError Name:="PayrollDialog", _
+        Member:="RefreshButton_Click()"
     Exit Sub
 End Sub
 
@@ -52,153 +184,42 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub SetComboBoxColors()
     On Error GoTo ErrorHandler:
-    Me.FundNameComboBox.ForeColor = RGB(255, 255, 255)
-    Me.FundNameComboBox.BackColor = RGB(33, 33, 33)
-    Me.FundNameComboBox.BorderColor = RGB(68, 114, 196)
+    Me!RpioNameComboBox.ForeColor = RGB(255, 255, 255)
+    Me!RpioNameComboBox.BackColor = RGB(33, 33, 33)
+    Me!RpioNameComboBox.BorderColor = RGB(68, 114, 196)
+    Me!FundNameComboBox.ForeColor = RGB(255, 255, 255)
+    Me!FundNameComboBox.BackColor = RGB(33, 33, 33)
+    Me!FundNameComboBox.BorderColor = RGB(68, 114, 196)
+    Me!StartDateTextBox.ForeColor = RGB(255, 255, 255)
+    Me!StartDateTextBox.BackColor = RGB(33, 33, 33)
+    Me!StartDateTextBox.BorderColor = RGB(68, 114, 196)
+    Me!EndDateTextBox.ForeColor = RGB(255, 255, 255)
+    Me!EndDateTextBox.BackColor = RGB(33, 33, 33)
+    Me!EndDateTextBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    ProcessError Name:="PayrollDialog", _ 
-        Member:=""
+    ProcessError Name:="PayrollDialog", _
+        Member:="SetComboBoxColors()"
     Exit Sub
 End Sub
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Event Sub-Procedure
-'   Name:        AcceptButton_Click
-'   Parameters:  Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub AcceptButton_Click()
-    On Error GoTo ErrorHandler:
-    Me.Visible = Not Me.Visible
-ErrorHandler:
-    ProcessError Name:="PayrollDialog", _ 
-        Member:=""
-    Exit Sub
-End Sub
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Event Sub-Procedure
-'   Name:        ExitButton_Click
-'   Parameters:  Void
-'   Retval:      Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub ExitButton_Click()
-    On Error GoTo ErrorHandler:
-    ClearFilterValues
-    DoCmd.Close acForm, Me.Name
-ErrorHandler:
-    ProcessError Name:="PayrollDialog", _ 
-        Member:=""
-    Exit Sub
-End Sub
-
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Event Sub-Procedure
-'   Name:        FundNameComboBox_Change
-'   Parameters:  Void
-'   Retval:      Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub FundNameComboBox_Change()
-    On Error GoTo ErrorHandler:
-    mFundName & "" = ""
-    Args.FundName & "" = ""
-    Me.Filter & "" = ""
-    FundNameFilter & "" = ""
-    Args.FundName = Me.FundNameComboBox.Value
-    Args.FundCode = DLookup("FundCode", "StatusOfFunds", "StatusOfFunds.FundName = '" _
-        & Me.FundNameComboBox.Value & "'")
-    FundNameFilter = "[FundName] = '" & Me.FundNameComboBox.Value & "'"
-ErrorHandler:
-    ProcessError Name:="PayrollDialog", _ 
-        Member:=""
-    Exit Sub
-End Sub
-
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Function
-'   Name:        GetFundNameFilter
-'   Parameters:  Void
-'   Retval:      String
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Function GetFundNameFilter() As String
-    On Error GoTo ErrorHandler:
-    If Not FundNameFilter & "" = "" And _
-        Not FiscalYearFilter & "" = "" Then
-            GetFundNameFilter = FundNameFilter _
-                & pAnd & FiscalYearFilter
-    End If
-    If Not FundNameFilter & "" = "" And _
-        FiscalYearFilter & "" = "" Then
-            GetFundNameFilter = FundNameFilter
-    End If
-ErrorHandler:
-    ProcessError Name:="PayrollDialog", _ 
-        Member:=""
-    Exit Function
-End Function
-
 
 
 
 '----------------------------------------------------------------------------------
 '   Type:        Sub-Procedure
-'   Name:        FiscalYearOptionGroup_AfterUpdate
+'   Name:        ClearComboBoxValues
 '   Parameters:  Void
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub FiscalYearOptionGroup_AfterUpdate()
+Private Sub ClearComboBoxValues()
     On Error GoTo ErrorHandler:
-    Args.BFY & "" = ""
-    FiscalYearFilter & "" = ""
-    Me.Filter & "" = ""
-    Select Case Me.FiscalYearOptionGroup.Value
-        Case 1
-            Args.BFY = "2020"
-            FiscalYearFilter = "[BFY] = '2020'"
-        Case 2
-            Args.BFY = "2021"
-            FiscalYearFilter = "[BFY] = '2021'"
-    End Select
-    Me.Filter = GetFiscalYearFilter
+    Me.RpioNameComboBox.Value = vbNullString
+    Me.FundNameComboBox.Value = vbNullString
 ErrorHandler:
-    ProcessError Name:="PayrollDialog", _ 
-        Member:=""
+    ProcessError Name:="PayrollDialog", _
+        Member:="ClearComboBoxValues()"
     Exit Sub
 End Sub
-
-'----------------------------------------------------------------------------------
-'   Type:        Function
-'   Name:        GetFiscalYearFilter
-'   Parameters:  Void
-'   Retval:      String
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Function GetFiscalYearFilter()
-    On Error GoTo ErrorHandler:
-    If Not FiscalYearFilter & "" = "" And _
-        FundNameFilter & "" = "" Then
-            GetFiscalYearFilter = FiscalYearFilter
-    End If
-    If Not FiscalYearFilter & "" = "" And _
-        Not FundNameFilter & "" = "" Then
-            GetFiscalYearFilter = FiscalYearFilter _
-                & pAnd & FundNameFilter
-    End If
-ErrorHandler:
-    ProcessError Name:="PayrollDialog", _ 
-        Member:=""
-    Exit Function
-End Function
 
 
 
@@ -206,39 +227,15 @@ End Function
 '   Type:        Event Sub-Procedure
 '   Name:        RefreshButton_Click
 '   Parameters:  Void
-'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub RefreshButton_Click()
+Private Sub ClearTextBoxValues()
     On Error GoTo ErrorHandler:
-    ClearComboBoxValues
-    ClearFilterValues
-    Me.FiscalYearOptionGroup.Value = 2
+    Me.StartDateTextBox.Value = vbNullString
+    Me.EndDateTextBox.Value = vbNullString
 ErrorHandler:
-    ProcessError Name:="PayrollDialog", _ 
-        Member:=""
-    Exit Sub
-End Sub
-
-
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Event Sub-Procedure
-'   Name:        ClearComboBoxValues
-'   Parameters:  Void
-'   Purpose:
-'---------------------------------------------------------------------------------
-Private Sub ClearComboBoxValues()
-    On Error GoTo ErrorHandler:
-    ClearFilterValues
-    Me.FundNameComboBox.Value & "" = ""
-    Me.FundNameComboBox.RowSource = "SELECT DISTINCT UCase(StatusOfFunds.FundName)" _
-        & " FROM StatusOfFunds" _
-        & " WHERE StatusOfFunds.BocCode = '10';"
-ErrorHandler:
-    ProcessError Name:="PayrollDialog", _ 
-        Member:=""
+    ProcessError Name:="PayrollDialog", _
+        Member:="ClearTextBoxValues()"
     Exit Sub
 End Sub
 
@@ -253,16 +250,88 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub ClearFilterValues()
     On Error GoTo ErrorHandler:
-    FundNameFilter & "" = ""
-    mFundName & "" = ""
-    Args.FundName & "" = ""
-    Args.FundCode & "" = ""
-    Me.Filter & "" = ""
+    m_EndDate = vbNullString
+    m_StartDate = vbNullString
+    m_RpioName = vbNullString
+    m_FundName = vbNullString
 ErrorHandler:
-    ProcessError Name:="PayrollDialog", _ 
-        Member:=""
+    ProcessError Name:="PayrollDialog", _
+        Member:="ClearFilterValues()"
     Exit Sub
 End Sub
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        ExitButton_Click
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub ExitButton_Click()
+    On Error GoTo ErrorHandler:
+    If Not Args Is Nothing Then
+        Set Args = Nothing
+    End If
+    DoCmd.Close ObjectType:=acForm, ObjectName:=Me.Name, Save:=acSaveNo
+ErrorHandler:
+    ProcessError Name:="PayrollDialog", _
+        Member:="ExitButton_Click()"
+    Exit Sub
+End Sub
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        ExitButton_Click
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub StartDateTextBox_Enter()
+    On Error GoTo ErrorHandler:
+    m_StartDate = vbNullString
+    Dim calendar As New Form_BudgetCalendar
+    DoCmd.OpenForm FormName:="BudgetCalendar", WindowMode:=acDialog, OpenArgs:=Me.StartDateTextBox
+    Set calendar = Forms("BudgetCalendar")
+    Me.StartDateTextBox.Value = calendar.txtCalendarDate
+    m_StartDate = Me.StartDateTextBox.Value
+    Args.StartDate = m_StartDate
+    DoCmd.Close ObjectType:=acForm, ObjectName:="BudgetCalendar", Save:=acSaveNo
+ErrorHandler:
+    ProcessError Name:="PayrollDialog", _
+        Member:="StartDateTextBox_Enter()"
+    Exit Sub
+End Sub
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        ExitButton_Click
+'   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub EndDateTextBox_Enter()
+    On Error GoTo ErrorHandler:
+    Dim calendar As New Form_BudgetCalendar
+    DoCmd.OpenForm FormName:="BudgetCalendar", WindowMode:=acDialog, OpenArgs:=Me.EndDateTextBox
+    Set calendar = Forms("BudgetCalendar")
+    Me.EndDateTextBox.Value = calendar.txtCalendarDate
+    m_EndDate = Me.EndDateTextBox.Value
+    Args.EndDate = m_EndDate
+    DoCmd.Close ObjectType:=acForm, ObjectName:="BudgetCalendar", Save:=acSaveNo
+ErrorHandler:
+    ProcessError Name:="PayrollDialog", _
+        Member:="EndDateTextBox_Enter()"
+    Exit Sub
+End Sub
+
+
+
 
 
 
@@ -296,3 +365,7 @@ Private Sub ProcessError(Optional Name As String, Optional Member As String)
     MessageFactory.ShowError (m_Error)
     Err.Clear
 End Sub
+
+
+
+

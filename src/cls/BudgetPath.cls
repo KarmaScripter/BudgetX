@@ -65,7 +65,8 @@ Public Property Get References() As String
         References = m_ReferenceModels
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetPath"
+    ProcessError Name:="BudgetPath", _ 
+        Member:="References"
     Exit Property
 End Property
 
@@ -86,7 +87,8 @@ Public Property Get Data() As String
         Data = m_DataModels
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetPath"
+    ProcessError Name:="BudgetPath", _
+        Member:="Data"
     Exit Property
 End Property
 
@@ -107,7 +109,8 @@ Public Property Get Views() As String
         Views = m_ViewModels
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetPath"
+    ProcessError Name:="BudgetPath", _
+        Member:="Views"
     Exit Property
 End Property
 
@@ -128,7 +131,8 @@ Public Property Get ReportTemplate() As String
         ReportTemplate = m_ExcelReport
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetPath"
+    ProcessError Name:="BudgetPath", _
+        Member:="ReportTemplate"
     Exit Property
 End Property
 
@@ -149,7 +153,8 @@ Public Property Get BudgetTemplate() As String
         BudgetTemplate = m_ExcelBudget
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetPath"
+    ProcessError Name:="BudgetPath", _
+        Member:="BudgetTemplate"
     Exit Property
 End Property
 
@@ -170,7 +175,8 @@ Public Property Let ExternalFile(fp As String)
         m_Path = fp
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetPath"
+    ProcessError Name:="BudgetPath", _
+        Member:="ExternalFile"
     Exit Property
 End Property
 
@@ -190,7 +196,8 @@ Public Property Get ExternalFile() As String
         ExternalFile = m_Path
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetPath"
+    ProcessError Name:="BudgetPath", _
+        Member:="ExternalFile"
     Exit Property
 End Property
 
@@ -210,7 +217,8 @@ Private Property Get DevelopmentPath() As String
     On Error GoTo ErrorHandler:
     DevelopmentPath = "C:\Users\terry\source\repos\BudgetX\db\accdb\models"
 ErrorHandler:
-    ProcessError Name:="BudgetPath"
+    ProcessError Name:="BudgetPath", _
+        Member:="DevelopmentPath"
     Exit Property
 End Property
 
@@ -229,7 +237,8 @@ Private Property Get ProductionPath() As String
     On Error GoTo ErrorHandler:
     ProductionPath = "C:\Users\teppler\source\repos\BudgetX\db\accdb\models"
 ErrorHandler:
-    ProcessError Name:="BudgetPath"
+    ProcessError Name:="BudgetPath", _
+        Member:="ProductionPath"
     Exit Property
 End Property
 

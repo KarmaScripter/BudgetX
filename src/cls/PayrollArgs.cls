@@ -1,52 +1,34 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "PayrollArgs"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+
 Option Compare Database
 Option Explicit
 
 
 
-Private m_BFY As String
+
+Private m_SSID As Integer
+Private m_City As String
 Private m_RpioCode As String
-Private m_AhCode As String
+Private m_RpioName As String
+Private m_State As String
+Private m_SiteProjectCode As String
 Private m_FundCode As String
 Private m_FundName As String
-Private m_HROrgCode As String
+Private m_OrgCode As String
 Private m_AccountCode As String
-Private m_WorkCode As String
 Private m_BocCode As String
 Private m_BocName As String
 Private m_RcCode As String
-Private m_DivisionName As String
-Private m_EmployeeNumber As String
-Private m_LastName As String
-Private m_FirstName As String
-Private m_PayPeriod As String
-Private m_PayGrade As String
-Private m_Step As String
+Private m_OperableUnit As String
+Private m_ActionCode As String
+Private m_ProgramProjectName As String
+Private m_SiteProjectName As String
 Private m_StartDate As String
-Private m_EndDate As String
-Private m_JobTitle As String
-Private m_ReportingCode As String
-Private m_ReportingCodeName As String
-Private m_FocCode As String
-Private m_FocName As String
+Private m_LastActivityDate As String
 Private m_Error As String
 
 
-'----------------------------------------------------------------------------------
-'   Type        Contructor/Finalizer
-'   Name        Class_Initialize()/Class_Terminate
-'   Parameters  Void
-'   Retval      AccessData
-'   Purpose
-'---------------------------------------------------------------------------------
+
+
 Public Sub Class_Initialize()
 End Sub
 
@@ -56,164 +38,208 @@ End Sub
 
 
 
-
-
-
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name            SSID
+'   Parameters      Void
+'   Retval          Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let BFY(yr As String)
+Public Property Let SSID(pid As Integer)
+    On Error GoTo ErrorHandler:
+    If Not pid < 0 Then
+        m_SSID = pid
+    End If
+ErrorHandler:
+    ProcessError Name:="SiteArgs", _
+        Member:="SSID"
+    Exit Property
+End Property
+
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
+'   Name            SSID
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Get SSID() As Integer
+    On Error GoTo ErrorHandler:
+    If Not m_SSID < 0 Then
+        SSID = m_SSID
+    End If
+ErrorHandler:
+    ProcessError Name:="SiteArgs", _
+        Member:="SSID"
+    Exit Property
+End Property
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name            City
+'   Parameters      Void
+'   Retval          Void
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Let City(yr As String)
     On Error GoTo ErrorHandler:
     If Not yr & "" = "" Then
-        m_BFY = yr
+        m_City = yr
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     BFY" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="City"
     Exit Property
 End Property
 
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
+'   Name            City
+'   Parameters      Void
+'   Retval          String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Get BFY() As String
+Public Property Get City() As String
     On Error GoTo ErrorHandler:
-    If Not m_BFY & "" = "" Then
-        BFY = m_BFY
+    If Not m_City & "" = "" Then
+        City = m_City
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     BFY" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="City"
     Exit Property
 End Property
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name            State
+'   Parameters      Void
+'   Retval          Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let StartDate(sd As String)
+Public Property Let State(bl As String)
     On Error GoTo ErrorHandler:
-    If Not sd & "" = "" Then
-        m_StartDate = sd
+    If Not bl & "" = "" Then
+        m_State = bl
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     StartDate" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="State"
     Exit Property
 End Property
 
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
+'   Name            State
+'   Parameters      Void
+'   Retval          String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Get StartDate() As String
+Public Property Get State() As String
     On Error GoTo ErrorHandler:
-    If Not m_StartDate & "" = "" Then
-        StartDate = m_StartDate
+    If Not m_State & "" = "" Then
+        State = m_State
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     StartDate" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="State"
     Exit Property
 End Property
 
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name            RpioCode
+'   Parameters      Void
+'   Retval          Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let EndDate(ed As String)
+Public Property Let RpioName(rn As String)
     On Error GoTo ErrorHandler:
-    If Not ed & "" = "" Then
-        m_EndDate = ed
+    If Not rn & "" = "" Then
+        m_RpioName = rn
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     EndDate" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="RpioName"
     Exit Property
 End Property
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
+'   Name            SiteProjectName
+'   Parameters      Void
+'   Retval          String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Get EndDate() As String
+Public Property Get SiteProjectName() As String
     On Error GoTo ErrorHandler:
-    If Not m_EndDate & "" = "" Then
-        EndDate = m_EndDate
+    If Not m_SiteProjectName & "" = "" Then
+        SiteProjectName = m_SiteProjectName
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     EndDate" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="SiteProjectName"
     Exit Property
 End Property
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name            RpioCode
+'   Parameters      Void
+'   Retval          Void
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Let SiteProjectName(rn As String)
+    On Error GoTo ErrorHandler:
+    If Not rn & "" = "" Then
+        m_SiteProjectName = rn
+    End If
+ErrorHandler:
+    ProcessError Name:="SiteArgs", _
+        Member:="SiteProjectName"
+    Exit Property
+End Property
+
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
+'   Name            RpioCode
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Get RpioName() As String
+    On Error GoTo ErrorHandler:
+    If Not m_RpioName & "" = "" Then
+        RpioName = m_RpioName
+    End If
+ErrorHandler:
+    ProcessError Name:="SiteArgs", _
+        Member:="RpioName"
+    Exit Property
+End Property
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name            RpioCode
+'   Parameters      Void
+'   Retval          Void
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let RpioCode(rp As String)
@@ -222,23 +248,18 @@ Public Property Let RpioCode(rp As String)
         m_RpioCode = rp
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     RpioCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="RpioCode"
     Exit Property
 End Property
 
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
+'   Name            RpioCode
+'   Parameters      Void
+'   Retval          String
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get RpioCode() As String
@@ -247,173 +268,96 @@ Public Property Get RpioCode() As String
         RpioCode = m_RpioCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     RpioCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="RpioCode"
     Exit Property
 End Property
 
 
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name            SiteProjectCode
+'   Parameters      Void
+'   Retval          Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let AhCode(ac As String)
+Public Property Let SiteProjectCode(ac As String)
     On Error GoTo ErrorHandler:
     If Not ac & "" = "" Then
-        m_AhCode = ac
+        m_SiteProjectCode = ac
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     AhCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="SiteProjectCode"
     Exit Property
 End Property
 
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
+'   Name            SiteProjectCode
+'   Parameters      Void
+'   Retval          String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Get AhCode() As String
+Public Property Get SiteProjectCode() As String
     On Error GoTo ErrorHandler:
-    If Not m_AhCode & "" = "" Then
-        AhCode = m_AhCode
+    If Not m_SiteProjectCode & "" = "" Then
+        SiteProjectCode = m_SiteProjectCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     AhCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="SiteProjectCode"
     Exit Property
 End Property
 
 
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name            OrgCode
+'   Parameters      Void
+'   Retval          Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let HrOrgCode(oc As String)
+Public Property Let OrgCode(oc As String)
     On Error GoTo ErrorHandler:
     If Not oc & "" = "" Then
-       m_HROrgCode = oc
+        m_OrgCode = oc
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     HrOrgCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="OrgCode"
     Exit Property
 End Property
 
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
+'   Name            OrgCode
+'   Parameters      Void
+'   Retval          String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Get HrOrgCode() As String
+Public Property Get OrgCode() As String
     On Error GoTo ErrorHandler:
-    If Not m_HROrgCode & "" = "" Then
-        HrOrgCode = m_HROrgCode
+    If Not m_OrgCode & "" = "" Then
+        OrgCode = m_OrgCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     HrOrgCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="OrgCode"
     Exit Property
 End Property
 
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let WorkCode(wc As String)
-    On Error GoTo ErrorHandler:
-    If Not wc & "" = "" Then
-        m_WorkCode = wc
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     WorkCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
+'   Type            Property-Get
 '   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Get WorkCode() As String
-    On Error GoTo ErrorHandler:
-    If Not m_WorkCode & "" = "" Then
-        WorkCode = m_WorkCode
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     WorkCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
+'   Parameters      Void
+'   Retval          String
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let FundCode(fc As String)
@@ -422,73 +366,18 @@ Public Property Let FundCode(fc As String)
         m_FundCode = fc
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     FundCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="FundCode"
     Exit Property
 End Property
 
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
 '---------------------------------------------------------------------------------
-Public Property Get FundName() As String
-    On Error GoTo ErrorHandler:
-    If Not m_FundName & "" = "" Then
-        FundName = m_FundName
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     FundName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
+'   Type            Property-Get
 '   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Let FundName(fn As String)
-    On Error GoTo ErrorHandler:
-    If Not fn & "" = "" Then
-        m_FundName = fn
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     FundName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
+'   Parameters      Void
+'   Retval          String
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get FundCode() As String
@@ -497,23 +386,56 @@ Public Property Get FundCode() As String
         FundCode = m_FundCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     FundCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
+    ProcessError Name:="SiteArgs", _
+        Member:="FundCode"
+    Exit Property
+End Property
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name
+'   Parameters      Void
+'   Retval          Void
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Let FundName(fn As String)
+    On Error GoTo ErrorHandler:
+    If Not fn & "" = "" Then
+        m_FundName = fn
     End If
-    MessageFactory.ShowError (m_Error)
+ErrorHandler:
+    ProcessError Name:="SiteArgs", _
+        Member:="FundName"
     Exit Property
 End Property
 
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
 '   Name
-'   Parameters  Void
-'   Retval      String
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Get FundName() As String
+    On Error GoTo ErrorHandler:
+    If Not m_FundName & "" = "" Then
+        FundName = m_FundName
+    End If
+ErrorHandler:
+    ProcessError Name:="SiteArgs", _
+        Member:="FundName"
+    Exit Property
+End Property
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name
+'   Parameters      Void
+'   Retval          Void
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let AccountCode(ac As String)
@@ -522,23 +444,18 @@ Public Property Let AccountCode(ac As String)
         m_AccountCode = ac
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     AccountCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="AccountCode"
     Exit Property
 End Property
 
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
 '   Name
-'   Parameters  Void
-'   Retval      String
+'   Parameters      Void
+'   Retval          String
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get AccountCode() As String
@@ -547,73 +464,57 @@ Public Property Get AccountCode() As String
         AccountCode = m_AccountCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     AccountCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="AccountCode"
     Exit Property
 End Property
 
 
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
 '   Name
-'   Parameters  Void
-'   Retval      String
+'   Parameters      Void
+'   Retval          Void
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Let EmployeeNumber(eid As String)
+Public Property Let ActionCode(act As String)
     On Error GoTo ErrorHandler:
-    If eid & "" = "" Then
-        m_EmployeeNumber = eid
+    If act & "" = "" Then
+        m_ActionCode = act
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     EmployeeNumber" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="ActionCode"
     Exit Property
 End Property
 
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
 '   Name
-'   Parameters  Void
-'   Retval      String
+'   Parameters      Void
+'   Retval          String
 '   Purpose
 '---------------------------------------------------------------------------------
-Public Property Get EmployeeNumber() As String
+Public Property Get ActionCode() As String
     On Error GoTo ErrorHandler:
-    If Not m_EmployeeNumber & "" = "" Then
-        EmployeeNumber = m_EmployeeNumber
+    If Not m_ActionCode & "" = "" Then
+        ActionCode = m_ActionCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     EmployeeNumber" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="ActionCode"
     Exit Property
 End Property
 
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
 '   Name
-'   Parameters  Void
-'   Retval      String
+'   Parameters      Void
+'   Retval          String
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Let BocCode(bc As String)
@@ -622,23 +523,18 @@ Public Property Let BocCode(bc As String)
         m_BocCode = bc
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     BocCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="BocCode"
     Exit Property
 End Property
 
 
 
-'----------------------------------------------------------------------------------
-'   Type        Property Get
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
 '   Name
-'   Parameters  Void
-'   Retval      String
+'   Parameters      Void
+'   Retval          String
 '   Purpose
 '---------------------------------------------------------------------------------
 Public Property Get BocCode() As String
@@ -647,467 +543,10 @@ Public Property Get BocCode() As String
         BocCode = m_BocCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     BocCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="BocCode"
     Exit Property
 End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Let RcCode(RC As String)
-    On Error GoTo ErrorHandler:
-    If Not RC & "" = "" Then
-        m_RcCode = RC
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     RcCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Get RcCode() As String
-    On Error GoTo ErrorHandler:
-    If Not m_RcCode & "" = "" Then
-        RcCode = m_RcCode
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     RcCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Let DivisionName(dn As String)
-    On Error GoTo ErrorHandler:
-    If Not dn & "" = "" Then
-        m_DivisionName = dn
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     DivisionName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Get DivisionName() As String
-    On Error GoTo ErrorHandler:
-    If Not m_DivisionName & "" = "" Then
-        DivisionName = m_DivisionName
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     DivisionName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Let PayPeriod(pyp As String)
-    On Error GoTo ErrorHandler:
-    If Not pyp & "" = "" Then
-        m_PayPeriod = pyp
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     PayPeriod" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Get PayPeriod() As String
-    On Error GoTo ErrorHandler:
-    If Not m_PayPeriod & "" = "" Then
-        PayPeriod = m_PayPeriod
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     PayPeriod" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Let PayGrade(pg As String)
-    On Error GoTo ErrorHandler:
-    If Not pg & "" = "" Then
-        m_PayGrade = pg
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     PayGrade" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Get PayGrade() As String
-    On Error GoTo ErrorHandler:
-    If Not m_PayGrade & "" = "" Then
-        PayGrade = m_PayGrade
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     PayGrade" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Let JobTitle(jt As String)
-    On Error GoTo ErrorHandler:
-    If Not jt & "" = "" Then
-        m_JobTitle = jt
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     JobTitle" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Get JobTitle() As String
-    On Error GoTo ErrorHandler:
-    If Not m_JobTitle & "" = "" Then
-        JobTitle = m_JobTitle
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     JobTitle" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Let ReportingCode(ppl As String)
-    On Error GoTo ErrorHandler:
-    If Not ppl & "" = "" Then
-        m_ReportingCode = ppl
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     ReportingCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Get ReportingCode() As String
-    On Error GoTo ErrorHandler:
-    If Not m_ReportingCode & "" = "" Then
-        ReportingCode = m_ReportingCode
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     ReportingCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Let ReportingCodeName(ppn As String)
-    On Error GoTo ErrorHandler:
-    If Not ppn & "" = "" Then
-        m_ReportingCodeName = ppn
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     ReportingCodeName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Get ReportingCodeName() As String
-    On Error GoTo ErrorHandler:
-    If Not m_ReportingCodeName & "" = "" Then
-        ReportingCodeName = m_ReportingCodeName
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     ReportingCodeName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Let FocCode(fcc As String)
-    On Error GoTo ErrorHandler:
-    If Not fcc & "" = "" Then
-        m_FocCode = fcc
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     FocCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Get FocCode() As String
-    On Error GoTo ErrorHandler:
-    If Not m_FocCode & "" = "" Then
-        FocCode = m_FocCode
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     FocCode" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Let FocName(fcn As String)
-    On Error GoTo ErrorHandler:
-    If Not fcn & "" = "" Then
-        m_FocName = fcn
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     FocName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
-
-
-'----------------------------------------------------------------------------------
-'   Type        Property Get
-'   Name
-'   Parameters  Void
-'   Retval      String
-'   Purpose
-'---------------------------------------------------------------------------------
-Public Property Get FocName() As String
-    On Error GoTo ErrorHandler:
-    If Not m_FocName & "" = "" Then
-        FocName = m_FocName
-    End If
-ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     FocName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
-    Exit Property
-End Property
-
 
 
 '---------------------------------------------------------------------------------
@@ -1123,13 +562,8 @@ Public Property Let BocName(bn As String)
         m_BocName = bn
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     BocName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="SiteArgs", _
+        Member:="BocName"
     Exit Property
 End Property
 
@@ -1148,13 +582,128 @@ Public Property Get BocName() As String
         BocName = m_BocName
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   PayrollArgs" _
-            & vbCrLf & "Member:     BocName" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
+    ProcessError Name:="SiteArgs", _
+        Member:="BocName"
+    Exit Property
+End Property
+
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name
+'   Parameters      Void
+'   Retval          Void
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Let OperableUnit(dn As String)
+    On Error GoTo ErrorHandler:
+    If Not dn & "" = "" Then
+        m_OperableUnit = dn
     End If
-    MessageFactory.ShowError (m_Error)
+ErrorHandler:
+    ProcessError Name:="SiteArgs", _
+        Member:="OperableUnit"
+    Exit Property
+End Property
+
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
+'   Name
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Get OperableUnit() As String
+    On Error GoTo ErrorHandler:
+    If Not m_OperableUnit & "" = "" Then
+        OperableUnit = m_OperableUnit
+    End If
+ErrorHandler:
+    ProcessError Name:="SiteArgs", _
+        Member:="OperableUnit"
+    Exit Property
+End Property
+
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Let ProgramProjectName(pn As String)
+    On Error GoTo ErrorHandler:
+    If Not pn & "" = "" Then
+        m_ProgramProjectName = pn
+    End If
+ErrorHandler:
+    ProcessError Name:="SiteArgs", _
+        Member:="ProgramProjectName"
+    Exit Property
+End Property
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
+'   Name
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Get ProgramProjectName() As String
+    On Error GoTo ErrorHandler:
+    If Not m_ProgramProjectName & "" = "" Then
+        ProgramProjectName = m_ProgramProjectName
+    End If
+ErrorHandler:
+    ProcessError Name:="SiteArgs", _
+        Member:="ProgramProjectName"
+    Exit Property
+End Property
+
+
+
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Let StartDate(pStart As String)
+    On Error GoTo ErrorHandler:
+    If Not pStart & "" = "" Then
+        m_StartDate = pStart
+    End If
+ErrorHandler:
+    ProcessError Name:="SiteArgs", _
+        Member:="StartDate"
+    Exit Property
+End Property
+
+
+'---------------------------------------------------------------------------------
+'   Type            Property-Get
+'   Name
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Get StartDate() As String
+    On Error GoTo ErrorHandler:
+    If Not m_StartDate & "" = "" Then
+        StartDate = m_StartDate
+    End If
+ErrorHandler:
+    ProcessError Name:="SiteArgs", _
+        Member:="StartDate"
     Exit Property
 End Property
 
@@ -1163,23 +712,72 @@ End Property
 
 
 
+'---------------------------------------------------------------------------------
+'   Type            Property-Let
+'   Name
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Let LastActivityDate(pEnd As String)
+    On Error GoTo ErrorHandler:
+    If Not pEnd & "" = "" Then
+        m_LastActivityDate = pEnd
+    End If
+ErrorHandler:
+    ProcessError Name:="SiteArgs", _
+        Member:="LastActivityDate"
+    Exit Property
+End Property
+
 
 '---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+'   Type            Property-Get
+'   Name
+'   Parameters      Void
+'   Retval          String
+'   Purpose
+'---------------------------------------------------------------------------------
+Public Property Get LastActivityDate() As String
+    On Error GoTo ErrorHandler:
+    If Not m_LastActivityDate & "" = "" Then
+        LastActivityDate = m_LastActivityDate
+    End If
+ErrorHandler:
+    ProcessError Name:="SiteArgs", _
+        Member:="LastActivityDate"
+    Exit Property
+End Property
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
-
 

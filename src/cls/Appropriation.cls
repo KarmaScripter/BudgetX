@@ -36,8 +36,13 @@ Public Property Let ID(num As Integer)
         m_ID = num
     End If
 ErrorHandler:
-    ProcessError Name:="Appropriation"
-        Member:="ID"
+    If Err.Number > 0 Then
+        m_Error = "Source:      Appropriation" _
+            & vbCrLf & "Member:       ID" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
     Exit Property
 End Property
 
@@ -55,8 +60,13 @@ Public Property Get ID() As Integer
         ID = m_ID
     End If
 ErrorHandler:
-    ProcessError Name:="Appropriation"
-        Member:="ID"
+    If Err.Number > 0 Then
+        m_Error = "Source:      Appropriation" _
+            & vbCrLf & "Member:       ID" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
     Exit Property
 End Property
 
@@ -74,8 +84,13 @@ Public Property Let Code(cd As String)
         m_FundCode = cd
     End If
 ErrorHandler:
-    ProcessError Name:="Appropriation"
-        Member:="Code"
+    If Err.Number > 0 Then
+        m_Error = "Source:      Appropriation" _
+            & vbCrLf & "Member:       Code" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
     Exit Property
 End Property
 
@@ -93,8 +108,13 @@ Public Property Get Code() As String
         Code = m_FundCode
     End If
 ErrorHandler:
-    ProcessError Name:="Appropriation"
-        Member:="Code"
+    If Err.Number > 0 Then
+        m_Error = "Source:      Appropriation" _
+            & vbCrLf & "Member:       Code" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
     Exit Property
 End Property
 
@@ -112,8 +132,13 @@ Public Property Let Name(nm As String)
         m_FundName = nm
     End If
 ErrorHandler:
-    ProcessError Name:="Appropriation"
-        Member:="Name"
+    If Err.Number > 0 Then
+        m_Error = "Source:      Appropriation" _
+            & vbCrLf & "Member:       Name" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
     Exit Property
 End Property
 
@@ -131,8 +156,13 @@ Public Property Get Name() As String
         Name = m_FundName
     End If
 ErrorHandler:
-    ProcessError Name:="Appropriation"
-        Member:="Name"
+    If Err.Number > 0 Then
+        m_Error = "Source:      Appropriation" _
+            & vbCrLf & "Member:       Name" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
     Exit Property
 End Property
 
@@ -150,8 +180,13 @@ Public Property Let Title(tit As String)
         m_FundTitle = tit
     End If
 ErrorHandler:
-    ProcessError Name:="Appropriation"
-        Member:="Title"
+    If Err.Number > 0 Then
+        m_Error = "Source:      Appropriation" _
+            & vbCrLf & "Member:       Title" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
     Exit Property
 End Property
 
@@ -169,8 +204,13 @@ Public Property Get Title() As String
         Title = m_FundTitle
     End If
 ErrorHandler:
-    ProcessError Name:="Appropriation"
-        Member:="Title"
+    If Err.Number > 0 Then
+        m_Error = "Source:      Appropriation" _
+            & vbCrLf & "Member:       Title" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
     Exit Property
 End Property
 
@@ -188,8 +228,13 @@ Public Property Let TreasurySymbol(ts As String)
         m_TreasurySymbol = ts
     End If
 ErrorHandler:
-    ProcessError Name:="Appropriation"
-        Member:="TreasurySymbol"
+    If Err.Number > 0 Then
+        m_Error = "Source:      Appropriation" _
+            & vbCrLf & "Member:       TreasurySymbol" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
     Exit Property
 End Property
 
@@ -207,8 +252,13 @@ Public Property Get TreasurySymbol() As String
         TreasurySymbol = m_TreasurySymbol
     End If
 ErrorHandler:
-    ProcessError Name:="Appropriation"
-        Member:="TreasurySymbol"
+    If Err.Number > 0 Then
+        m_Error = "Source:      Appropriation" _
+            & vbCrLf & "Member:       TreasurySymbol" _
+            & vbCrLf & "Descript:   " & Err.Description
+        Err.Clear
+    End If
+    MessageFactory.ShowError (m_Error)
     Exit Property
 End Property
 
@@ -217,38 +267,22 @@ End Property
 
 
 
-
-
-
-
-
-
-'----------------------------------------------------------------------------------
-'   Type:        Event Sub-Procedure
-'   Name:        Process
+'---------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        ProcessError
 '   Parameters:  Void
-'   Retval:      Void
+'   RetVal:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError(Optional Name As String, Optional Member As String)
-    If Err.Number <> 0 And _
-        Not IsMissing(Name) And _
-        Not IsMissing(Member) Then
-            m_Error = "Source:      " & Err.Source _
-                & vbCrLf & "Number:     " & Err.Number _
-                & vbCrLf & "Issue:      " & Err.Description _
-                & vbCrLf & "Class:      " & Name _
-                & vbCrLf & "Member:     " & Member
-    End If
-    If Err.Number <> 0 And _
-        IsMissing(Name) And _
-        IsMissing(Member) Then
-            m_Error = "Source:      " & Err.Source _
-                & vbCrLf & "Number:     " & Err.Number _
-                & vbCrLf & "Issue:      " & Err.Description
+Private Sub ProcessError()
+    If Err.Number <> 0 Then
+        m_Error = "Source:      " & Err.Source _
+            & vbCrLf & "Number:     " & Err.Number _
+            & vbCrLf & "Issue:      " & Err.Description
+        Err.Clear
     End If
     MessageFactory.ShowError (m_Error)
-    Err.Clear
 End Sub
+
 
 

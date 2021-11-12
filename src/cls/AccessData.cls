@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "AccessData"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
@@ -72,7 +63,8 @@ Public Function GetDataConnection() As ADODB.Connection
         Set GetDataConnection = m_DataConnection
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccessData", _
+        Member:="GetDataConnection()"
     KillConnection
     Exit Function
 End Function
@@ -98,7 +90,8 @@ Public Function GetReferenceConnection() As ADODB.Connection
         Set GetReferenceConnection = m_ReferenceConnection
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccessData", _
+        Member:="GetReferenceConnection()"
     KillReferenceConnection
     Exit Function
 End Function
@@ -124,7 +117,8 @@ Public Function GetViewConnection() As ADODB.Connection
         Set GetViewConnection = m_ViewConnection
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccessData", _
+        Member:="GetViewConnection()"
     KillViewConnection
     Exit Function
 End Function
@@ -154,7 +148,8 @@ Public Function GetDataModel(pTableName As String) As ADODB.Recordset
         Set p_Connection = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccessData", _
+        Member:="GetDataModel()"
     Exit Function
 End Function
 
@@ -179,7 +174,8 @@ Public Function GetReferenceModel(pTableName As String) As ADODB.Recordset
         KillConnection
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccessData", _
+        Member:="GetReferenceModel()"
     Exit Function
 End Function
 
@@ -209,7 +205,8 @@ Public Function GetViewModel(pTableName As String) As ADODB.Recordset
         Set p_Connection = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccessData", _
+        Member:="GetViewModel()"
     Exit Function
 End Function
 
@@ -236,7 +233,8 @@ Public Function CreateCommand(pSQL As String) As ADODB.Command
         Set CreateCommand = cmd
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccessData", _
+        Member:="CreateCommand"
     Exit Function
 End Function
 
@@ -256,7 +254,8 @@ Public Function GetModel(pTableName As String) As ADODB.Recordset
         Set GetModel = m_DataSet
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccessData", _
+        Member:="GetModel"
     Exit Function
 End Function
 
@@ -281,7 +280,7 @@ Public Sub ImportExcelData(pFilePath As String)
         p_Excel.Visible = False
         p_Excel.DisplayAlerts = False
         p_Excel.Workbooks.Open p_FilePath
-        If p_Excel.Worksheets.count > 1 Then
+        If p_Excel.Worksheets.Count > 1 Then
             Dim i As Integer
             For Each p_Worksheet In p_Excel.Worksheets
                 ReDim Preserve p_List(p_Count)
@@ -301,7 +300,8 @@ Public Sub ImportExcelData(pFilePath As String)
         Set p_Excel = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccessData", _
+        Member:="ImportExcelData"
     Exit Sub
 End Sub
 
@@ -321,7 +321,8 @@ Private Sub KillDataConnection()
         Set m_DataConnection = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccessData", _
+        Member:="KillDataConnection"
     Exit Sub
 End Sub
 
@@ -341,7 +342,8 @@ Private Sub KillReferenceConnection()
         Set m_ReferenceConnection = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccessData", _
+        Member:="KillReferenceConnection"
     Exit Sub
 End Sub
 
@@ -361,7 +363,8 @@ Private Sub KillViewConnection()
         Set m_ViewConnection = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccessData", _
+        Member:="KillViewConnection"
     Exit Sub
 End Sub
 
@@ -381,7 +384,8 @@ Private Sub KillConnection()
         Set m_Connection = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccessData", _
+        Member:="KillConnection"
     Exit Sub
 End Sub
 
@@ -401,7 +405,8 @@ Private Sub KillFiles()
         Set m_BudgetPath = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="AccessData", _
+        Member:="KillFiles()"
     Exit Sub
 End Sub
 
@@ -409,22 +414,34 @@ End Sub
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
+
 
 
 
