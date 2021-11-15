@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "ExcelBudget"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
@@ -71,7 +62,8 @@ Public Function WorksheetExists(pSheetName As String, pWorkbook As Workbook) As 
     WorksheetExists = True
     Exit Function
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="WorksheetExists"
     WorksheetExists = False
     Exit Function
 End Function
@@ -94,7 +86,8 @@ Public Function WorkbookExists(pWorkbookName As String) As Boolean
     WorkbookExists = True
     Exit Function
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="WorkbookExists"
     WorkbookExists = False
     Exit Function
 End Function
@@ -118,7 +111,8 @@ Public Sub CreateWorkbook(pFilePath As String)
         FileFormat:=xlOpenXMLWorkbook
     m_Workbook.Close SaveChanges:=False
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="CreateWorkbook"
     Exit Sub
 End Sub
 
@@ -141,7 +135,8 @@ Public Function GetReportTemplate() As Excel.Workbook
     Set m_Workbook = m_Excel.Workbooks.Open(m_Template)
     Set GetReportTemplate = m_Workbook
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="GetReportTemplate"
     Exit Function
 End Function
 
@@ -165,7 +160,8 @@ Private Function GetBudgetTemplate() As Excel.Workbook
     m_Excel.Workbooks.add (m_Workbook)
     Set GetReportTemplate = m_Workbook
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="GetBudgetTemplate"
     Exit Function
 End Function
 
@@ -193,7 +189,8 @@ Public Sub OpenFileDialog()
        Debug.Print m_Dialog.SelectedItems(1)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="OpenFileDialog"
     Exit Sub
 End Sub
 
@@ -207,16 +204,17 @@ End Sub
 '   Retval:          Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Public Sub OpenExcelFile(filename As String, FilePath As String)
+Public Sub OpenExcelFile(pFileName As String, pFilePath As String)
     On Error GoTo ErrorHandler:
     Dim view As ADODB.Connection
     Dim m_DataSet As ADODB.Recordset
     Set view = New ADODB.Connection
     view.Open "Provider=Microsoft.ACE.OLEDB.12.0;" _
-        & "Data Source=" & filename & _
+        & "Data Source=" & pFileName & _
         "Extended Properties=""Excel 12.0; HDR=YES"";"
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="OpenExcelFile"
     Exit Sub
 End Sub
 
@@ -234,18 +232,19 @@ Public Sub CreateCsvFile(pFileName As String, pFilePath As String)
     On Error GoTo ErrorHandler:
     If Not pFileName & "" = "" And _
         Not pFilePath & "" = "" Then
-            Dim p_FilePath As String
+            Dim p_pFilePath As String
             Dim p_CsvName As String
             Dim p_Sheet As Worksheet
             Set p_Sheet = ActiveWorkbook.Sheets("Sheet1")
             p_CsvName = pFileName & ".csv"
-            p_FilePath = Application.CurrentProject
+            p_pFilePath = Application.CurrentProject
             p_Sheet.Copy
-            ActiveWorkbook.SaveAs filename:=p_FilePath & "\" & p_CsvName, _
+            ActiveWorkbook.SaveAs filename:=p_pFilePath & "\" & p_CsvName, _
                 FileFormat:=xlCSV, CreateBackup:=False
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="CreateCsvFile"
     Exit Sub
 End Sub
 
@@ -273,11 +272,11 @@ Function ExportQuery(ByVal pQuery As String)
     Set m_Worksheet = m_Workbook.Sheets(1)
     With m_DataSet
         If .RecordCount <> 0 Then
-            For iCols = 0 To m_DataSet.Fields.count - 1
+            For iCols = 0 To m_DataSet.Fields.Count - 1
                 m_Worksheet.Cells(1, iCols + 1).Value = m_DataSet.Fields(iCols).Name
             Next
             With m_Worksheet.Range(m_Worksheet.Cells(1, 1), _
-                m_Worksheet.Cells(1, m_DataSet.Fields.count))
+                m_Worksheet.Cells(1, m_DataSet.Fields.Count))
                 .Font.Bold = True
                 .Font.ColorIndex = 2
                 .Interior.ColorIndex = 1
@@ -285,12 +284,13 @@ Function ExportQuery(ByVal pQuery As String)
             End With
             m_Worksheet.Range("A2").CopyFromRecordset m_DataSet
             m_Worksheet.Range(m_Worksheet.Cells(1, 1), _
-                m_Worksheet.Cells(1, m_DataSet.Fields.count)).Columns.AutoFit
+                m_Worksheet.Cells(1, m_DataSet.Fields.Count)).Columns.AutoFit
             m_Worksheet.Range("A1").Select
         End If
     End With
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="ExportQuery"
     Exit Function
 End Function
 
@@ -304,7 +304,7 @@ End Function
 ' Retval:       Excel.Application
 ' Purpose:      Export recordset to Excel
 '---------------------------------------------------------------------------------------
-Public Function ExportRecordset(pData As DAO.Recordset)
+Public Function ImportRecordset(pData As DAO.Recordset)
     On Error GoTo ErrorHandler:
     Set m_DataSet = pData
     Dim m_IsOpen As Boolean
@@ -318,11 +318,11 @@ Public Function ExportRecordset(pData As DAO.Recordset)
     Set m_Worksheet = m_Workbook.Sheets(1)
     With pData
         If .RecordCount <> 0 Then
-            For iCols = 0 To pData.Fields.count - 1
+            For iCols = 0 To pData.Fields.Count - 1
                 m_Worksheet.Cells(1, iCols + 1).Value = pData.Fields(iCols).Name
             Next
             With m_Worksheet.Range(m_Worksheet.Cells(1, 1), _
-                m_Worksheet.Cells(1, pData.Fields.count))
+                m_Worksheet.Cells(1, pData.Fields.Count))
                 .Font.Bold = True
                 .Font.ColorIndex = 2
                 .Interior.ColorIndex = 1
@@ -330,12 +330,13 @@ Public Function ExportRecordset(pData As DAO.Recordset)
             End With
             m_Worksheet.Range("A2").CopyFromRecordset pData
             m_Worksheet.Range(m_Worksheet.Cells(1, 1), _
-                m_Worksheet.Cells(1, pData.Fields.count)).Columns.AutoFit
+                m_Worksheet.Cells(1, pData.Fields.Count)).Columns.AutoFit
             m_Worksheet.Range("A1").Select
         End If
     End With
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="ImportRecordset"
     Exit Function
 End Function
 
@@ -361,7 +362,8 @@ Public Sub OpenSaveDialog()
        Debug.Print m_Dialog.SelectedItems(1)
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="OpenSaveDialog"
     Exit Sub
 End Sub
 
@@ -387,7 +389,8 @@ Private Sub KillExcel()
         Set m_Worksheet = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="KillExcel"
     Exit Sub
 End Sub
 
@@ -406,7 +409,8 @@ Private Sub KillChart()
         Set m_Chart = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="KillChart"
     Exit Sub
 End Sub
 
@@ -431,7 +435,8 @@ Private Sub KillPivot()
         Set m_PivotItems = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="KillPivot"
     Exit Sub
 End Sub
 
@@ -456,7 +461,8 @@ Private Sub KillData()
         Set m_DataSet = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="KillData"
     Exit Sub
 End Sub
 
@@ -479,7 +485,8 @@ Private Sub KillFiles()
         Set m_BudgetPath = Nothing
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="ExcelBudget", _
+        Member:="KillFiles"
     Exit Sub
 End Sub
 
@@ -490,22 +497,34 @@ End Sub
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
 
 

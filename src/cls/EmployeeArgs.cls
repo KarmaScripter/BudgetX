@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "EmployeeArgs"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
@@ -54,7 +45,8 @@ Public Property Let EmployeeNumber(eid As String)
         m_EmployeeNumber = eid
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="EmployeeArgs", _ 
+        Member:="EmployeeNumber"
     Exit Property
 End Property
 
@@ -72,7 +64,8 @@ Public Property Get EmployeeNumber() As String
         EmployeeNumber = m_EmployeeNumber
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="EmployeeArgs", _ 
+        Member:="EmployeeNumber"
     Exit Property
 End Property
 
@@ -89,7 +82,8 @@ Public Property Let LastName(ln As String)
         m_LastName = ln
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="EmployeeArgs", _ 
+        Member:="LastName"
     Exit Property
 End Property
 
@@ -107,7 +101,8 @@ Public Property Get LastName() As String
         LastName = m_LastName
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="EmployeeArgs", _ 
+        Member:="LastName"
     Exit Property
 End Property
 
@@ -124,7 +119,8 @@ Public Property Let FirstName(fn As String)
     m_FirstName = fn
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="EmployeeArgs", _ 
+        Member:="FirstName"
     Exit Property
 End Property
 
@@ -142,7 +138,8 @@ Public Property Get FirstName() As String
         FirstName = m_FirstName
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="EmployeeArgs", _ 
+        Member:="FirstName"
     Exit Property
 End Property
 
@@ -159,7 +156,8 @@ Public Property Let RcCode(RC As String)
         m_RcCode = RC
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="EmployeeArgs", _ 
+        Member:="RcCode"
     Exit Property
 End Property
 
@@ -177,7 +175,8 @@ Public Property Get RcCode() As String
         RcCode = m_RcCode
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="EmployeeArgs", _ 
+        Member:="RcCode"
     Exit Property
 End Property
 
@@ -194,7 +193,8 @@ Public Property Let PayGrade(pg As String)
         m_PayGrade = pg
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="EmployeeArgs", _ 
+        Member:="PayGrade"
     Exit Property
 End Property
 
@@ -212,7 +212,8 @@ Public Property Get PayGrade() As String
         PayGrade = m_PayGrade
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="EmployeeArgs", _ 
+        Member:="PayGrade"
     Exit Property
 End Property
 
@@ -229,7 +230,8 @@ Public Property Let JobTitle(jt As String)
         m_JobTitle = jt
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="EmployeeArgs", _ 
+        Member:="JobTitle"
     Exit Property
 End Property
 
@@ -247,7 +249,8 @@ Public Property Get JobTitle() As String
         JobTitle = m_JobTitle
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="EmployeeArgs", _ 
+        Member:="JobTitle"
     Exit Property
 End Property
 
@@ -256,22 +259,32 @@ End Property
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
-
-

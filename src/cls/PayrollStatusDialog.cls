@@ -3,6 +3,10 @@ Option Compare Database
 Option Explicit
 
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 Public Args As PayrollArgs
 Private pAnd As String
 Private m_FundCode As String
@@ -14,6 +18,11 @@ Private m_And As String
 Private m_Filter As String
 Private m_Error As String
 Private m_Notification As String
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
 
 
 
@@ -32,14 +41,23 @@ Private Sub Form_Load()
     pAnd = " AND "
     Set Args = New PayrollArgs
     Me.FiscalYearOptionGroup.DefaultValue = 2
+<<<<<<< Updated upstream
     FiscalYearFilter = "[BFY] = '2022'"
     Args.BFY = "2022"
+=======
+    FiscalYearFilter = "[BFY] = '2021'"
+    Args.BFY = "2021"
+>>>>>>> Stashed changes
     Me.FundNameComboBox.RowSource = "SELECT DISTINCT UCase(StatusOfFunds.FundName)" _
         & " FROM StatusOfFunds" _
         & " WHERE StatusOfFunds.BudgetLevel = '7'" _
         & " AND StatusOfFunds.BocCode = '10';"
 ErrorHandler:
+<<<<<<< Updated upstream
     ProcessError Name:="PayrollStatusDialog", _
+=======
+    ProcessError Name:="PayPeriodDialog", _
+>>>>>>> Stashed changes
         Member:="Form_Load()"
     Exit Sub
 End Sub
@@ -58,19 +76,46 @@ Private Sub SetComboBoxColors()
     Me.FundNameComboBox.BackColor = RGB(33, 33, 33)
     Me.FundNameComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
+<<<<<<< Updated upstream
     ProcessError Name:="PayrollStatusDialog", _
+=======
+    ProcessError Name:="PayPeriodDialog", _
+>>>>>>> Stashed changes
         Member:="SetComboBoxColors()"
     Exit Sub
 End Sub
 
 
+<<<<<<< Updated upstream
 
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        AcceptButton_Click
+=======
 '----------------------------------------------------------------------------------
 '   Type:        Event Sub-Procedure
 '   Name:        AcceptButton_Click
 '   Parameters:  Void
 '   Purpose:
 '---------------------------------------------------------------------------------
+Private Sub AcceptButton_Click()
+    On Error GoTo ErrorHandler:
+    Me.Visible = Not Me.Visible
+ErrorHandler:
+    ProcessError Name:="PayPeriodDialog", _
+        Member:="AcceptButton_Click()"
+    Exit Sub
+End Sub
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        ExitButton_Click
+>>>>>>> Stashed changes
+'   Parameters:  Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+<<<<<<< Updated upstream
 Private Sub AcceptButton_Click()
     On Error GoTo ErrorHandler:
     Me.Visible = Not Me.Visible
@@ -99,6 +144,18 @@ ErrorHandler:
     Exit Sub
 End Sub
 
+=======
+Private Sub ExitButton_Click()
+    On Error GoTo ErrorHandler:
+    ClearFilterValues
+    DoCmd.Close acForm, Me.Name
+ErrorHandler:
+    ProcessError Name:="PayPeriodDialog", _
+        Member:="ExitButton_Click()"
+    Exit Sub
+End Sub
+
+>>>>>>> Stashed changes
 '----------------------------------------------------------------------------------
 '   Type:        Event Sub-Procedure
 '   Name:        FundNameComboBox_Change
@@ -117,7 +174,11 @@ Private Sub FundNameComboBox_Change()
         & Me.FundNameComboBox.Value & "'")
     FundNameFilter = "[FundName] = '" & Me.FundNameComboBox.Value & "'"
 ErrorHandler:
+<<<<<<< Updated upstream
     ProcessError Name:="PayrollStatusDialog", _
+=======
+    ProcessError Name:="PayPeriodDialog", _
+>>>>>>> Stashed changes
         Member:="FundNameComboBox_Change()"
     Exit Sub
 End Sub
@@ -143,7 +204,11 @@ Private Function GetFundNameFilter() As String
             GetFundNameFilter = FundNameFilter
     End If
 ErrorHandler:
+<<<<<<< Updated upstream
     ProcessError Name:="PayrollStatusDialog", _
+=======
+    ProcessError Name:="PayPeriodDialog", _
+>>>>>>> Stashed changes
         Member:="GetFundNameFilter()"
     Exit Function
 End Function
@@ -165,6 +230,7 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     Me.Filter = vbNullString
     Select Case Me.FiscalYearOptionGroup.Value
         Case 1
+<<<<<<< Updated upstream
             Args.BFY = "2021"
             FiscalYearFilter = "[BFY] = '2021'"
         Case 2
@@ -174,12 +240,26 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     Me.Filter = GetFiscalYearFilter
 ErrorHandler:
     ProcessError Name:="PayrollStatusDialog", _
+=======
+            Args.BFY = "2020"
+            FiscalYearFilter = "[BFY] = '2020'"
+        Case 2
+            Args.BFY = "2021"
+            FiscalYearFilter = "[BFY] = '2021'"
+    End Select
+    Me.Filter = GetFiscalYearFilter
+ErrorHandler:
+    ProcessError Name:="PayPeriodDialog", _
+>>>>>>> Stashed changes
         Member:="FiscalYearOptionGroup_AfterUpdate()"
     Exit Sub
 End Sub
 
+<<<<<<< Updated upstream
 
 
+=======
+>>>>>>> Stashed changes
 '----------------------------------------------------------------------------------
 '   Type:        Function
 '   Name:        GetFiscalYearFilter
@@ -189,17 +269,30 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetFiscalYearFilter()
     On Error GoTo ErrorHandler:
+<<<<<<< Updated upstream
     If Not FiscalYearFilter & "" = "" And _
         FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter
     End If
     If Not FiscalYearFilter & "" = "" And _
         Not FundNameFilter & "" = "" Then
+=======
+    If Not FiscalYearFilter = vbNullString And _
+        FundNameFilter = vbNullString Then
+            GetFiscalYearFilter = FiscalYearFilter
+    End If
+    If Not FiscalYearFilter = vbNullString And _
+        Not FundNameFilter = vbNullString Then
+>>>>>>> Stashed changes
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
+<<<<<<< Updated upstream
     ProcessError Name:="PayrollStatusDialog", _
+=======
+    ProcessError Name:="PayPeriodDialog", _
+>>>>>>> Stashed changes
         Member:="GetFiscalYearFilter()"
     Exit Function
 End Function
@@ -219,7 +312,11 @@ Private Sub RefreshButton_Click()
     ClearFilterValues
     Me.FiscalYearOptionGroup.Value = 2
 ErrorHandler:
+<<<<<<< Updated upstream
     ProcessError Name:="PayrollStatusDialog", _
+=======
+    ProcessError Name:="PayPeriodDialog", _
+>>>>>>> Stashed changes
         Member:="RefreshButton_Click()"
     Exit Sub
 End Sub
@@ -241,7 +338,11 @@ Private Sub ClearComboBoxValues()
         & " FROM StatusOfFunds" _
         & " WHERE StatusOfFunds.BocCode = '10';"
 ErrorHandler:
+<<<<<<< Updated upstream
     ProcessError Name:="PayrollStatusDialog", _
+=======
+    ProcessError Name:="PayPeriodDialog", _
+>>>>>>> Stashed changes
         Member:="ClearComboBoxValues()"
     Exit Sub
 End Sub
@@ -259,6 +360,11 @@ Private Sub ClearFilterValues()
     On Error GoTo ErrorHandler:
     FundNameFilter = vbNullString
     m_FundName = vbNullString
+<<<<<<< Updated upstream
+=======
+    Args.FundName = vbNullString
+    Args.FundCode = vbNullString
+>>>>>>> Stashed changes
     Me.Filter = vbNullString
 ErrorHandler:
     ProcessError Name:="PayrollStatusDialog", _
@@ -269,6 +375,7 @@ End Sub
 
 
 
+<<<<<<< Updated upstream
 
 
 
@@ -276,6 +383,8 @@ End Sub
 
 
 
+=======
+>>>>>>> Stashed changes
 
 
 
@@ -311,3 +420,10 @@ End Sub
 
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+>>>>>>> Stashed changes

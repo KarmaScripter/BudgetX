@@ -62,7 +62,7 @@ Public Function WorksheetExists(pSheetName As String, pWorkbook As Workbook) As 
     WorksheetExists = True
     Exit Function
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="WorksheetExists"
     WorksheetExists = False
     Exit Function
@@ -86,7 +86,7 @@ Public Function WorkbookExists(pWorkbookName As String) As Boolean
     WorkbookExists = True
     Exit Function
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="WorkbookExists"
     WorkbookExists = False
     Exit Function
@@ -111,7 +111,7 @@ Public Sub CreateWorkbook(pFilePath As String)
         FileFormat:=xlOpenXMLWorkbook
     m_Workbook.Close SaveChanges:=False
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="CreateWorkbook"
     Exit Sub
 End Sub
@@ -135,7 +135,7 @@ Public Function GetReportTemplate() As Excel.Workbook
     Set m_Workbook = m_Excel.Workbooks.Open(m_Template)
     Set GetReportTemplate = m_Workbook
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="GetReportTemplate"
     Exit Function
 End Function
@@ -160,7 +160,7 @@ Private Function GetBudgetTemplate() As Excel.Workbook
     m_Excel.Workbooks.add (m_Workbook)
     Set GetReportTemplate = m_Workbook
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="GetBudgetTemplate"
     Exit Function
 End Function
@@ -189,7 +189,7 @@ Public Sub OpenFileDialog()
        Debug.Print m_Dialog.SelectedItems(1)
     End If
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="OpenFileDialog"
     Exit Sub
 End Sub
@@ -213,7 +213,7 @@ Public Sub OpenExcelFile(pFileName As String, pFilePath As String)
         & "Data Source=" & pFileName & _
         "Extended Properties=""Excel 12.0; HDR=YES"";"
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="OpenExcelFile"
     Exit Sub
 End Sub
@@ -243,7 +243,7 @@ Public Sub CreateCsvFile(pFileName As String, pFilePath As String)
                 FileFormat:=xlCSV, CreateBackup:=False
     End If
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="CreateCsvFile"
     Exit Sub
 End Sub
@@ -289,7 +289,7 @@ Function ExportQuery(ByVal pQuery As String)
         End If
     End With
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="ExportQuery"
     Exit Function
 End Function
@@ -335,7 +335,7 @@ Public Function ImportRecordset(pData As DAO.Recordset)
         End If
     End With
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="ImportRecordset"
     Exit Function
 End Function
@@ -362,7 +362,7 @@ Public Sub OpenSaveDialog()
        Debug.Print m_Dialog.SelectedItems(1)
     End If
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="OpenSaveDialog"
     Exit Sub
 End Sub
@@ -389,7 +389,7 @@ Private Sub KillExcel()
         Set m_Worksheet = Nothing
     End If
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="KillExcel"
     Exit Sub
 End Sub
@@ -409,7 +409,7 @@ Private Sub KillChart()
         Set m_Chart = Nothing
     End If
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="KillChart"
     Exit Sub
 End Sub
@@ -435,7 +435,7 @@ Private Sub KillPivot()
         Set m_PivotItems = Nothing
     End If
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="KillPivot"
     Exit Sub
 End Sub
@@ -461,7 +461,7 @@ Private Sub KillData()
         Set m_DataSet = Nothing
     End If
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="KillData"
     Exit Sub
 End Sub
@@ -485,7 +485,7 @@ Private Sub KillFiles()
         Set m_BudgetPath = Nothing
     End If
 ErrorHandler:
-    ProcessError Name:="ExcelFile", _
+    ProcessError Name:="ExcelReport", _
         Member:="KillFiles"
     Exit Sub
 End Sub
@@ -526,7 +526,5 @@ Private Sub ProcessError(Optional Name As String, Optional Member As String)
     MessageFactory.ShowError (m_Error)
     Err.Clear
 End Sub
-
-
 
 

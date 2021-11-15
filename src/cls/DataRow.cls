@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "DataRow"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
@@ -279,7 +270,7 @@ Public Property Get IsConnected() As Boolean
         IsConnected = False
     End If
 ErrorHandler:
-    ProcessError Name:="DataRow" Name:="DataRow", _ 
+    ProcessError Name:="DataRow", _ 
         Member:="IsConnected"
     Exit Property
 End Property
@@ -300,7 +291,7 @@ End Property
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError Name:="DataRow"(Optional Name As String, Optional Member As String)
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
     If Err.Number <> 0 And _
         Not IsMissing(Name) And _
         Not IsMissing(Member) Then

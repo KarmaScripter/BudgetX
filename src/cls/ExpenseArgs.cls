@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "ExpenseArgs"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
@@ -66,7 +57,7 @@ Public Property Let BFY(yr As String)
         m_BFY = yr
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="BFY"
     Exit Property
 End Property
@@ -85,7 +76,7 @@ Public Property Get BFY() As String
         BFY = m_BFY
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="BFY"
     Exit Property
 End Property
@@ -104,7 +95,7 @@ Public Property Let RpioCode(rp As String)
         m_RpioCode = rp
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="RpioCode"
     Exit Property
 End Property
@@ -123,7 +114,7 @@ Public Property Get RpioCode() As String
         RpioCode = m_RpioCode
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="RpioCode"
     Exit Property
 End Property
@@ -142,7 +133,7 @@ Public Property Let AhCode(ac As String)
         m_AhCode = ac
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="AhCode"
     Exit Property
 End Property
@@ -162,8 +153,8 @@ Public Property Get AhCode() As String
         AhCode = m_AhCode
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
-        Member:=""hCode
+    ProcessError Name:="ExpenseArgs", _
+        Member:="AhCode"
     Exit Property
 End Property
 
@@ -182,7 +173,7 @@ Public Property Let FundCode(fc As String)
         m_FundCode = fc
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="FundCode"
     Exit Property
 End Property
@@ -201,7 +192,7 @@ Public Property Get FundCode() As String
         FundCode = m_FundCode
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="FundCode"
     Exit Property
 End Property
@@ -220,7 +211,7 @@ Public Property Let AccountCode(ac As String)
         m_AccountCode = ac
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="AccountCode"
     Exit Property
 End Property
@@ -239,7 +230,7 @@ Public Property Get AccountCode() As String
         AccountCode = m_AccountCode
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="AccountCode"
     Exit Property
 End Property
@@ -258,7 +249,7 @@ Public Property Let BocCode(bc As String)
         m_BocCode = bc
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="BocCode"
     Exit Property
 End Property
@@ -277,7 +268,7 @@ Public Property Get BocCode() As String
         BocCode = m_BocCode
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="BocCode"
     Exit Property
 End Property
@@ -296,7 +287,7 @@ Public Property Let RcCode(RC As String)
         m_RcCode = RC
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="RcCode"
     Exit Property
 End Property
@@ -315,7 +306,7 @@ Public Property Get RcCode() As String
         RcCode = m_RcCode
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="RcCode"
     Exit Property
 End Property
@@ -335,7 +326,7 @@ Public Property Let FocCode(fcc As String)
         m_FocCode = fcc
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="FocCode"
     Exit Property
 End Property
@@ -354,7 +345,7 @@ Public Property Get FocCode() As String
         FocCode = m_FocCode
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="FocCode"
     Exit Property
 End Property
@@ -373,7 +364,7 @@ Public Property Let FocName(fcn As String)
         m_FocName = fcn
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="FocName"
     Exit Property
 End Property
@@ -392,7 +383,7 @@ Public Property Get FocName() As String
         FocName = m_FocName
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="FocName"
     Exit Property
 End Property
@@ -411,7 +402,7 @@ Public Property Let Commitments(cm As Double)
         m_Commitments = cm
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="Commitments"
     Exit Property
 End Property
@@ -430,7 +421,7 @@ Public Property Get Commitments() As Double
         Commitments = m_Commitments
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="Commitments"
     Exit Property
 End Property
@@ -448,7 +439,7 @@ Public Property Let OpenCommitments(oc As Double)
         m_OpenCommitments = oc
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="OpenCommitments"
     Exit Property
 End Property
@@ -468,7 +459,7 @@ Public Property Get OpenCommitments() As Double
         Commitments = m_Commitments
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="OpenCommitments"
     Exit Property
 End Property
@@ -487,7 +478,7 @@ Public Property Let Obligations(ob As Double)
         m_Obligations = ob
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="Obligations"
     Exit Property
 End Property
@@ -506,7 +497,7 @@ Public Property Get Obligations() As Double
         Obligations = m_Obligations
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="Obligations"
     Exit Property
 End Property
@@ -525,7 +516,7 @@ Public Property Let Deobligations(od As Double)
         m_Deobligations = od
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="Deobligations"
     Exit Property
 End Property
@@ -545,7 +536,7 @@ Public Property Get Deobligations() As Double
         Deobligations = m_Deobligations
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="Deobligations"
     Exit Property
 End Property
@@ -564,7 +555,7 @@ Public Property Let ULO(uo As Double)
         m_ULO = uo
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="ULO"
     Exit Property
 End Property
@@ -584,7 +575,7 @@ Public Property Get ULO() As Double
         ULO = m_ULO
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="ULO"
     Exit Property
 End Property
@@ -603,7 +594,7 @@ Public Property Let Expenditure(ex As Double)
         m_Expenditures = ex
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="Expenditure"
     Exit Property
 End Property
@@ -623,7 +614,7 @@ Public Property Get Expenditures() As Double
         Expenditures = m_Expenditures
     End If
 ErrorHandler:
-    ProcessError Name:="ExpenseArgs", _ 
+    ProcessError Name:="ExpenseArgs", _
         Member:="Expenditure"
     Exit Property
 End Property
@@ -667,5 +658,7 @@ Private Sub ProcessError(Optional Name As String, Optional Member As String)
     MessageFactory.ShowError (m_Error)
     Err.Clear
 End Sub
+
+
 
 

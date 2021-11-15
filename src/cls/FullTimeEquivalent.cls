@@ -1,12 +1,4 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "FullTimeEquivalent"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+
 Option Compare Database
 Option Explicit
 
@@ -61,13 +53,8 @@ Public Property Get BFY() As String
         BFY = m_BFY
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         BFY" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="BFY"
     Exit Property
 End Property
 
@@ -86,13 +73,8 @@ Public Property Let BFY(year As String)
         m_BFY = year
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         BFY" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="BFY"
     Exit Property
 End Property
 
@@ -111,13 +93,8 @@ Public Property Get RPIO() As String
         RPIO = m_RpioCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         RPIO" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="RPIO"
     Exit Property
 End Property
 
@@ -136,13 +113,8 @@ Public Property Let RPIO(rp As String)
         m_RpioCode = rp
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         RPIO" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="RPIO"
     Exit Property
 End Property
 
@@ -161,13 +133,8 @@ Public Property Let BudgetLevel(bl As String)
         m_BudgetLevel = bl
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         BudgetLevel" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="BudgetLevel"
     Exit Property
 End Property
 
@@ -186,13 +153,8 @@ Public Property Get BudgetLevel() As String
         BudgetLevel = m_BudgetLevel
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         BudgetLevel" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="BudgetLevel"
     Exit Property
 End Property
 
@@ -211,13 +173,8 @@ Public Property Let FundCode(fc As String)
         m_FundCode = fc
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         FundCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="FundCode"
     Exit Property
 End Property
 
@@ -236,13 +193,8 @@ Public Property Get FundCode() As String
         FundCode = m_FundCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         FundCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="FundCode"
     Exit Property
 End Property
 
@@ -261,13 +213,8 @@ Public Property Let AhCode(AH As String)
         m_AhCode = AH
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         AhCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="AhCode"
     Exit Property
 End Property
 
@@ -286,13 +233,8 @@ Public Property Get AhCode() As String
         AhCode = m_AhCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         AhCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="AhCode"
     Exit Property
 End Property
 
@@ -311,13 +253,8 @@ Public Property Let OrgCode(ORG As String)
         m_OrgCode = ORG
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         OrgCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="OrgCode"
     Exit Property
 End Property
 
@@ -336,13 +273,8 @@ Public Property Get OrgCode() As String
         OrgCode = m_OrgCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         OrgCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="OrgCode"
     Exit Property
 End Property
 
@@ -360,13 +292,8 @@ Public Property Let AccountCode(ac As String)
         m_AccountCode = ac
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         AccountCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="AccountCode"
     Exit Property
 End Property
 
@@ -385,13 +312,8 @@ Public Property Get AccountCode() As String
         AccountCode = m_AccountCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         AccountCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="AccountCode"
     Exit Property
 End Property
 
@@ -410,13 +332,8 @@ Public Property Let RcCode(RC As String)
         m_RcCode = RC
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         RcCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="RcCode"
     Exit Property
 End Property
 
@@ -435,13 +352,8 @@ Public Property Get RcCode() As String
         RcCode = m_RcCode
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         RcCode" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="RcCode"
     Exit Property
 End Property
 
@@ -460,13 +372,8 @@ Public Property Let Amount(funds As Double)
         m_Amount = funds
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         Amount" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="Amount"
     Exit Property
 End Property
 
@@ -485,13 +392,8 @@ Public Property Get Amount() As Double
         Amount = m_Amount
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:      FullTimeEquivalent" _
-            & vbCrLf & "Member:         Amount" _
-            & vbCrLf & "Descript: " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FullTimeEquivalent", _
+        Member:="Amount"
     Exit Property
 End Property
 
@@ -500,22 +402,32 @@ End Property
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
 
 

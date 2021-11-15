@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "CriteriaBuilder"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
@@ -70,7 +61,7 @@ Public Property Let Names(pNames() As String)
             Names = m_Names
     End If
 ErrorHandler:
-    ProcessError Name:="CriteriaBuilder"
+    ProcessError Name:="CriteriaBuilder", _
         Member:="Names"
     Exit Property
 End Property
@@ -92,7 +83,7 @@ Public Property Get Names() As String()
             Names = m_Names
     End If
 ErrorHandler:
-    ProcessError Name:="CriteriaBuilder"
+    ProcessError Name:="CriteriaBuilder", _
         Member:="Names"
     Exit Property
 End Property
@@ -121,7 +112,7 @@ Public Property Let Values(pValues() As Variant)
             Values = m_Values
     End If
 ErrorHandler:
-    ProcessError Name:="CriteriaBuilder"
+    ProcessError Name:="CriteriaBuilder", _
         Member:="Values"
     Exit Property
 End Property
@@ -142,7 +133,7 @@ Public Property Get Values() As Variant()
         Values = m_Values
     End If
 ErrorHandler:
-    ProcessError Name:="CriteriaBuilder"
+    ProcessError Name:="CriteriaBuilder", _
         Member:="Values"
     Exit Property
 End Property
@@ -174,7 +165,7 @@ Public Function GetNameValuePairs() As Scripting.Dictionary
             Set GetNameValuePairs = p_Criteria
     End If
 ErrorHandler:
-    ProcessError Name:="CriteriaBuilder"
+    ProcessError Name:="CriteriaBuilder", _
         Member:="GetNameValuePairs"
     Exit Function
 End Function
@@ -197,13 +188,13 @@ Public Function GetDataAccessCriteria(pData As DAO.Recordset) As Scripting.Dicti
     Dim p_Criteria As New Scripting.Dictionary
     Set p_Criteria = CreateObject("Scripting.Dictionary")
     If Not pData Is Nothing Then
-        For i = 0 To i = pData.Fields.count
+        For i = 0 To i = pData.Fields.Count
             p_Criteria.add pData.Fields(i).Name, pData.Fields(i).Value
         Next i
         Set GetDataAccessCriteria = p_Criteria.Items
     End If
 ErrorHandler:
-    ProcessError Name:="CriteriaBuilder"
+    ProcessError Name:="CriteriaBuilder", _
         Member:="GetDataAccessCriteria"
     Exit Function
 End Function
@@ -227,13 +218,13 @@ Public Function GetAccessDataCriteria(pData As ADODB.Recordset) As Scripting.Dic
     Dim p_Criteria As New Scripting.Dictionary
     Set p_Criteria = CreateObject("Scripting.Dictionary")
     If Not pData Is Nothing Then
-        For i = 0 To i = pData.Fields.count
+        For i = 0 To i = pData.Fields.Count
             p_Criteria.add pData.Fields(i).Name, pData.Fields(i).Value
         Next i
         Set GetAccessDataCriteria = p_Criteria.Items
     End If
 ErrorHandler:
-    ProcessError Name:="CriteriaBuilder"
+    ProcessError Name:="CriteriaBuilder", _
         Member:="GetAccessDataCriteria"
     Exit Function
 End Function
@@ -275,3 +266,5 @@ Private Sub ProcessError(Optional Name As String, Optional Member As String)
     MessageFactory.ShowError (m_Error)
     Err.Clear
 End Sub
+
+

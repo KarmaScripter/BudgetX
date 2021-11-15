@@ -1320,7 +1320,7 @@ Private Sub SetRpioIcon(pRpioCode As String)
         End Select
     End If
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
+    ProcessError Name:="PayrollAuthorityForm", _ 
         Member:="SetRpioIcon"
     Exit Sub
 End Sub

@@ -1,18 +1,9 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "Form_PayrollUtilization"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = True
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
 
 
-Public m_Dialog As Form_StatusOfFundsDialog
+Public m_Dialog As Form_FundDialog
 Public Args As AccountArgs
 Private FundNameFilter As String
 Private ProgramAreaNameFilter As String
@@ -38,10 +29,10 @@ Private m_Notification As String
 '---------------------------------------------------------------------------------
 Private Sub Form_Open(Cancel As Integer)
     On Error GoTo ErrorHandler:
-    Set m_Dialog = New Form_StatusOfFundsDialog
-    DoCmd.OpenForm FormName:="StatusOfFundsDialog", _
+    Set m_Dialog = New Form_FundDialog
+    DoCmd.OpenForm FormName:="FundDialog", _
         WindowMode:=acDialog
-    Set m_Dialog = Forms("StatusOfFundsDialog")
+    Set m_Dialog = Forms("FundDialog")
     pAnd = " AND "
     Set Args = New AccountArgs
     Set Args = m_Dialog.Args
@@ -74,10 +65,10 @@ Private Sub Form_Open(Cancel As Integer)
         & " WHERE StatusOfFunds.BocCode = '10'" _
         & " AND StatusOfFunds.BudgetLevel = '7'" _
         & pAnd & Me.Filter
-    DoCmd.Close ObjectType:=acForm, ObjectName:="StatusOfFundsDialog", Save:=acSaveNo
+    DoCmd.Close ObjectType:=acForm, ObjectName:="FundDialog", Save:=acSaveNo
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="Form_Open"
     Exit Sub
 End Sub
 
@@ -95,8 +86,8 @@ Private Sub Form_Close()
     On Error GoTo ErrorHandler:
     Me.Filter = vbNullString
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="Form_Close()"
     Exit Sub
 End Sub
 
@@ -115,8 +106,8 @@ Private Sub Form_Unload(Cancel As Integer)
     On Error GoTo ErrorHandler:
     ClearFilterValues
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="Form_Unload"
     Exit Sub
 End Sub
 
@@ -135,8 +126,8 @@ Private Sub Form_Load()
     SetButtonVisibility
     SetHeaderCaption
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="Form_Load()"
     Exit Sub
 End Sub
 
@@ -160,8 +151,8 @@ Private Sub SetButtonVisibility()
     Me.ExcelButton.Visible = Not Me.ExcelButton.Visible
     Me.DataButton.Visible = Not Me.DataButton.Visible
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="SetButtonVisibility()"
     Exit Sub
 End Sub
 
@@ -192,8 +183,8 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     Me.RecordSource = "SELECT * FROM Allocations WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="FiscalYearOptionGroup_AfterUpdate()"
     Exit Sub
 End Sub
 
@@ -210,8 +201,8 @@ Private Sub Form_Timer()
     On Error GoTo ErrorHandler:
     HideButtons
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="Form_Timer()"
     Exit Sub
 End Sub
 
@@ -235,8 +226,8 @@ Private Sub HideButtons()
     Me.CalculatorButton.Visible = False
     Me.ExcelButton.Visible = False
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="HideButtons()"
     Exit Sub
 End Sub
 
@@ -260,8 +251,8 @@ Private Sub SetComboBoxColors()
     Me.ProgramProjectNameComboBox.BackColor = RGB(33, 33, 33)
     Me.ProgramProjectNameComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="SetComboBoxColors()"
     Exit Sub
 End Sub
 
@@ -279,8 +270,8 @@ Private Sub ClearComboBoxValues()
     Me.ProgramAreaNameComboBox.Value = vbNullString
     Me.ProgramProjectNameComboBox.Value = vbNullString
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="ClearComboBoxValues()"
     Exit Sub
 End Sub
 
@@ -300,8 +291,8 @@ Private Sub ClearFilterValues()
     ProgramProjectNameFilter = vbNullString
     Me.Filter = vbNullString
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="ClearFilterValues()"
     Exit Sub
 End Sub
 
@@ -326,8 +317,8 @@ Private Sub ProgramAreaNameComboBox_Change()
         & " AND StatusOfFunds.BudgetLevel = '7'" & pAnd & Me.Filter
     Me.Requery
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="ProgramAreaNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -342,69 +333,69 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetProgramAreaNameFilter() As String
     On Error GoTo ErrorHandler:
-    If Not ProgramAreaNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not ProgramAreaNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetProgramAreaNameFilter = ProgramAreaNameFilter
     End If
-    If Not ProgramAreaNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not ProgramAreaNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetProgramAreaNameFilter = ProgramAreaNameFilter _
             & pAnd & FiscalYearFilter
     End If
-    If Not ProgramAreaNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not ProgramAreaNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetProgramAreaNameFilter = ProgramAreaNameFilter _
                 & pAnd & FiscalYearFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not ProgramAreaNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not ProgramAreaNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetProgramAreaNameFilter = ProgramAreaNameFilter _
                 & pAnd & FiscalYearFilter _
                 & pAnd & ProgramProjectNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not ProgramAreaNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not ProgramAreaNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetProgramAreaNameFilter = ProgramAreaNameFilter _
                 & pAnd & ProgramProjectNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not ProgramAreaNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not ProgramAreaNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetProgramAreaNameFilter = ProgramAreaNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not ProgramAreaNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        FundNameFilter = vbNullString Then
+    If Not ProgramAreaNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetProgramAreaNameFilter = ProgramAreaNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not ProgramAreaNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        Not FundNameFilter = vbNullString Then
+    If Not ProgramAreaNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetProgramAreaNameFilter = ProgramAreaNameFilter _
                 & pAnd & FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="GetProgramAreaNameFilter()"
     Exit Function
 End Function
 
@@ -433,8 +424,8 @@ Private Sub ProgramProjectNameComboBox_Change()
     Me.Requery
     SetHeaderCaption
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="ProgramProjectNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -502,17 +493,17 @@ Private Function GetProgramProjectNameFilter() As String
             GetProgramProjectNameFilter = ProgramProjectNameFilter _
                 & pAnd & ProgramAreaNameFilter
     End If
-    If Not ProgramProjectNameFilter = "" And _
-        Not FundNameFilter = "" And _
-        ProgramAreaNameFilter = "" And _
-        Not FiscalYearFilter = "" Then
+    If Not ProgramProjectNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" And _
+        ProgramAreaNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" Then
             GetProgramProjectNameFilter = ProgramProjectNameFilter _
                 & pAnd & FundNameFilter _
                 & pAnd & FiscalYearFilter
     End If
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="GetProgramProjectNameFilter()"
     Exit Function
 End Function
 
@@ -595,8 +586,8 @@ Private Function GetFiscalYearFilter() As String
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="GetFiscalYearFilter()"
     Exit Function
 End Function
 
@@ -630,8 +621,8 @@ Private Sub FundNameComboBox_Change()
         & " AND StatusOfFunds.BudgetLevel = '7'" _
         & pAnd & Me.Filter
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="FundNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -645,69 +636,69 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetFundNameFilter() As String
     On Error GoTo ErrorHandler:
-    If Not FundNameFilter = vbNullString And _
-        ProgramAreaNameFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        ProgramAreaNameFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" Then
             GetFundNameFilter = FundNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not ProgramAreaNameFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not ProgramAreaNameFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" Then
             GetFundNameFilter = FundNameFilter _
             & pAnd & ProgramAreaNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not ProgramAreaNameFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not ProgramAreaNameFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" Then
             GetFundNameFilter = FundNameFilter _
                 & pAnd & ProgramAreaNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not ProgramAreaNameFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not ProgramAreaNameFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" Then
             GetFundNameFilter = FundNameFilter _
                 & pAnd & ProgramAreaNameFilter _
                 & pAnd & ProgramProjectNameFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        ProgramAreaNameFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        ProgramAreaNameFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" Then
             GetFundNameFilter = FundNameFilter _
                 & pAnd & ProgramProjectNameFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        ProgramAreaNameFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        ProgramAreaNameFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" Then
             GetFundNameFilter = FundNameFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        ProgramAreaNameFilter = vbNullString And _
-        Not ProgramProjectNameFilter = vbNullString And _
-        FiscalYearFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        ProgramAreaNameFilter & "" = "" And _
+        Not ProgramProjectNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" Then
             GetFundNameFilter = FundNameFilter _
                 & pAnd & ProgramProjectNameFilter
     End If
-    If Not FundNameFilter = vbNullString And _
-        Not ProgramAreaNameFilter = vbNullString And _
-        ProgramProjectNameFilter = vbNullString And _
-        Not FiscalYearFilter = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not ProgramAreaNameFilter & "" = "" And _
+        ProgramProjectNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" Then
             GetFundNameFilter = FundNameFilter _
                 & pAnd & ProgramAreaNameFilter _
                 & pAnd & FiscalYearFilter
     End If
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="GetFundNameFilter()"
     Exit Function
 End Function
 
@@ -724,8 +715,8 @@ Private Sub CalculatorButton_Click()
     On Error GoTo ErrorHandler:
     Calculator.Calculate
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="CalculatorButton_Click()"
     Exit Sub
 End Sub
 
@@ -741,8 +732,8 @@ Private Sub CompassSpendingQueryButton_Click()
     On Error GoTo ErrorHandler:
     DoCmd.OpenForm "BudgetDetailedSpendingQuery"
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="CompassSpendingQueryButton_Click()"
     Exit Sub
 End Sub
 
@@ -758,7 +749,7 @@ Private Sub MenuButton_Click()
     On Error GoTo ErrorHandler:
     SetButtonVisibility
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
+    ProcessError Name:="PayrollUtilizationForm", _
         Member:=""
     Exit Sub
 End Sub
@@ -791,29 +782,10 @@ Private Sub RefreshButton_Click()
         & " WHERE StatusOfFunds.BocCode = '10'" _
         & " AND StatusOfFunds.BudgetLevel = '7';"
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="MenuButton_Click()"
     Exit Sub
 End Sub
-
-
-
-
-
-Private Sub SetHeaderCaption()
-    On Error GoTo ErrorHandler:
-    If Not Me.ProgramProjectNameComboBox.Value & "" = "" Then
-            Me.ProgramAreaHeader.Caption = DLookup("ProgramAreaName", "ProgramDescriptions", _
-                "[ProgramDescriptions.ProgramProjectName] = '" & Me.ProgramProjectNameComboBox.Value & "'")
-    Else
-        Me.ProgramAreaHeader.Caption = "Payroll Utilization"
-    End If
-ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
-    Exit Sub
-End Sub
-
 
 
 
@@ -824,13 +796,13 @@ End Sub
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub SetRpioIcon(pRpioName As String)
+Private Sub SetRpioIcon(pRpioCode As String)
     On Error GoTo ErrorHandler:
     Dim p_RpioCode As String
-    If Not pRpioName & "" = "" Then
+    If Not pRpioCode & "" = "" Then
         p_RpioCode = DLookup("RpioCode", "StatusOfFunds", _
-            "[RpioName] = '" & pRpioName & "'")
-        Me.Caption = pRpioName
+            "[RpioName] = '" & pRpioCode & "'")
+        Me.Caption = pRpioCode
         Select Case CStr(p_RpioCode)
             Case "01"
                 Me.RpioIcon.Picture = CurrentProject.Path _
@@ -904,12 +876,27 @@ Private Sub SetRpioIcon(pRpioName As String)
         End Select
     End If
 ErrorHandler:
-    ProcessError Name:="PayrollUtilizationForm", _ 
-        Member:=""
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="SetRpioIcon"
     Exit Sub
 End Sub
 
 
+
+
+Private Sub SetHeaderCaption()
+    On Error GoTo ErrorHandler:
+    If Not Me.ProgramProjectNameComboBox.Value & "" = "" Then
+            Me.ProgramAreaHeader.Caption = DLookup("ProgramAreaName", "ProgramDescriptions", _
+                "[ProgramDescriptions.ProgramProjectName] = '" & Me.ProgramProjectNameComboBox.Value & "'")
+    Else
+        Me.ProgramAreaHeader.Caption = "Payroll Utilization"
+    End If
+ErrorHandler:
+    ProcessError Name:="PayrollUtilizationForm", _
+        Member:="SetHeaderCaption()"
+    Exit Sub
+End Sub
 
 
 
@@ -944,6 +931,9 @@ Private Sub ProcessError(Optional Name As String, Optional Member As String)
     MessageFactory.ShowError (m_Error)
     Err.Clear
 End Sub
+
+
+
 
 
 

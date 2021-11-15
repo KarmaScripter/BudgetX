@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "BudgetFiscalYear"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
@@ -77,7 +68,8 @@ Public Property Let Base(p_Year As String)
             m_Base = p_Year
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="Base"
     Exit Property
 End Property
 
@@ -98,7 +90,8 @@ Public Property Get Base() As String
         Base = m_Base
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="Base"
     Exit Property
 End Property
 
@@ -118,7 +111,8 @@ Public Property Let ID(num As Integer)
         m_ID = num
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="ID"
     Exit Property
 End Property
 
@@ -136,7 +130,8 @@ Public Property Get ID() As Integer
         ID = m_ID
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="ID"
     Exit Property
 End Property
 
@@ -159,7 +154,8 @@ Public Property Let SweepDate(pDate As Date)
             m_SweepDate = pDate
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="SweepDate"
     Exit Property
 End Property
 
@@ -180,7 +176,8 @@ Public Property Get SweepDate() As Date
             SweepDate = m_SweepDate
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="SweepDate"
     Exit Property
 End Property
 
@@ -203,7 +200,8 @@ Public Property Let BFY(pBFY As String)
         m_BFY = year(Now())
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="BFY"
     Exit Property
 End Property
 
@@ -221,7 +219,8 @@ Public Property Get BFY() As String
         BFY = m_BFY
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="BFY"
     Exit Property
 End Property
 
@@ -241,7 +240,8 @@ Public Property Let EFY(by As String)
         m_EFY = m_BFY
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="EFY"
     Exit Property
 End Property
 
@@ -260,7 +260,8 @@ Public Property Get EFY() As String
         EFY = m_EFY
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="EFY"
     Exit Property
 End Property
 
@@ -282,7 +283,8 @@ Public Property Let ExpirationYear(ex As String)
             m_ExpiringYear = m_EFY
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="ExpirationYear"
     Exit Property
 End Property
 
@@ -303,7 +305,8 @@ Public Property Get ExpirationYear() As String
         ExpirationYear = m_ExpiringYear
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="ExpirationYear()"
     Exit Property
 End Property
 
@@ -323,7 +326,8 @@ Public Property Get CalendarDate() As Date
         CalendarDate = m_CalendarDate
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="CalendarDate()"
     Exit Property
 End Property
 
@@ -342,7 +346,8 @@ Public Property Get CalendarMonth() As Date
         CalendarMonth = m_Month
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="CalendarMonth()"
     Exit Property
 End Property
 
@@ -361,7 +366,8 @@ Public Property Get CalendarDay() As Date
         CalendarDay = m_Day
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="CalendarDay()"
     Exit Property
 End Property
 
@@ -380,7 +386,8 @@ Public Property Get CalendarYear() As String
         CalendarYear = m_CalendarYear
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="CalendarYear()"
     Exit Property
 End Property
 
@@ -403,7 +410,8 @@ Public Function IsExpiring() As Boolean
         IsExpiring = False
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="IsExpiring()"
     Exit Function
 End Function
 
@@ -429,7 +437,8 @@ Public Function CalculateRemainingCalendarDays() As Integer
         CalculateRemainingCalendarDays = DateDiff("d", Now, p_Date)
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="CalculateRemainingCalendarDays()"
     Exit Function
 End Function
 
@@ -450,7 +459,8 @@ Public Function CalculateWorkDays(pDate As Date) As Integer
         CalculateWorkDays = DateDiff("d", Now, pDate)
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear" Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="CalculateWorkDays()"
     Exit Function
 End Function
 
@@ -478,7 +488,8 @@ Public Function CalculateRemainingWorkDays() As Integer
         CalculateRemainingWorkDays = DateDiff("d", Now, p_Date)
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetFiscalYear" Name:="BudgetFiscalYear"
+    ProcessError Name:="BudgetFiscalYear", _ 
+        Member:="CalculateRemainingWorkDays()"
     Exit Function
 End Function
 
@@ -500,7 +511,7 @@ End Function
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError Name:="BudgetFiscalYear"(Optional Name As String, Optional Member As String)
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
     If Err.Number <> 0 And _
         Not IsMissing(Name) And _
         Not IsMissing(Member) Then

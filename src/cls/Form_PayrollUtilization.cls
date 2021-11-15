@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "Form_PayrollUtilization"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = True
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
@@ -76,7 +67,8 @@ Private Sub Form_Open(Cancel As Integer)
         & pAnd & Me.Filter
     DoCmd.Close ObjectType:=acForm, ObjectName:="FundDialog", Save:=acSaveNo
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="Form_Open"
     Exit Sub
 End Sub
 
@@ -94,7 +86,8 @@ Private Sub Form_Close()
     On Error GoTo ErrorHandler:
     Me.Filter = vbNullString
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="Form_Close()"
     Exit Sub
 End Sub
 
@@ -113,7 +106,8 @@ Private Sub Form_Unload(Cancel As Integer)
     On Error GoTo ErrorHandler:
     ClearFilterValues
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="Form_Unload"
     Exit Sub
 End Sub
 
@@ -132,7 +126,8 @@ Private Sub Form_Load()
     SetButtonVisibility
     SetHeaderCaption
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="Form_Load()"
     Exit Sub
 End Sub
 
@@ -156,7 +151,8 @@ Private Sub SetButtonVisibility()
     Me.ExcelButton.Visible = Not Me.ExcelButton.Visible
     Me.DataButton.Visible = Not Me.DataButton.Visible
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="SetButtonVisibility()"
     Exit Sub
 End Sub
 
@@ -187,7 +183,8 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     Me.RecordSource = "SELECT * FROM Allocations WHERE " & Me.Filter
     Me.Requery
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="FiscalYearOptionGroup_AfterUpdate()"
     Exit Sub
 End Sub
 
@@ -204,7 +201,8 @@ Private Sub Form_Timer()
     On Error GoTo ErrorHandler:
     HideButtons
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="Form_Timer()"
     Exit Sub
 End Sub
 
@@ -228,7 +226,8 @@ Private Sub HideButtons()
     Me.CalculatorButton.Visible = False
     Me.ExcelButton.Visible = False
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="HideButtons()"
     Exit Sub
 End Sub
 
@@ -252,7 +251,8 @@ Private Sub SetComboBoxColors()
     Me.ProgramProjectNameComboBox.BackColor = RGB(33, 33, 33)
     Me.ProgramProjectNameComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="SetComboBoxColors()"
     Exit Sub
 End Sub
 
@@ -270,7 +270,8 @@ Private Sub ClearComboBoxValues()
     Me.ProgramAreaNameComboBox.Value = vbNullString
     Me.ProgramProjectNameComboBox.Value = vbNullString
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="ClearComboBoxValues()"
     Exit Sub
 End Sub
 
@@ -290,7 +291,8 @@ Private Sub ClearFilterValues()
     ProgramProjectNameFilter = vbNullString
     Me.Filter = vbNullString
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="ClearFilterValues()"
     Exit Sub
 End Sub
 
@@ -315,7 +317,8 @@ Private Sub ProgramAreaNameComboBox_Change()
         & " AND StatusOfFunds.BudgetLevel = '7'" & pAnd & Me.Filter
     Me.Requery
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="ProgramAreaNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -391,7 +394,8 @@ Private Function GetProgramAreaNameFilter() As String
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="GetProgramAreaNameFilter()"
     Exit Function
 End Function
 
@@ -420,7 +424,8 @@ Private Sub ProgramProjectNameComboBox_Change()
     Me.Requery
     SetHeaderCaption
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="ProgramProjectNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -497,7 +502,8 @@ Private Function GetProgramProjectNameFilter() As String
                 & pAnd & FiscalYearFilter
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="GetProgramProjectNameFilter()"
     Exit Function
 End Function
 
@@ -580,7 +586,8 @@ Private Function GetFiscalYearFilter() As String
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="GetFiscalYearFilter()"
     Exit Function
 End Function
 
@@ -614,7 +621,8 @@ Private Sub FundNameComboBox_Change()
         & " AND StatusOfFunds.BudgetLevel = '7'" _
         & pAnd & Me.Filter
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="FundNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -689,7 +697,8 @@ Private Function GetFundNameFilter() As String
                 & pAnd & FiscalYearFilter
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="GetFundNameFilter()"
     Exit Function
 End Function
 
@@ -706,7 +715,8 @@ Private Sub CalculatorButton_Click()
     On Error GoTo ErrorHandler:
     Calculator.Calculate
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="CalculatorButton_Click()"
     Exit Sub
 End Sub
 
@@ -722,7 +732,8 @@ Private Sub CompassSpendingQueryButton_Click()
     On Error GoTo ErrorHandler:
     DoCmd.OpenForm "BudgetDetailedSpendingQuery"
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="CompassSpendingQueryButton_Click()"
     Exit Sub
 End Sub
 
@@ -738,7 +749,8 @@ Private Sub MenuButton_Click()
     On Error GoTo ErrorHandler:
     SetButtonVisibility
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -770,61 +782,105 @@ Private Sub RefreshButton_Click()
         & " WHERE StatusOfFunds.BocCode = '10'" _
         & " AND StatusOfFunds.BudgetLevel = '7';"
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="MenuButton_Click()"
     Exit Sub
 End Sub
-
 
 
 
 '----------------------------------------------------------------------------------
 '   Type:        Event Sub-Procedure
-'   Name:        SetDivisionIcon
+'   Name:        SetNpmIcon
 '   Parameters:  Void
 '   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub SetDivisionIcon()
-    On Error GoTo ErrorHandler::
-    If Not Args.RcCode = vbNullString Then
-        Select Case Args.RcCode
-            Case "06A"
-                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ORA.png"
-            Case "06B"
-                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\LCARD.png"
-            Case "06C"
-                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\MSD.png"
-            Case "06D"
-                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ORC.png"
-            Case "06F"
-                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\EJ.png"
-            Case "06G"
-                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\WCF.png"
-            Case "06H"
-                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\LSASD.png"
-            Case "06J"
-                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ARD.png"
-            Case "06K"
-                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\WD.png"
-            Case "06L"
-                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\SEMD.png"
-            Case "06M"
-                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\ECAD.png"
-            Case "06N"
-                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\WSA.png"
-            Case "06R"
-                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\MSR.png"
-            Case "06X"
-                Me.DivisionIcon.Picture = CurrentProject.Path & "\etc\png\DivisionLogo\XA.png"
+Private Sub SetRpioIcon(pRpioCode As String)
+    On Error GoTo ErrorHandler:
+    Dim p_RpioCode As String
+    If Not pRpioCode & "" = "" Then
+        p_RpioCode = DLookup("RpioCode", "StatusOfFunds", _
+            "[RpioName] = '" & pRpioCode & "'")
+        Me.Caption = pRpioCode
+        Select Case CStr(p_RpioCode)
+            Case "01"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R1.png"
+            Case "02"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R2.png"
+            Case "03"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R3.png"
+            Case "04"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R4.png"
+            Case "05"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R5.png"
+            Case "06"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R6.png"
+            Case "07"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R7.png"
+            Case "08"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R8.png"
+            Case "09"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R9.png"
+            Case "10"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\R10.png"
+            Case "11"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OA.png"
+            Case "13"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OITA.png"
+            Case "16"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OMS.png"
+            Case "17"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OCFO.png"
+            Case "20"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OCSPP.png"
+            Case "26"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\ORD.png"
+            Case "27"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OAR.png"
+            Case "30"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OW.png"
+            Case "35"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OIG.png"
+            Case "39"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OGC.png"
+            Case "75"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OLEM.png"
+            Case "77"
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\RPIO\OECA.png"
+            Case Else
+                Me.RpioIcon.Picture = CurrentProject.Path _
+                    & "\etc\png\AppIcons\interface\ui\capital.png"
         End Select
-    Else
-        Me.DivisionIcon.Picture = _
-            CurrentProject.Path & "\etc\png\AppIcons\interface\ui\Reports.png"
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _ 
+        Member:="SetRpioIcon"
     Exit Sub
 End Sub
+
 
 
 
@@ -837,28 +893,43 @@ Private Sub SetHeaderCaption()
         Me.ProgramAreaHeader.Caption = "Payroll Utilization"
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayrollUtilizationForm", _  
+        Member:="SetHeaderCaption()"
     Exit Sub
 End Sub
 
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
 
 

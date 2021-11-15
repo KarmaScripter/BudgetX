@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "FederalHoliday"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
@@ -58,13 +49,8 @@ Public Property Let Base(yr As String)
         m_Base = yr
     End If
 ErrorHandler:
-    If Err.Number > 0 Then
-        m_Error = "Source:   FederalHoliday" _
-            & vbCrLf & "Member:      Base" _
-            & vbCrLf & "Descript:   " & Err.Description
-        Err.Clear
-    End If
-    MessageFactory.ShowError (m_Error)
+    ProcessError Name:="FederalHoliday", _ 
+        Member:="Base"
     Exit Property
 End Property
 
@@ -83,7 +69,8 @@ Public Property Get Base() As String
         Base = m_Base
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="FederalHoliday", _ 
+        Member:="Base"
     Exit Property
 End Property
 
@@ -102,7 +89,8 @@ Public Property Let ID(num As Integer)
         m_ID = num
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="FederalHoliday", _ 
+        Member:="ID"
     Exit Property
 End Property
 
@@ -121,7 +109,8 @@ Public Property Get ID() As Integer
         ID = m_ID
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="FederalHoliday", _ 
+        Member:="ID"
     Exit Property
 End Property
 
@@ -141,7 +130,8 @@ Public Property Let Name(pName As String)
         m_Name = pName
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="FederalHoliday", _ 
+        Member:="Name"
     Exit Property
 End Property
 
@@ -159,7 +149,8 @@ Public Property Get Name() As String
         Name = m_Name
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="FederalHoliday", _ 
+        Member:="Name"
     Exit Property
 End Property
 
@@ -182,7 +173,8 @@ Public Property Let Day(pDate As Date)
         m_Date = pDate
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="FederalHoliday", _ 
+        Member:="Day"
     Exit Property
 End Property
 
@@ -201,7 +193,8 @@ Public Property Get Day() As Date
         Day = m_Date
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="FederalHoliday", _ 
+        Member:="Day"
     Exit Property
 End Property
 
@@ -213,22 +206,41 @@ End Property
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+
+
+
+
+
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
-
-
-

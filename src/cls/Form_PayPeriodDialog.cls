@@ -50,7 +50,8 @@ Private Sub Form_Open(Cancel As Integer)
         & " FROM PayrollObligations" _
         & " WHERE " & Me.Filter
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -66,7 +67,8 @@ Private Sub Form_Load()
     On Error GoTo ErrorHandler:
     ClearComboBoxValues
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -90,7 +92,8 @@ Private Sub SetComboBoxColors()
     Me.PayPeriodComboBox.BackColor = RGB(33, 33, 33)
     Me.PayPeriodComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -105,7 +108,8 @@ Private Sub AcceptButton_Click()
     On Error GoTo ErrorHandler:
     Me.Visible = Not Me.Visible
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -122,7 +126,8 @@ Private Sub ExitButton_Click()
     ClearFilterValues
     DoCmd.Close acForm, Me.Name
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -150,7 +155,8 @@ Private Sub DivisionNameComboBox_Change()
         & " FROM PayrollObligations" _
         & " WHERE " & Me.Filter
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -196,7 +202,8 @@ Private Function GetDivisionNameFilter()
                 & pAnd & FiscalYearFilter
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Function
 End Function
 
@@ -218,7 +225,8 @@ Private Sub FundNameComboBox_Change()
         & " FROM PayrollObligations" _
         & " WHERE " & Me.Filter
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -263,7 +271,8 @@ Private Function GetFundNameFilter()
                 & pAnd & PayPeriodFilter
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Function
 End Function
 
@@ -288,7 +297,8 @@ Private Sub PayPeriodComboBox_Change()
         & " FROM PayrollObligations" _
         & " WHERE " & Me.Filter
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -365,7 +375,8 @@ Private Function GetPayPeriodFilter() As String
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Function
 End Function
 
@@ -385,7 +396,8 @@ Private Sub ResetOptionGroupValues()
     Me.FiscalYearOptionGroup.Value = 2
     FiscalYearFilter = "[BFY] = '2021'"
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -423,7 +435,8 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     Me.RecordSource = "SELECT * FROM PayrollObligations" _
         & " WHERE " & Me.Filter
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -494,7 +507,8 @@ Private Function GetFiscalYearFilter()
                 & pAnd & DivisionNameFilter
     End If
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Function
 End Function
 
@@ -519,7 +533,8 @@ Private Sub RefreshButton_Click()
     Me.PayPeriodComboBox.RowSource = "SELECT DISTINCT PayrollObligations.PayPeriod" _
         & " FROM PayrollObligations;"
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -539,7 +554,8 @@ Private Sub ClearComboBoxValues()
     Me.DivisionNameComboBox.Value = vbNullString
     Me.PayPeriodComboBox.Value = vbNullString
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -559,7 +575,8 @@ Private Sub ClearFilterValues()
     FundNameFilter = vbNullString
     PayPeriodFilter = vbNullString
 ErrorHandler:
-    ProcessError
+    ProcessError Name:="PayPeriodDialog", _ 
+        Member:=""
     Exit Sub
 End Sub
 
@@ -570,22 +587,37 @@ End Sub
 
 
 
-'---------------------------------------------------------------------------------
-'   Type:        Sub-Procedure
-'   Name:        ProcessError
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Event Sub-Procedure
+'   Name:        Process
 '   Parameters:  Void
-'   RetVal:      Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
-Private Sub ProcessError()
-    If Err.Number <> 0 Then
-        m_Error = "Source:      " & Err.Source _
-            & vbCrLf & "Number:     " & Err.Number _
-            & vbCrLf & "Issue:      " & Err.Description
-        Err.Clear
+Private Sub ProcessError(Optional Name As String, Optional Member As String)
+    If Err.Number <> 0 And _
+        Not IsMissing(Name) And _
+        Not IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description _
+                & vbCrLf & "Class:      " & Name _
+                & vbCrLf & "Member:     " & Member
+    End If
+    If Err.Number <> 0 And _
+        IsMissing(Name) And _
+        IsMissing(Member) Then
+            m_Error = "Source:      " & Err.Source _
+                & vbCrLf & "Number:     " & Err.Number _
+                & vbCrLf & "Issue:      " & Err.Description
     End If
     MessageFactory.ShowError (m_Error)
+    Err.Clear
 End Sub
+
+
 
 
 

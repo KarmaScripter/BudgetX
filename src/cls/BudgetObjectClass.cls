@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "BudgetObjectClass"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
@@ -32,7 +23,8 @@ Public Property Let ID(bocid As Integer)
         m_ID = bocid
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetObjectClass"
+    ProcessError Name:="BudgetObjectClass", _ 
+        Member:="ID"
     Exit Property
 End Property
 
@@ -52,7 +44,8 @@ Public Property Get ID() As Integer
     If m_ID > 0 Then
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetObjectClass"
+    ProcessError Name:="BudgetObjectClass", _ 
+        Member:="ID"
     Exit Property
 End Property
 
@@ -73,7 +66,8 @@ Public Property Let Code(cd As String)
         m_Code = cd
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetObjectClass"
+    ProcessError Name:="BudgetObjectClass", _ 
+        Member:="Code"
     Exit Property
 End Property
 
@@ -94,7 +88,8 @@ Public Property Get Code() As String
         Code = m_Code
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetObjectClass"
+    ProcessError Name:="BudgetObjectClass", _ 
+        Member:="Code"
     Exit Property
 End Property
 
@@ -115,7 +110,8 @@ Public Property Let Name(nm As String)
         m_Name = nm
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetObjectClass"
+    ProcessError Name:="BudgetObjectClass", _ 
+        Member:="Name"
     Exit Property
 End Property
 
@@ -136,7 +132,8 @@ Public Property Get Name() As String
         Name = m_Name
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetObjectClass"
+    ProcessError Name:="BudgetObjectClass", _ 
+        Member:="Name"
     Exit Property
 End Property
 
@@ -157,7 +154,8 @@ Public Property Let Value(vl As Double)
         m_Value = vl
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetObjectClass"
+    ProcessError Name:="BudgetObjectClass", _ 
+        Member:="Value"
     Exit Property
 End Property
 
@@ -178,7 +176,8 @@ Public Property Get Value() As Double
         Value = m_Value
     End If
 ErrorHandler:
-    ProcessError Name:="BudgetObjectClass"
+    ProcessError Name:="BudgetObjectClass", _ 
+        Member:="Value"
     Exit Property
 End Property
 

@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "DataAccess"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
@@ -55,7 +46,7 @@ End Sub
 '   RetVal:      Boolean
 '   Purpose:     Function returns boolean value indicating if Workspace is open
 '---------------------------------------------------------------------------------
-Public Property Get IsConnectedIsConnected() As Boolean
+Public Property Get IsConnected() As Boolean
     On Error GoTo ErrorHandler:
     If Not IsObject(m_Data) Then
         IsConnected = True
