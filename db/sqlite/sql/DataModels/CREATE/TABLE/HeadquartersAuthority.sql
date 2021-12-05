@@ -1,0 +1,30 @@
+CREATE TABLE "HeadquartersAuthority" 
+(
+	"HeadquartersId"	INTEGER,
+	"AllocationsId"	INTEGER,
+	"StatusOfFundsId"	INTEGER,
+	"BFY"	INTEGER,
+	"EFY"	INTEGER,
+	"RpioCode"	INTEGER,
+	"RpioName"	TEXT,
+	"BudgetLevel"	INTEGER,
+	"AhCode"	INTEGER,
+	"AhName"	TEXT,
+	"FundCode"	TEXT,
+	"FundName"	TEXT,
+	"OrgCode"	INTEGER,
+	"OrgName"	TEXT,
+	"AccountCode"	TEXT,
+	"RcCode"	INTEGER,
+	"RcName"	TEXT,
+	"BocCode"	INTEGER,
+	"BocName"	TEXT,
+	"Amount"	INTEGER,
+	"ProgramProjectCode"	INTEGER,
+	"ProgramProjectName"	TEXT,
+	"ProgramAreaCode"	TEXT,
+	"ProgramAreaName"	TEXT,
+	"NpmCode"	TEXT,
+	"NpmName"	TEXT
+)
+

@@ -1,0 +1,27 @@
+CREATE TABLE "CongressionalReprogrammings" 
+(
+	"CongressionalTransferId"	INTEGER,
+	"ReprogrammingNumber"	TEXT,
+	"BFY"	INTEGER,
+	"EFY"	TEXT,
+	"RpioCode"	INTEGER,
+	"AhCode"	INTEGER,
+	"AhName"	TEXT,
+	"FundCode"	TEXT,
+	"FundName"	TEXT,
+	"AccountCode"	TEXT,
+	"ProgramProjectCode"	TEXT,
+	"ProgramProjectName"	TEXT,
+	"ProgramAreaCode"	TEXT,
+	"ProgramAreaName"	TEXT,
+	"OrgCode"	INTEGER,
+	"OrgName"	TEXT,
+	"BocCode"	INTEGER,
+	"BocName"	TEXT,
+	"ActivityCode"	TEXT,
+	"Amount"	INTEGER,
+	"Description"	TEXT,
+	"ExtendedDescription"	TEXT,
+	"FromTo"	TEXT,
+	"Cycle"	TEXT
+)
