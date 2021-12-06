@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "HeadquartersAllocationsForm"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = True
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
 Option Compare Database
 Option Explicit
 
@@ -44,26 +35,39 @@ Private Sub Form_Open(Cancel As Integer)
     Set m_Dialog = Forms("NpmDialog")
     Set Args = m_Dialog.Args
     If Not Args.RpioName & "" = "" Then
-        FiscalYearFilter = "[BFY] = '" & Args.BFY & "'"
         RpioNameFilter = "[RpioName] = '" & Args.RpioName & "'"
-        Me.Filter = FiscalYearFilter & pAnd & RpioNameFilter
-        Me.RpioNameComboBox.RowSource = "SELECT DISTINCT Allocations.RpioName" _
-            & " FROM Allocations" _
-            & " WHERE Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
-            & " AND Allocations.BudgetLevel = '7';"
-        Me.FundNameComboBox.RowSource = "SELECT DISTINCT Allocations.FundName" _
-            & " FROM Allocations" _
-            & " WHERE Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
-            & " AND Allocations.BudgetLevel = '7';"
-        Me.BocNameComboBox.RowSource = "SELECT DISTINCT Allocations.BocName" _
-            & " FROM Allocations" _
-            & " WHERE Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
-            & " AND Allocations.BudgetLevel = '7';"
+    End If
+    If Not Args.BFY & "" = "" Then
+        FiscalYearFilter = "[BFY] = '" & Args.BFY & "'"
+    End If
+    If Not Args.FundName & "" = "" Then
+        FundNameFilter = "[FundName] = '" & Args.FundName & "'"
+    End If
+    If Not Args.RpioName & "" = "" And _
+        Not Args.BFY & "" = "" And _
+        Args.FundName & "" = "" Then
+            SetFiscalYearOptionGroupValue (Args.BFY)
+            RpioNameFilter = "[RpioName] = '" & Args.RpioName & "'"
+            Me.Filter = FiscalYearFilter _
+                & pAnd & RpioNameFilter
+            Me.RecordSource = "SELECT * FROM Allocations WHERE " & Me.Filter
+            SetRpioIcon (Args.RpioName)
+    End If
+    If Not Args.RpioName & "" = "" And _
+        Not Args.BFY & "" = "" And _
+        Not Args.FundName & "" = "" Then
+            SetFiscalYearOptionGroupValue (Args.BFY)
+            RpioNameFilter = "[RpioName] = '" & Args.RpioName & "'"
+            Me.Filter = FiscalYearFilter _
+                & pAnd & RpioNameFilter _
+                & pAnd & FundNameFilter
+            Me.RecordSource = "SELECT * FROM Allocations WHERE " & Me.Filter
+            SetRpioIcon (Args.RpioName)
     End If
     DoCmd.Close ObjectType:=acForm, ObjectName:="NpmDialog", Save:=acSaveNo
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="Form_Open()"
     Exit Sub
 End Sub
 
@@ -78,21 +82,18 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Sub Form_Load()
     On Error GoTo ErrorHandler:
-    Me.Section(acHeader).AutoHeight = False
-    Me.Section(acHeader).Height = 2
-    Me.Section(acDetail).AutoHeight = False
-    Me.Section(acDetail).Height = 4
-    Me.Section(acFooter).AutoHeight = False
-    Me.Section(acFooter).Height = 0.5
+    Me.SECTION(acHeader).AutoHeight = False
+    Me.SECTION(acHeader).Height = 2
+    Me.SECTION(acDetail).AutoHeight = False
+    Me.SECTION(acDetail).Height = 4
+    Me.SECTION(acFooter).AutoHeight = False
+    Me.SECTION(acFooter).Height = 0.5
     SetComboBoxColors
-    ResetOptionGroupValues
     ClearComboBoxValues
     HideButtons
-    SetRpioIcon (Args.RcCode)
-    Me.Caption = "HQ Allocations"
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="Form_Load()"
     Exit Sub
 End Sub
 
@@ -115,8 +116,8 @@ Private Sub SetComboBoxColors()
     Me.BocNameComboBox.BackColor = RGB(33, 33, 33)
     Me.BocNameComboBox.BorderColor = RGB(68, 114, 196)
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="SetComboBoxColors()"
     Exit Sub
 End Sub
 
@@ -144,8 +145,8 @@ Private Sub SetButtonVisibility()
     Me.FilterButton.Visible = Not Me.FilterButton.Visible
     Me.CompassStatusOfFundsButton.Visible = Not Me.CompassStatusOfFundsButton.Visible
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="SetButtonVisibility()"
     Exit Sub
 End Sub
 
@@ -174,8 +175,8 @@ Private Sub HideButtons()
     Me.FilterButton.Visible = False
     Me.CompassStatusOfFundsButton.Visible = False
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="HideButtons()"
     Exit Sub
 End Sub
 
@@ -194,8 +195,8 @@ Private Sub ClearFilters()
     FundNameFilter = vbNullString
     Me.Filter = vbNullString
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="ClearFilters()"
     Exit Sub
 End Sub
 
@@ -212,8 +213,8 @@ Private Sub Form_Timer()
     On Error GoTo ErrorHandler::
     HideButtons
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="Form_Timer()"
     Exit Sub
 End Sub
 
@@ -257,8 +258,8 @@ Private Sub PopulateComboBoxes()
             & " AND Allocations.BudgetLevel = '7';"
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="PopulateComboBoxes()"
     Exit Sub
 End Sub
 
@@ -275,8 +276,8 @@ Private Sub ClearComboBoxValues()
     Me.FundNameComboBox.Value = vbNullString
     Me.BocNameComboBox.Value = vbNullString
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="ClearComboBoxValues()"
     Exit Sub
 End Sub
 
@@ -290,18 +291,55 @@ End Sub
 Private Sub ResetOptionGroupValues()
     On Error GoTo ErrorHandler:
     Me.FiscalYearOptionGroup.Value = 2
-    FiscalYearFilter = "[BFY] = '2021'"
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="ResetOptionGroupValues()"
     Exit Sub
 End Sub
+
+
+
+
 
 
 '----------------------------------------------------------------------------------
 '   Type:        Sub-Procedure
 '   Name:        FiscalYearOptionGroup_AfterUpdate
 '   Parameters:  Void
+'   Retval:      Void
+'   Purpose:
+'---------------------------------------------------------------------------------
+Private Sub SetFiscalYearOptionGroupValue(pBFY As String)
+    On Error GoTo ErrorHandler:
+    If Args Is Nothing Then
+        Set Args = New AccountArgs
+    End If
+    If Not pBFY & "" = "" Then
+        Select Case pBFY
+            Case "2021"
+                Args.BFY = "2021"
+                FiscalYearFilter = "[BFY] = '2021'"
+                Me.FiscalYearOptionGroup.Value = 1
+            Case "2022"
+                Args.BFY = "2022"
+                FiscalYearFilter = "[BFY] = '2022'"
+                Me.FiscalYearOptionGroup.Value = 2
+        End Select
+    End If
+ErrorHandler:
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="SetFiscalYearOptionGroupValue()"
+    Exit Sub
+End Sub
+
+
+
+
+'----------------------------------------------------------------------------------
+'   Type:        Sub-Procedure
+'   Name:        FiscalYearOptionGroup_AfterUpdate
+'   Parameters:  Void
+'   Retval:      Void
 '   Purpose:
 '---------------------------------------------------------------------------------
 Private Sub FiscalYearOptionGroup_AfterUpdate()
@@ -310,14 +348,15 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
     FiscalYearFilter = vbNullString
     Select Case Me.FiscalYearOptionGroup.Value
         Case 1
-            Args.BFY = "2020"
-            FiscalYearFilter = "[BFY] = '2020'"
-        Case 2
             Args.BFY = "2021"
             FiscalYearFilter = "[BFY] = '2021'"
+        Case 2
+            Args.BFY = "2022"
+            FiscalYearFilter = "[BFY] = '2022'"
     End Select
     If Not Args.RpioName & "" = "" Then
-        Me.Filter = RpioNameFilter & pAnd & GetFiscalYearFilter
+        Me.Filter = RpioNameFilter _
+            & pAnd & GetFiscalYearFilter
         Me.RecordSource = "SELECT * FROM Allocations" _
             & " WHERE Allocations.BudgetLevel = '7'" _
             & pAnd & "Allocations.RpioCode NOT IN ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10')" _
@@ -332,8 +371,8 @@ Private Sub FiscalYearOptionGroup_AfterUpdate()
         Me.Requery
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="FiscalYearOptionGroup_AfterUpdate()"
     Exit Sub
 End Sub
 
@@ -347,67 +386,70 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetFiscalYearFilter()
     On Error GoTo ErrorHandler:
-    If Not FiscalYearFilter & vbNullString = vbNullString And _
-        BocNameFilter & vbNullString = vbNullString And _
-        RpioNameFilter & vbNullString = vbNullString And _
-        FundNameFilter & vbNullString = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter
     End If
-    If Not FiscalYearFilter & vbNullString = vbNullString And _
-        Not BocNameFilter & vbNullString = vbNullString And _
-        RpioNameFilter & vbNullString = vbNullString And _
-        FundNameFilter & vbNullString = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter
     End If
-    If Not FiscalYearFilter & vbNullString = vbNullString And _
-        Not BocNameFilter & vbNullString = vbNullString And _
-        Not RpioNameFilter & vbNullString = vbNullString And _
-        FundNameFilter & vbNullString = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & RpioNameFilter
     End If
-    If Not FiscalYearFilter & vbNullString = vbNullString And _
-        Not BocNameFilter & vbNullString = vbNullString And _
-        Not RpioNameFilter & vbNullString = vbNullString And _
-        Not FundNameFilter & vbNullString = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FiscalYearFilter & vbNullString = vbNullString And _
-        BocNameFilter & vbNullString = vbNullString And _
-        Not RpioNameFilter & vbNullString = vbNullString And _
-        Not FundNameFilter & vbNullString = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FiscalYearFilter & vbNullString = vbNullString And _
-        Not BocNameFilter & vbNullString = vbNullString And _
-        RpioNameFilter & vbNullString = vbNullString And _
-        Not FundNameFilter & vbNullString = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FiscalYearFilter & vbNullString = vbNullString And _
-        BocNameFilter & vbNullString = vbNullString And _
-        Not RpioNameFilter & vbNullString = vbNullString And _
-        FundNameFilter & vbNullString = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & RpioNameFilter
     End If
-    If Not FiscalYearFilter & vbNullString = vbNullString And _
-        BocNameFilter & vbNullString = vbNullString And _
-        RpioNameFilter & vbNullString = vbNullString And _
-        Not FundNameFilter & vbNullString = vbNullString Then
+    If Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetFiscalYearFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="GetFiscalYearFilter()"
     Exit Function
 End Function
+
+
+
 
 
 '----------------------------------------------------------------------------------
@@ -462,8 +504,8 @@ Private Sub RpioNameComboBox_Change()
         Me.Requery
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="RpioNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -478,66 +520,69 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetRpioNameFilter()
     On Error GoTo ErrorHandler:
-    If Not RpioNameFilter & vbNullString = vbNullString And _
-        FiscalYearFilter & vbNullString = vbNullString And _
-        BocNameFilter & vbNullString = vbNullString And _
-        FundNameFilter & vbNullString = vbNullString Then
+    If Not RpioNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetRpioNameFilter = RpioNameFilter
     End If
-    If Not RpioNameFilter & vbNullString = vbNullString And _
-        Not FiscalYearFilter & vbNullString = vbNullString And _
-        BocNameFilter & vbNullString = vbNullString And _
-        FundNameFilter & vbNullString = vbNullString Then
-            GetRpioNameFilter = FiscalYearFilter & pAnd & RpioNameFilter
-    End If
-    If Not RpioNameFilter & vbNullString = vbNullString And _
-        Not FiscalYearFilter & vbNullString = vbNullString And _
-        Not BocNameFilter & vbNullString = vbNullString And _
-        FundNameFilter & vbNullString = vbNullString Then
-            GetRpioNameFilter = FiscalYearFilter & pAnd & BocNameFilter _
+    If Not RpioNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
+            GetRpioNameFilter = FiscalYearFilter _
                 & pAnd & RpioNameFilter
     End If
-    If Not RpioNameFilter & vbNullString & vbNullString = vbNullString And _
-        Not FiscalYearFilter & vbNullString = vbNullString And _
-        Not BocNameFilter & vbNullString = vbNullString And _
-        Not FundNameFilter & vbNullString = vbNullString Then
-            GetRpioNameFilter = FiscalYearFilter & pAnd & BocNameFilter _
+    If Not RpioNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
+            GetRpioNameFilter = FiscalYearFilter _
+                & pAnd & BocNameFilter _
+                & pAnd & RpioNameFilter
+    End If
+    If Not RpioNameFilter & vbNullString & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
+            GetRpioNameFilter = FiscalYearFilter _
+                & pAnd & BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not RpioNameFilter & vbNullString = vbNullString And _
-        FiscalYearFilter & vbNullString = vbNullString And _
-        Not BocNameFilter & vbNullString = vbNullString And _
-        Not FundNameFilter & vbNullString = vbNullString Then
+    If Not RpioNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetRpioNameFilter = BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not RpioNameFilter & vbNullString = vbNullString And _
-        FiscalYearFilter & vbNullString = vbNullString And _
-        BocNameFilter & vbNullString = vbNullString And _
-        Not FundNameFilter & vbNullString = vbNullString Then
+    If Not RpioNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             Me.Filter = RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not RpioNameFilter & vbNullString = vbNullString And _
-        FiscalYearFilter & vbNullString = vbNullString And _
-        Not BocNameFilter & vbNullString = vbNullString And _
-        FundNameFilter & vbNullString = vbNullString Then
+    If Not RpioNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetRpioNameFilter = BocNameFilter _
                 & pAnd & RpioNameFilter
     End If
-    If Not RpioNameFilter & vbNullString = vbNullString And _
-        Not FiscalYearFilter & vbNullString = vbNullString And _
-        BocNameFilter & vbNullString = vbNullString And _
-        Not FundNameFilter & vbNullString = vbNullString Then
+    If Not RpioNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetRpioNameFilter = FiscalYearFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="GetRpioNameFilter()"
     Exit Function
 End Function
 
@@ -580,8 +625,8 @@ Private Sub FundNameComboBox_Change()
         Me.Requery
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="FundNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -595,69 +640,69 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetFundNameFilter()
     On Error GoTo ErrorHandler:
-    If Not FundNameFilter & vbNullString = vbNullString And _
-        FiscalYearFilter & vbNullString = vbNullString And _
-        BocNameFilter & vbNullString = vbNullString And _
-        RpioNameFilter & vbNullString = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" Then
             GetFundNameFilter = FundNameFilter
     End If
-    If Not FundNameFilter & vbNullString = vbNullString And _
-        Not FiscalYearFilter & vbNullString = vbNullString And _
-        BocNameFilter & vbNullString = vbNullString And _
-        RpioNameFilter & vbNullString = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" Then
             GetFundNameFilter = FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter & vbNullString = vbNullString And _
-        Not FiscalYearFilter & vbNullString = vbNullString And _
-        Not BocNameFilter & vbNullString = vbNullString And _
-        RpioNameFilter & vbNullString = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" Then
             GetFundNameFilter = FiscalYearFilter _
                 & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter & vbNullString = vbNullString And _
-        Not FiscalYearFilter & vbNullString = vbNullString And _
-        Not BocNameFilter & vbNullString = vbNullString And _
-        Not RpioNameFilter & vbNullString = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" Then
             GetFundNameFilter = FiscalYearFilter _
                 & pAnd & BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter & vbNullString = vbNullString And _
-        FiscalYearFilter & vbNullString = vbNullString And _
-        Not BocNameFilter & vbNullString = vbNullString And _
-        Not RpioNameFilter & vbNullString = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" Then
             GetFundNameFilter = BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter & vbNullString = vbNullString And _
-        FiscalYearFilter & vbNullString = vbNullString And _
-        BocNameFilter & vbNullString = vbNullString And _
-        Not RpioNameFilter & vbNullString = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" Then
             GetFundNameFilter = RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter & vbNullString = vbNullString And _
-        FiscalYearFilter & vbNullString = vbNullString And _
-        Not BocNameFilter & vbNullString = vbNullString And _
-        RpioNameFilter & vbNullString = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" Then
             GetFundNameFilter = BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not FundNameFilter & vbNullString = vbNullString And _
-        Not FiscalYearFilter & vbNullString = vbNullString And _
-        BocNameFilter & vbNullString = vbNullString And _
-        Not RpioNameFilter & vbNullString = vbNullString Then
+    If Not FundNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        BocNameFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" Then
             GetFundNameFilter = FiscalYearFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="GetFundNameFilter()"
     Exit Function
 End Function
 
@@ -692,8 +737,8 @@ Private Sub BocNameComboBox_Change()
         Me.Requery
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="BocNameComboBox_Change()"
     Exit Sub
 End Sub
 
@@ -707,77 +752,77 @@ End Sub
 '---------------------------------------------------------------------------------
 Private Function GetBocNameFilter() As String
     On Error GoTo ErrorHandler:
-    If Not BocNameFilter & vbNullString = vbNullString And _
-        FiscalYearFilter & vbNullString = vbNullString And _
-        FundNameFilter & vbNullString = vbNullString And _
-        RpioNameFilter & vbNullString = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        FundNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter
     End If
-    If Not BocNameFilter & vbNullString = vbNullString And _
-        Not FiscalYearFilter & vbNullString = vbNullString And _
-        RpioNameFilter & vbNullString = vbNullString And _
-        FundNameFilter & vbNullString = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FiscalYearFilter
     End If
-    If Not BocNameFilter & vbNullString = vbNullString And _
-        Not FiscalYearFilter & vbNullString = vbNullString And _
-        RpioNameFilter & vbNullString = vbNullString And _
-        Not FundNameFilter & vbNullString = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FiscalYearFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter & vbNullString = vbNullString And _
-        RpioNameFilter & vbNullString = vbNullString And _
-        Not FiscalYearFilter & vbNullString = vbNullString And _
-        Not FundNameFilter & vbNullString = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = FiscalYearFilter _
                 & pAnd & BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter & vbNullString = vbNullString And _
-        Not FiscalYearFilter & vbNullString = vbNullString And _
-        Not RpioNameFilter & vbNullString = vbNullString And _
-        Not FundNameFilter & vbNullString = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FiscalYearFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter & vbNullString = vbNullString And _
-        FiscalYearFilter & vbNullString = vbNullString And _
-        Not RpioNameFilter & vbNullString = vbNullString And _
-        FundNameFilter & vbNullString = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & RpioNameFilter
     End If
-    If Not BocNameFilter & vbNullString = vbNullString And _
-        FiscalYearFilter & vbNullString = vbNullString And _
-        Not RpioNameFilter & vbNullString = vbNullString And _
-        Not FundNameFilter & vbNullString = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter & vbNullString = vbNullString And _
-        FiscalYearFilter & vbNullString = vbNullString And _
-        RpioNameFilter & vbNullString = vbNullString And _
-        Not FundNameFilter & vbNullString = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        FiscalYearFilter & "" = "" And _
+        RpioNameFilter & "" = "" And _
+        Not FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & FundNameFilter
     End If
-    If Not BocNameFilter & vbNullString = vbNullString And _
-        Not FiscalYearFilter & vbNullString = vbNullString And _
-        Not RpioNameFilter & vbNullString = vbNullString And _
-        FundNameFilter & vbNullString = vbNullString Then
+    If Not BocNameFilter & "" = "" And _
+        Not FiscalYearFilter & "" = "" And _
+        Not RpioNameFilter & "" = "" And _
+        FundNameFilter & "" = "" Then
             GetBocNameFilter = BocNameFilter _
                 & pAnd & RpioNameFilter _
                 & pAnd & FiscalYearFilter
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="GetBocNameFilter()"
     Exit Function
 End Function
 
@@ -813,8 +858,8 @@ Private Sub RefreshButton_Click()
         Me.Requery
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="RefreshButton_Click()"
     Exit Sub
 End Sub
 
@@ -830,8 +875,8 @@ Private Sub Form_Close()
     ClearFilters
     Me.Filter = vbNullString
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="Form_Close()"
     Exit Sub
 End Sub
 
@@ -848,8 +893,8 @@ Private Sub CompassStatusOfFundsButton_Click()
     On Error GoTo ErrorHandler:
     DoCmd.OpenForm "CompassBudgetStatusQuery"
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="CompassStatusOfFundsButton_Click()"
     Exit Sub
 End Sub
 
@@ -898,8 +943,8 @@ Private Sub EditButton_Click()
     DoCmd.Close ObjectType:=acForm, _
         ObjectName:=Me.Name, Save:=acSaveYes
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="EditButton_Click()"
     Exit Sub
 End Sub
 
@@ -994,8 +1039,8 @@ Private Sub SetRpioIcon(pRpioName As String)
         End Select
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="SetRpioIcon()"
     Exit Sub
 End Sub
 
@@ -1013,8 +1058,8 @@ Private Sub CalculatorButton_Click()
     On Error GoTo ErrorHandler:
     Calculator.Calculate
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="CalculatorButton_Click()"
 End Sub
 
 
@@ -1028,8 +1073,8 @@ Private Sub MenuButton_Click()
     On Error GoTo ErrorHandler:
     SetButtonVisibility
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="MenuButton_Click()"
     Exit Sub
 End Sub
 
@@ -1055,8 +1100,8 @@ Private Sub ExitButton_Click()
             WindowMode:=acDialog
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="ExitButton_Click()"
     Exit Sub
 End Sub
 
@@ -1082,8 +1127,8 @@ Private Sub UpdateBudgetLevel()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="UpdateBudgetLevel()"
     Exit Sub
 End Sub
 
@@ -1107,8 +1152,8 @@ Private Sub UpdateBfy()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="UpdateBfy()"
     Exit Sub
 End Sub
 
@@ -1133,8 +1178,8 @@ Private Sub UpdateRpioCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="UpdateRpioCode()"
     Exit Sub
 End Sub
 
@@ -1158,8 +1203,8 @@ Private Sub UpdateAhCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="UpdateAhCode()"
     Exit Sub
 End Sub
 
@@ -1183,8 +1228,8 @@ Private Sub UpdateOrgCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="UpdateOrgCode()"
     Exit Sub
 End Sub
 
@@ -1209,8 +1254,8 @@ Private Sub UpdateAccountCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="UpdateAccountCode()"
     Exit Sub
 End Sub
 
@@ -1235,8 +1280,8 @@ Private Sub UpdateBocCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="UpdateBocCode()"
     Exit Sub
 End Sub
 
@@ -1261,8 +1306,8 @@ Private Sub UpdateRcCode()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="UpdateRcCode()"
     Exit Sub
 End Sub
 
@@ -1288,8 +1333,8 @@ Private Sub UpdateAmount()
     Set DB = CurrentDb
     DB.Execute (SQL)
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="UpdateAmount()"
     Exit Sub
 End Sub
 
@@ -1318,8 +1363,8 @@ Private Function GetReportData() As DAO.Recordset
     Set m_Data = CurrentDb.OpenRecordset(m_SQL)
     Set GetReportData = m_Data
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="GetReportData()"
     Exit Function
 End Function
 
@@ -1343,7 +1388,7 @@ Private Function GetColumnNames() As String()
     Dim j As Integer
     Dim m_Array() As String
     Set m_Data = GetReportData
-    j = m_Data.Fields.count - 1
+    j = m_Data.Fields.Count - 1
     ReDim m_Array(j)
     For i = LBound(m_Array()) To UBound(m_Array())
         If Not m_Data.Fields(i).Name & "" = "" Then
@@ -1352,8 +1397,8 @@ Private Function GetColumnNames() As String()
     Next i
     GetColumnNames = m_Array()
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="GetColumnNames()"
     Exit Function
 End Function
 
@@ -1415,8 +1460,8 @@ Private Sub ExcelButton_Click()
     p_Excel.WindowState = xlMaximized
     p_Excel.Visible = True
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="ExcelButton_Click()"
     Exit Sub
 End Sub
 
@@ -1435,8 +1480,8 @@ Private Sub UndoButton_Click()
         DoCmd.RunCommand acCmdUndo
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="UndoButton_Click()"
     Exit Sub
 End Sub
 
@@ -1456,8 +1501,8 @@ Private Sub SaveButton_Click()
         DoCmd.RunCommand acCmdSave
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="SaveButton_Click()"
     Exit Sub
 End Sub
 
@@ -1475,8 +1520,8 @@ Private Sub DeleteButton_Click()
         DoCmd.RunCommand acCmdDelete
     End If
 ErrorHandler:
-    ProcessError Name:="HeadQuartersAllocationForm", _ 
-        Member:=""
+    ProcessError Name:="HeadQuartersAllocationForm", _
+        Member:="DeleteButton_Click()"
     Exit Sub
 End Sub
 
@@ -1515,6 +1560,8 @@ Private Sub ProcessError(Optional Name As String, Optional Member As String)
     MessageFactory.ShowError (m_Error)
     Err.Clear
 End Sub
+
+
 
 
 
